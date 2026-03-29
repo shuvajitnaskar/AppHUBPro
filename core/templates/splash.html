@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Hub Pro - Locked</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin-top: 60px;
+        }
+        .qr-box {
+            border: 2px solid #444;
+            border-radius: 20px;
+            padding: 10px;
+            display: inline-block;
+            background-color: white;
+        }
+        .qr-box img {
+            width: 250px;
+            height: 250px;
+            border-radius: 15px;
+            object-fit: contain;
+        }
+        .follow-btn {
+            background-color: #ff4081; /* আপনার অ্যাপের গোলাপি রঙের মতো */
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 30px;
+        }
+        h1 { font-size: 28px; font-weight: bold; }
+        p { color: gray; font-size: 16px; margin-bottom: 30px; padding: 0 20px; }
+        .username { font-size: 20px; font-weight: bold; letter-spacing: 1px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>App Hub Pro is Locked</h1>
+    <p>You must follow the developer on Instagram to unlock the website.</p>
+
+    <div class="qr-box">
+        <img src="/media/shuvajit_naskar_qr.png" alt="QR Code">
+    </div>
+
+    <div class="username">@shuvajit_naskar</div>
+
+    <button onclick="unlockWebsite()" class="follow-btn">Follow to Unlock</button>
+
+    <script>
+        // পেজ লোড হলেই চেক করবে আগে থেকে ফলো করা আছে কি না
+        if (localStorage.getItem('hasFollowed') === 'true') {
+            window.location.href = '/home/';
+        }
+
+        function unlockWebsite() {
+            // ১. ইন্সটাগ্রাম ওপেন হবে নতুন ট্যাবে
+            window.open("https://www.instagram.com/shuvajit_naskar?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", "_blank");
+            
+            // ২. ব্রাউজারে সেভ হয়ে যাবে যে ইউজার ফলো করেছে
+            localStorage.setItem('hasFollowed', 'true');
+            
+            // ৩. ২ সেকেন্ড পর মূল ওয়েবসাইটে (Home) নিয়ে যাবে
+            setTimeout(function() {
+                window.location.href = '/home/';
+            }, 2000);
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload - App HUB Pro</title>
+    <style>
+        body { background-color: #121212; color: white; font-family: Arial; text-align: center; padding: 50px; }
+        .box { background: #1f1f1f; padding: 30px; border-radius: 15px; border: 1px solid #333; display: inline-block; width: 350px; }
+        input, select { width: 90%; padding: 10px; margin: 10px 0; background: #222; color: white; border: 1px solid #444; }
+        .progress-box { display: none; margin-top: 20px; }
+        progress { width: 100%; accent-color: #00e676; }
+        .btn { background: #ff4081; color: white; padding: 10px; border: none; border-radius: 20px; width: 100%; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Admin Upload</h2>
+        <form id="upload-form">
+            {% csrf_token %}
+            <input type="text" id="title" placeholder="Title" required>
+            <select id="content_type">
+                <option value="app">App</option>
+                <option value="photo">Photo</option>
+            </select>
+            <input type="file" id="file" required>
+            <button type="submit" class="btn">Upload</button>
+        </form>
+        <div class="progress-box" id="p-box">
+            <p>Uploading: <span id="pc">0%</span></p>
+            <progress id="pb" value="0" max="100"></progress>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').onsubmit = function(e) {
+            e.preventDefault();
+            const fd = new FormData();
+            fd.append('title', document.getElementById('title').value);
+            fd.append('content_type', document.getElementById('content_type').value);
+            fd.append('file', document.getElementById('file').files[0]);
+            fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/upload/', true);
+            xhr.upload.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    document.getElementById('p-box').style.display = 'block';
+                    const per = Math.round((e.loaded / e.total) * 100);
+                    document.getElementById('pb').value = per;
+                    document.getElementById('pc').innerText = per + '%';
+                }
+            };
+            xhr.onload = function() { if(xhr.status === 200) { alert('Success!'); window.location.href='/home/'; } };
+            xhr.send(fd);
+        };
+    </script>
+</body>
+</html>
