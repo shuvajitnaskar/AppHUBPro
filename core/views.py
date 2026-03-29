@@ -8,6 +8,9 @@ from .models import UploadedContent
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+def splash_screen(request):
+    return render(request, 'splash.html')
+
 # হোম পেজ (ফিল্টার ও সার্চ ঠিক রাখা হয়েছে)
 def home(request):
     query = request.GET.get('q')
