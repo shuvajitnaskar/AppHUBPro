@@ -25,102 +25,102 @@
             position: relative;
         }
 
-        /* Watermark Background Section */
+        /* Full Watermark Background (Name, Web, QR, Instagram) */
         body::before {
             content: "";
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: -1;
-            opacity: 0.04; /* Very subtle opacity */
+            opacity: 0.06; /* Subtle Branding */
             pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='150' viewBox='0 0 250 150'%3E%3Ctext x='0' y='50' font-family='Arial' font-size='14' fill='white' transform='rotate(-25)'%3EShuvajit Naskar | apphubpro.onrender.com%3C/text%3E%3C/svg%3E");
+            /* SVG Pattern includes QR Box, Name, Web, and Insta @shuvajit_naskar */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='350' height='350' viewBox='0 0 350 350'%3E%3Cg transform='rotate(-25 175 175)' fill='white' font-family='Arial, sans-serif'%3E%3Crect x='10' y='10' width='45' height='45' fill='white'/%3E%3Crect x='18' y='18' width='29' height='29' fill='black'/%3E%3Crect x='25' y='25' width='15' height='15' fill='white'/%3E%3Ctext x='10' y='85' font-size='16' font-weight='bold'%3EShuvajit Naskar%3C/text%3E%3Ctext x='10' y='105' font-size='11'%3Eapphubpro.onrender.com%3C/text%3E%3Ctext x='10' y='122' font-size='11'%3EInsta: @shuvajit_naskar%3C/text%3E%3C/g%3E%3C/svg%3E");
             background-repeat: repeat;
         }
 
         .header { 
             text-align: center; 
-            padding: 50px 20px; 
-            background: rgba(31, 31, 31, 0.8); 
-            border-radius: 20px; 
-            margin-bottom: 30px; 
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); 
+            padding: 55px 20px; 
+            background: rgba(26, 26, 29, 0.9); 
+            border-radius: 25px; 
+            margin-bottom: 35px; 
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.9); 
             border: 1px solid #333;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
         }
 
         h1 { 
             margin: 0; 
             font-family: 'Orbitron', sans-serif;
             color: white; 
-            font-size: 42px; 
-            letter-spacing: 5px; 
+            font-size: 48px; 
+            letter-spacing: 7px; 
             text-transform: uppercase; 
             text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
-            animation: glow 2s ease-in-out infinite alternate;
+            animation: neonGlow 3s ease-in-out infinite alternate;
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink); }
-            to { text-shadow: 0 0 15px var(--neon-blue), 0 0 30px var(--neon-blue); }
+        @keyframes neonGlow {
+            0% { text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink); }
+            100% { text-shadow: 0 0 20px var(--neon-blue), 0 0 40px var(--neon-blue); }
         }
 
-        /* User Menu Section */
-        .user-nav { margin-top: 20px; display: flex; justify-content: center; gap: 15px; align-items: center; }
+        .user-nav { margin-top: 25px; display: flex; justify-content: center; gap: 20px; align-items: center; }
         
-        .search-container { margin: 30px 0; display: flex; justify-content: center; gap: 10px; }
+        .search-container { margin: 40px 0; display: flex; justify-content: center; gap: 12px; }
         .search-box { 
-            padding: 12px 25px; border-radius: 30px; border: 1px solid #444; 
-            background: #1a1a1a; color: white; width: 350px; outline: none; 
-            transition: 0.3s;
+            padding: 15px 30px; border-radius: 40px; border: 1px solid #444; 
+            background: #151517; color: white; width: 400px; outline: none; 
+            transition: 0.4s; font-size: 16px;
         }
-        .search-box:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
+        .search-box:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 212, 255, 0.6); }
 
         .search-btn { 
-            padding: 12px 30px; border-radius: 30px; border: none; 
-            background: linear-gradient(45deg, var(--neon-pink), #b0003a); 
-            color: white; cursor: pointer; font-weight: bold; 
+            padding: 12px 35px; border-radius: 40px; border: none; 
+            background: linear-gradient(45deg, var(--neon-pink), #9c0035); 
+            color: white; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s;
         }
+        .search-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
 
-        .filter-container { margin-bottom: 40px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .filter-container { margin-bottom: 50px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
         .filter-btn { 
-            padding: 10px 22px; border-radius: 25px; border: 1px solid #444; 
-            background: #1a1a1a; color: #ddd; text-decoration: none; 
+            padding: 12px 28px; border-radius: 35px; border: 1px solid #444; 
+            background: #1a1a1c; color: #eee; text-decoration: none; 
             font-size: 14px; font-weight: 600; transition: 0.3s; 
         }
         .filter-btn:hover, .filter-btn.active { 
             background: var(--neon-pink); color: white; border-color: var(--neon-pink);
-            box-shadow: 0 0 15px rgba(255, 0, 123, 0.4);
+            box-shadow: 0 0 20px rgba(255, 0, 123, 0.6);
         }
 
-        /* Card Section */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
         .card { 
-            background: rgba(30, 30, 32, 0.9); border: 1px solid #333; border-radius: 20px; 
-            padding: 25px; text-align: center; transition: 0.4s; position: relative;
+            background: rgba(28, 28, 30, 0.95); border: 1px solid #333; border-radius: 25px; 
+            padding: 35px; text-align: center; transition: 0.4s; position: relative;
             overflow: hidden;
         }
-        .card:hover { transform: translateY(-10px); border-color: var(--neon-blue); box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2); }
+        .card:hover { transform: translateY(-15px); border-color: var(--neon-blue); box-shadow: 0 20px 45px rgba(0, 212, 255, 0.3); }
         
         .badge { 
             display: inline-block; background-color: var(--neon-blue); color: #000; 
-            padding: 6px 15px; border-radius: 50px; font-size: 10px; 
-            text-transform: uppercase; font-weight: 800; margin-bottom: 15px;
+            padding: 8px 20px; border-radius: 50px; font-size: 11px; 
+            text-transform: uppercase; font-weight: 800; margin-bottom: 20px;
         }
         
-        .uploader-info { font-size: 12px; color: #888; margin-bottom: 15px; }
+        .uploader-info { font-size: 14px; color: #aaa; margin-bottom: 20px; line-height: 1.6; }
         .uploader-info strong { color: var(--neon-pink); }
 
-        .btn-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .preview-btn { background: #333; color: white; padding: 12px; border-radius: 30px; text-decoration: none; font-weight: 600; border: 1px solid #555; transition: 0.3s; }
-        .preview-btn:hover { background: #444; border-color: var(--neon-blue); }
+        .btn-group { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
+        .preview-btn { background: #2a2a2c; color: white; padding: 15px; border-radius: 40px; text-decoration: none; font-weight: 600; border: 1px solid #444; transition: 0.3s; }
+        .preview-btn:hover { background: #3a3a3c; border-color: var(--neon-blue); }
         
         .download-btn { 
-            background: linear-gradient(45deg, var(--neon-green), #00a052); 
-            color: black; padding: 12px; border-radius: 30px; text-decoration: none; 
-            font-weight: 800; transition: 0.3s; 
+            background: linear-gradient(45deg, var(--neon-green), #00b359); 
+            color: black; padding: 15px; border-radius: 40px; text-decoration: none; 
+            font-weight: 800; transition: 0.3s; font-size: 17px;
         }
-        .download-btn:hover { transform: scale(1.03); box-shadow: 0 0 15px var(--neon-green); }
+        .download-btn:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--neon-green); }
     </style>
 </head>
 <body>
@@ -130,10 +130,10 @@
         
         <div class="user-nav">
             {% if user.is_authenticated %}
-                <span style="color: var(--neon-green); font-weight: 600;">Welcome, {{ user.username }}!</span>
-                <a href="{% url 'upload' %}" class="filter-btn active" style="border-color: var(--neon-green); color: var(--neon-green);">Upload APK</a>
+                <span style="color: var(--neon-green); font-weight: 600; font-size: 15px;">WELCOME, {{ user.username|upper }}!</span>
+                <a href="{% url 'upload' %}" class="filter-btn active" style="border-color: var(--neon-green); color: var(--neon-green);">Upload Content</a>
                 <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                    {% csrf_token %}<button type="submit" class="filter-btn" style="cursor:pointer;">Logout</button>
+                    {% csrf_token %}<button type="submit" class="filter-btn" style="cursor:pointer; background:none; border:1px solid #444; color:#aaa;">Logout</button>
                 </form>
             {% else %}
                 <a href="{% url 'login' %}" class="filter-btn">Login</a>
@@ -142,16 +142,16 @@
         </div>
 
         <form method="GET" action="{% url 'home' %}" class="search-container">
-            <input type="text" name="q" class="search-box" placeholder="Find premium contents..." value="{{ request.GET.q }}">
+            <input type="text" name="q" class="search-box" placeholder="Search premium apps & media..." value="{{ request.GET.q }}">
             <button type="submit" class="search-btn">Search</button>
         </form>
 
         <div class="filter-container">
-            <a href="{% url 'home' %}?category=all" class="filter-btn">All Items</a>
-            <a href="{% url 'home' %}?category=app" class="filter-btn">Apps</a>
-            <a href="{% url 'home' %}?category=photo" class="filter-btn">Photos</a>
-            <a href="{% url 'home' %}?category=video" class="filter-btn">Videos</a>
-            <a href="{% url 'home' %}?category=document" class="filter-btn">Documents</a>
+            <a href="{% url 'home' %}?category=all" class="filter-btn {% if not request.GET.category or request.GET.category == 'all' %}active{% endif %}">Explore All</a>
+            <a href="{% url 'home' %}?category=app" class="filter-btn {% if request.GET.category == 'app' %}active{% endif %}">Apps</a>
+            <a href="{% url 'home' %}?category=photo" class="filter-btn {% if request.GET.category == 'photo' %}active{% endif %}">Photos</a>
+            <a href="{% url 'home' %}?category=video" class="filter-btn {% if request.GET.category == 'video' %}active{% endif %}">Videos</a>
+            <a href="{% url 'home' %}?category=document" class="filter-btn {% if request.GET.category == 'document' %}active{% endif %}">Documents</a>
         </div>
     </div>
 
@@ -159,18 +159,18 @@
         {% for item in contents %}
         <div class="card">
             <span class="badge">{{ item.get_content_type_display }}</span>
-            <h3 style="margin: 10px 0; font-size: 22px;">{{ item.title }}</h3>
+            <h3 style="margin: 10px 0; font-size: 26px; font-weight: 700; font-family: 'Poppins';">{{ item.title }}</h3>
             
             <div class="uploader-info">
                 {% if item.uploaded_by %}
-                    By: <strong>{{ item.uploaded_by.username }}</strong> <br>
+                    Uploaded By: <strong>{{ item.uploaded_by.username }}</strong> <br>
                     {{ item.uploaded_by.email|default:"" }}
                 {% else %}
-                    By: <strong>Admin</strong>
+                    Uploaded By: <strong>System Admin</strong>
                 {% endif %}
             </div>
 
-            <p style="color: #bbb; font-size: 14px; line-height: 1.6;">{{ item.description|default:"Exclusive content for App Hub Pro users."|truncatechars:80 }}</p>
+            <p style="color: #ccc; font-size: 15px; line-height: 1.7;">{{ item.description|default:"Exclusive premium content provided by App HUB Pro."|truncatechars:100 }}</p>
             
             <div class="btn-group">
                 <a href="{{ item.file.url }}" class="preview-btn" target="_blank">View Details</a>
@@ -178,9 +178,9 @@
             </div>
         </div>
         {% empty %}
-        <div style="grid-column: 1/-1; text-align: center; margin-top: 80px; opacity: 0.5;">
-            <h2 style="font-family: 'Orbitron';">NO CONTENT FOUND</h2>
-            <p>Try exploring other categories or search terms.</p>
+        <div style="grid-column: 1/-1; text-align: center; margin-top: 120px; opacity: 0.7;">
+            <h2 style="font-family: 'Orbitron'; font-size: 35px; letter-spacing: 3px; color: var(--neon-pink);">NO CONTENT FOUND</h2>
+            <p style="font-size: 18px;">Try a different keyword or check other categories.</p>
         </div>
         {% endfor %}
     </div>
