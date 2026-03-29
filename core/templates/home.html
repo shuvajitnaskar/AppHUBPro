@@ -61,7 +61,6 @@
             margin-bottom: 10px;
         }
 
-        /* তোমার যোগ করা নতুন টেক্সটের স্টাইল */
         .header h3 { 
             color: var(--neon-blue); 
             font-size: 18px; 
@@ -104,7 +103,6 @@
             box-shadow: 0 0 20px rgba(255, 0, 123, 0.6);
         }
 
-        /* Card Section */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
         .card { 
             background: rgba(28, 28, 30, 0.95); border: 1px solid #333; border-radius: 25px; 
@@ -159,9 +157,12 @@
         <div class="filter-container">
             <a href="{% url 'home' %}?category=all" class="filter-btn {% if not request.GET.category or request.GET.category == 'all' %}active{% endif %}">Explore All</a>
             <a href="{% url 'home' %}?category=app" class="filter-btn {% if request.GET.category == 'app' %}active{% endif %}">Apps</a>
-            <a href="{% url 'home' %}?category=photo" class="filter-btn {% if request.GET.category == 'photo' %}active{% endif %}">Photos</a>
-            <a href="{% url 'home' %}?category=video" class="filter-btn {% if request.GET.category == 'video' %}active{% endif %}">Videos</a>
-            <a href="{% url 'home' %}?category=document" class="filter-btn {% if request.GET.category == 'document' %}active{% endif %}">Documents</a>
+            
+            {% if user.is_superuser %}
+                <a href="{% url 'home' %}?category=photo" class="filter-btn {% if request.GET.category == 'photo' %}active{% endif %}">Photos</a>
+                <a href="{% url 'home' %}?category=video" class="filter-btn {% if request.GET.category == 'video' %}active{% endif %}">Videos</a>
+                <a href="{% url 'home' %}?category=document" class="filter-btn {% if request.GET.category == 'document' %}active{% endif %}">Documents</a>
+            {% endif %}
         </div>
     </div>
 

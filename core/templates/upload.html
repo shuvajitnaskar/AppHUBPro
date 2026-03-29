@@ -2,57 +2,139 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Upload - App HUB Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Content | App HUB Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #121212; color: white; font-family: Arial; text-align: center; padding: 50px; }
-        .box { background: #1f1f1f; padding: 30px; border-radius: 15px; border: 1px solid #333; display: inline-block; width: 350px; }
-        input, select { width: 90%; padding: 10px; margin: 10px 0; background: #222; color: white; border: 1px solid #444; }
-        .progress-box { display: none; margin-top: 20px; }
-        progress { width: 100%; accent-color: #00e676; }
-        .btn { background: #ff4081; color: white; padding: 10px; border: none; border-radius: 20px; width: 100%; cursor: pointer; }
+        :root {
+            --neon-pink: #ff007b;
+            --neon-blue: #00d4ff;
+            --neon-green: #00e676;
+            --bg-dark: #0a0a0b;
+        }
+
+        body { 
+            background-color: var(--bg-dark); 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Full Watermark (Shuvajit Naskar, Web, Insta, QR) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='350' height='350' viewBox='0 0 350 350'%3E%3Cg transform='rotate(-25 175 175)' fill='white' font-family='Arial, sans-serif'%3E%3Crect x='10' y='10' width='45' height='45' fill='white'/%3E%3Crect x='18' y='18' width='29' height='29' fill='black'/%3E%3Crect x='25' y='25' width='15' height='15' fill='white'/%3E%3Ctext x='10' y='85' font-size='16' font-weight='bold'%3EShuvajit Naskar%3C/text%3E%3Ctext x='10' y='105' font-size='11'%3Eapphubpro.onrender.com%3C/text%3E%3Ctext x='10' y='122' font-size='11'%3EInsta: @shuvajit_naskar%3C/text%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+
+        .upload-card {
+            background: rgba(20, 20, 22, 0.95);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.9);
+            border: 1px solid #333;
+            width: 100%;
+            max-width: 500px;
+            backdrop-filter: blur(15px);
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0 0 10px var(--neon-blue);
+            margin-bottom: 35px;
+            letter-spacing: 3px;
+        }
+
+        .form-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 10px; color: #ddd; font-size: 14px; font-weight: 600; }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #444;
+            background: #151517;
+            color: white;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus, select:focus { border-color: var(--neon-pink); }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 40px;
+            border: none;
+            background: linear-gradient(45deg, var(--neon-pink), #b0003a);
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.4s;
+            margin-top: 15px;
+        }
+
+        .submit-btn:hover { transform: scale(1.03); box-shadow: 0 0 20px var(--neon-pink); }
+
+        .back-link { text-align: center; margin-top: 25px; }
+        .back-link a { color: var(--neon-blue); text-decoration: none; font-size: 15px; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>Admin Upload</h2>
-        <form id="upload-form">
+
+    <div class="upload-card">
+        <h2>UPLOAD CONTENT</h2>
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="text" id="title" placeholder="Title" required>
-            <select id="content_type">
-                <option value="app">App</option>
-                <option value="photo">Photo</option>
-            </select>
-            <input type="file" id="file" required>
-            <button type="submit" class="btn">Upload</button>
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" placeholder="Enter App or File Name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Content Type</label>
+                <select name="content_type">
+                    <option value="app">App (APK)</option>
+                    
+                    {% if user.is_superuser %}
+                        <option value="photo">Photo / Image</option>
+                        <option value="video">Video Content</option>
+                        <option value="document">Document (PDF/Docs)</option>
+                    {% endif %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" rows="4" placeholder="Brief description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Select File</label>
+                <input type="file" name="file" accept=".apk,image/*,video/*,application/pdf" required>
+            </div>
+
+            <button type="submit" class="submit-btn">PUBLISH TO HUB</button>
         </form>
-        <div class="progress-box" id="p-box">
-            <p>Uploading: <span id="pc">0%</span></p>
-            <progress id="pb" value="0" max="100"></progress>
+        <div class="back-link">
+            <a href="{% url 'home' %}">← Return to Home</a>
         </div>
     </div>
 
-    <script>
-        document.getElementById('upload-form').onsubmit = function(e) {
-            e.preventDefault();
-            const fd = new FormData();
-            fd.append('title', document.getElementById('title').value);
-            fd.append('content_type', document.getElementById('content_type').value);
-            fd.append('file', document.getElementById('file').files[0]);
-            fd.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/upload/', true);
-            xhr.upload.onprogress = function(e) {
-                if (e.lengthComputable) {
-                    document.getElementById('p-box').style.display = 'block';
-                    const per = Math.round((e.loaded / e.total) * 100);
-                    document.getElementById('pb').value = per;
-                    document.getElementById('pc').innerText = per + '%';
-                }
-            };
-            xhr.onload = function() { if(xhr.status === 200) { alert('Success!'); window.location.href='/home/'; } };
-            xhr.send(fd);
-        };
-    </script>
 </body>
 </html>
