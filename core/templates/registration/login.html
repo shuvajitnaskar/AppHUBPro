@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - App HUB Pro</title>
+    <style>
+        body { background-color: #121212; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background-color: #1f1f1f; padding: 40px; border-radius: 15px; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 350px; text-align: center; }
+        h2 { color: #ff4081; margin-bottom: 25px; letter-spacing: 1px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #ff4081; }
+        .btn { width: 100%; padding: 12px; border-radius: 30px; border: none; background: #ff4081; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 15px; }
+        .btn:hover { background: #e91e63; transform: translateY(-2px); }
+        .footer-links { margin-top: 20px; font-size: 14px; color: #aaa; }
+        .footer-links a { color: #ff4081; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>App HUB Pro Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Login Now</button>
+        </form>
+        <div class="footer-links">
+            Don't have an account? <a href="{% url 'register' %}">Create One</a> <br><br>
+            <a href="{% url 'home' %}">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

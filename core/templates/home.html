@@ -1,134 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="Shuvajit Naskar">
-    <meta name="description" content="App HUB Pro - Created by Shuvajit Naskar. A premium gallery for apps, photos, and documents.">
-    <meta name="keywords" content="Shuvajit Naskar, App HUB Pro, Shuvajit, Bengali Developer">
-    <title>App Hub Pro - Home</title>
-    <style>
-        body { background-color: #121212; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; }
-        .header { text-align: center; padding: 30px; background-color: #1f1f1f; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); border: 1px solid #333; }
-        h1 { margin: 0; color: #ff4081; font-size: 32px; letter-spacing: 2px; text-transform: uppercase; }
+<div class="grid-container">
+    {% for item in contents %}
+    <div class="card">
+        <span class="badge">{{ item.get_content_type_display }}</span>
+        <h3>{{ item.title }}</h3>
         
-        /* সার্চ বার ও ফিল্টার */
-        .search-container { margin: 25px 0; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .search-box { padding: 12px 20px; border-radius: 30px; border: 1px solid #444; background: #2a2a2a; color: white; width: 350px; outline: none; font-size: 16px; transition: 0.3s; }
-        .search-box:focus { border-color: #ff4081; box-shadow: 0 0 10px rgba(255, 64, 129, 0.3); }
-        .search-btn { padding: 10px 25px; border-radius: 30px; border: none; background: #ff4081; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .search-btn:hover { background: #e91e63; transform: translateY(-2px); }
+        <div style="font-size: 12px; color: #ff4081; margin-bottom: 8px;">
+            By: {{ item.uploaded_by.username }} 
+            {% if item.uploaded_by.email %}| {{ item.uploaded_by.email }}{% endif %}
+        </div>
 
-        .filter-container { margin-bottom: 35px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
-        .filter-btn { padding: 10px 20px; border-radius: 25px; border: 1px solid #444; background: #1f1f1f; color: #bbb; text-decoration: none; font-size: 14px; font-weight: 500; transition: 0.3s; }
-        .filter-btn:hover, .filter-btn.active { background: #ff4081; color: white; border-color: #ff4081; box-shadow: 0 4px 10px rgba(255, 64, 129, 0.4); }
+        <p>{{ item.description|default:"No description available." }}</p>
+        
+        <div class="app-rating-box">
+             </div>
 
-        /* কার্ড গ্রিড */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .card { background-color: #1f1f1f; border: 1px solid #333; border-radius: 15px; padding: 25px; text-align: center; box-shadow: 0 6px 12px rgba(0,0,0,0.5); transition: 0.3s; position: relative; }
-        .card:hover { transform: translateY(-8px); border-color: #ff4081; box-shadow: 0 10px 20px rgba(0,0,0,0.7); }
-        .card h3 { margin-top: 10px; color: #fff; font-size: 24px; }
-        .card p { color: #aaa; font-size: 15px; margin-bottom: 20px; line-height: 1.5; height: 45px; overflow: hidden; }
-        
-        .badge { display: inline-block; background-color: #ff4081; color: white; padding: 5px 12px; border-radius: 6px; font-size: 11px; margin-bottom: 15px; text-transform: uppercase; font-weight: bold; }
-        
-        /* রেটিং */
-        .app-rating-box { background-color: #2a2a2a; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #3d3d3d; }
-        .avg-rating { color: gold; font-weight: bold; font-size: 14px; display: block; margin-bottom: 10px; }
-        .your-score-label { font-size: 13px; color: #ccc; margin-bottom: 5px; display: block; }
-        input[type=range] { width: 100%; accent-color: #ff4081; cursor: pointer; margin: 10px 0; }
-
-        /* বাটন স্টাইল */
-        .btn-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
-        .preview-btn { display: inline-block; background-color: #2196F3; color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; width: 85%; transition: 0.3s; }
-        .preview-btn:hover { background-color: #1976D2; transform: scale(1.05); }
-        
-        .download-btn { display: inline-block; background-color: #00e676; color: black; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; width: 85%; transition: 0.3s; }
-        .download-btn:hover { background-color: #00c853; color: white; transform: scale(1.05); }
-        
-        .empty-msg { grid-column: 1 / -1; text-align: center; color: #777; margin-top: 60px; }
-    </style>
-</head>
-<body>
-
-    <div class="header">
-        <h1>App HUB Pro</h1>
-        
-        <form method="GET" action="/home/" class="search-container">
-            <input type="text" name="q" class="search-box" placeholder="Search by name..." value="{{ request.GET.q }}">
-            <button type="submit" class="search-btn">Search</button>
-        </form>
-
-        <div class="filter-container">
-            <a href="/home/?category=all" class="filter-btn">All Items</a>
-            <a href="/home/?category=app" class="filter-btn">Apps</a>
-            <a href="/home/?category=photo" class="filter-btn">Photos</a>
-            <a href="/home/?category=video" class="filter-btn">Videos</a>
-            <a href="/home/?category=document" class="filter-btn">Documents</a>
+        <div class="btn-group">
+            <a href="{{ item.file.url }}" class="preview-btn" target="_blank">Preview / Open</a>
+            <a href="{{ item.file.url }}" class="download-btn" download="{{ item.title }}">Download File</a>
         </div>
     </div>
-
-    <div class="grid-container">
-        {% for item in contents %}
-        <div class="card">
-            <span class="badge">{{ item.get_content_type_display }}</span>
-            <h3>{{ item.title }}</h3>
-            <p>{{ item.description|default:"No description available." }}</p>
-            
-            <div class="app-rating-box">
-                <span class="avg-rating">Global Rating: {{ item.rating|stringformat:".1f" }} / 100 ⭐ ({{ item.total_votes }} votes)</span>
-                <hr style="border: 0.5px solid #444; margin: 10px 0;">
-                <span class="your-score-label">Your Rating: <span id="app-score-{{ item.id }}">0</span> / 100</span>
-                <input type="range" min="0" max="100" value="0" id="app-slider-{{ item.id }}" 
-                       title="Slide to rate this item"
-                       oninput="document.getElementById('app-score-{{ item.id }}').innerText=this.value"
-                       onchange="saveAppRating('{{ item.id }}', this.value)">
-            </div>
-
-            <div class="btn-group">
-                <a href="{{ item.file.url }}" class="preview-btn" target="_blank">Preview / Open</a>
-                
-                <a href="{{ item.file.url }}" class="download-btn" download="{{ item.title }}">Download File</a>
-            </div>
-        </div>
-        {% empty %}
-        <div class="empty-msg">
-            <h2>Nothing found!</h2>
-            <p>Try searching with another keyword or check different categories.</p>
-        </div>
-        {% endfor %}
-    </div>
-
-    <script>
-        window.onload = function() {
-            {% for item in contents %}
-            let savedRating = localStorage.getItem('appRating_{{ item.id }}');
-            if(savedRating) {
-                document.getElementById('app-slider-{{ item.id }}').value = savedRating;
-                document.getElementById('app-score-{{ item.id }}').innerText = savedRating;
-            }
-            {% endfor %}
-        }
-
-        function saveAppRating(appId, value) {
-            fetch('/update-rating/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 'id': appId, 'score': value })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.status === 'success') {
-                    alert('Rating updated! New Global Average: ' + data.new_rating);
-                    localStorage.setItem('appRating_' + appId, value);
-                    location.reload(); 
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
-
-</body>
-</html>
+    {% endfor %}
+</div>

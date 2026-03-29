@@ -15,8 +15,6 @@ class UploadedContent(models.Model):
     file = models.FileField(upload_to='uploads/')
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    
-    # রেটিং সিস্টেমের জন্য
     rating = models.FloatField(default=0.0)
     total_votes = models.IntegerField(default=0)
 
