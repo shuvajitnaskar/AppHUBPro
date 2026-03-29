@@ -1,23 +1,94 @@
-<div class="grid-container">
-    {% for item in contents %}
-    <div class="card">
-        <span class="badge">{{ item.get_content_type_display }}</span>
-        <h3>{{ item.title }}</h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Shuvajit Naskar">
+    <title>App Hub Pro - Home</title>
+    <style>
+        body { background-color: #121212; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        .header { text-align: center; padding: 30px; background-color: #1f1f1f; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 8px 16px rgba(0,0,0,0.6); border: 1px solid #333; }
+        h1 { margin: 0; color: #ff4081; font-size: 32px; letter-spacing: 2px; text-transform: uppercase; }
         
-        <div style="font-size: 12px; color: #ff4081; margin-bottom: 8px;">
-            By: {{ item.uploaded_by.username }} 
-            {% if item.uploaded_by.email %}| {{ item.uploaded_by.email }}{% endif %}
+        .search-container { margin: 20px 0; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .search-box { padding: 12px 20px; border-radius: 30px; border: 1px solid #444; background: #2a2a2a; color: white; width: 300px; outline: none; }
+        .search-btn { padding: 10px 25px; border-radius: 30px; border: none; background: #ff4081; color: white; cursor: pointer; font-weight: bold; }
+
+        .filter-container { margin-bottom: 30px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 18px; border-radius: 25px; border: 1px solid #444; background: #1f1f1f; color: #bbb; text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .filter-btn:hover, .filter-btn.active { background: #ff4081; color: white; border-color: #ff4081; }
+
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .card { background-color: #1f1f1f; border: 1px solid #333; border-radius: 15px; padding: 20px; text-align: center; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: #ff4081; }
+        .badge { display: inline-block; background-color: #ff4081; color: white; padding: 5px 12px; border-radius: 6px; font-size: 11px; text-transform: uppercase; margin-bottom: 10px; }
+        
+        .uploader-info { font-size: 12px; color: #ff4081; margin-bottom: 12px; line-height: 1.4; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 15px; }
+        .preview-btn { background-color: #2196F3; color: white; padding: 10px; border-radius: 25px; text-decoration: none; width: 90%; font-weight: bold; }
+        .download-btn { background-color: #00e676; color: black; padding: 10px; border-radius: 25px; text-decoration: none; width: 90%; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>App HUB Pro</h1>
+        
+        <div style="margin-top: 15px;">
+            {% if user.is_authenticated %}
+                <span style="color: #00e676; margin-right: 10px;">স্বাগতম, {{ user.username }}!</span>
+                <a href="{% url 'upload' %}" class="filter-btn active" style="background:#00e676; color:black;">Upload APK</a>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}<button type="submit" class="filter-btn">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="filter-btn">Login</a>
+                <a href="{% url 'register' %}" class="filter-btn active">Create Account</a>
+            {% endif %}
         </div>
 
-        <p>{{ item.description|default:"No description available." }}</p>
-        
-        <div class="app-rating-box">
-             </div>
+        <form method="GET" action="{% url 'home' %}" class="search-container">
+            <input type="text" name="q" class="search-box" placeholder="Search apps..." value="{{ request.GET.q }}">
+            <button type="submit" class="search-btn">Search</button>
+        </form>
 
-        <div class="btn-group">
-            <a href="{{ item.file.url }}" class="preview-btn" target="_blank">Preview / Open</a>
-            <a href="{{ item.file.url }}" class="download-btn" download="{{ item.title }}">Download File</a>
+        <div class="filter-container">
+            <a href="{% url 'home' %}?category=all" class="filter-btn">All</a>
+            <a href="{% url 'home' %}?category=app" class="filter-btn">Apps</a>
+            <a href="{% url 'home' %}?category=photo" class="filter-btn">Photos</a>
+            <a href="{% url 'home' %}?category=video" class="filter-btn">Videos</a>
+            <a href="{% url 'home' %}?category=document" class="filter-btn">Docs</a>
         </div>
     </div>
-    {% endfor %}
-</div>
+
+    <div class="grid-container">
+        {% for item in contents %}
+        <div class="card">
+            <span class="badge">{{ item.get_content_type_display }}</span>
+            <h3 style="margin: 5px 0;">{{ item.title }}</h3>
+            
+            <div class="uploader-info">
+                {% if item.uploaded_by %}
+                    By: <strong>{{ item.uploaded_by.username }}</strong> <br>
+                    Contact: {{ item.uploaded_by.email|default:"N/A" }}
+                {% else %}
+                    By: <strong>Admin</strong>
+                {% endif %}
+            </div>
+
+            <p style="color: #aaa; font-size: 14px;">{{ item.description|truncatechars:60 }}</p>
+            
+            <div class="btn-group">
+                <a href="{{ item.file.url }}" class="preview-btn" target="_blank">Preview</a>
+                <a href="{{ item.file.url }}" class="download-btn" download>Download</a>
+            </div>
+        </div>
+        {% empty %}
+        <div style="grid-column: 1/-1; text-align: center; margin-top: 50px; color: #777;">
+            <h2>কোনো কন্টেন্ট খুঁজে পাওয়া যায়নি!</h2>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
