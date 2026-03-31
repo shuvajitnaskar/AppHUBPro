@@ -13,6 +13,10 @@ class UploadedContent(models.Model):
     description = models.TextField(blank=True, null=True)
     content_type = models.CharField(max_length=20, choices=CONTENT_CHOICES)
     file = models.FileField(upload_to='uploads/')
+    
+    # অ্যাপের লোগো বা আইকন আপলোড করার জন্য নতুন ফিল্ড
+    logo = models.ImageField(upload_to='logos/', blank=True, null=True)
+    
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     rating = models.FloatField(default=0.0)

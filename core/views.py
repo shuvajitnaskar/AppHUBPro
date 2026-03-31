@@ -1,6 +1,6 @@
 import os
 import json
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -11,17 +11,23 @@ from django.views.decorators.csrf import csrf_exempt
 def splash_screen(request):
     return render(request, 'splash.html')
 
-# হোম পেজ (ফিল্টার ও সার্চ ঠিক রাখা হয়েছে)
+# হোম পেজ এবং সার্চ পেজ লজিক
 def home(request):
     query = request.GET.get('q')
     category = request.GET.get('category')
     contents = UploadedContent.objects.all().order_by('-created_at')
 
+    # যদি ইউজার সার্চ বক্সে কিছু লিখে সার্চ করে:
     if query:
         contents = contents.filter(title__icontains=query)
+        # তাকে নতুন search.html পেজে পাঠানো হবে
+        return render(request, 'search.html', {'contents': contents, 'query': query})
+
+    # যদি ইউজার কোনো ক্যাটাগরি ফিল্টার করে:
     if category and category != 'all':
         contents = contents.filter(content_type=category)
 
+    # সাধারণ অবস্থায় হোম পেজ দেখাবে
     return render(request, 'home.html', {'contents': contents})
 
 # নতুন ইউজার রেজিস্ট্রেশন
@@ -31,12 +37,20 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('home')
+            # রেজিস্ট্রেশন সফল হলে এখন ড্যাশবোর্ডে যাবে
+            return redirect('dashboard')
     else:
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
-# আপলোড লজিক (সুপার-ইউজার বনাম সাধারণ ইউজার)
+# লগ-ইন হওয়ার পরের পেজ (Dashboard)
+@login_required
+def dashboard(request):
+    # ইউজার নিজে যে অ্যাপগুলো আপলোড করেছে, সেগুলো তার ড্যাশবোর্ডে দেখাবে
+    user_apps = UploadedContent.objects.filter(uploaded_by=request.user).order_by('-created_at')
+    return render(request, 'dashboard.html', {'user_apps': user_apps})
+
+# আপলোড লজিক (লোগো আপলোড সহ)
 @login_required
 def upload_content(request):
     if request.method == 'POST':
@@ -44,6 +58,7 @@ def upload_content(request):
         description = request.POST.get('description')
         content_type = request.POST.get('content_type')
         uploaded_file = request.FILES.get('file')
+        logo_file = request.FILES.get('logo') # লোগো রিসিভ করা হচ্ছে
 
         if uploaded_file:
             ext = os.path.splitext(uploaded_file.name)[1].lower()
@@ -55,14 +70,23 @@ def upload_content(request):
                 content_type = 'app'
 
             UploadedContent.objects.create(
-                title=title, description=description,
-                content_type=content_type, file=uploaded_file,
+                title=title, 
+                description=description,
+                content_type=content_type, 
+                file=uploaded_file,
+                logo=logo_file, # ডাটাবেসে লোগো সেভ করা হচ্ছে
                 uploaded_by=request.user
             )
-            return redirect('home')
+            return redirect('dashboard') # আপলোডের পর ড্যাশবোর্ডে ফিরে যাবে
     return render(request, 'upload.html')
 
-# রেটিং লজিক (আগেরটাই আছে)
+# অ্যাপের ডিটেইলস পেজ
+def app_detail(request, pk):
+    item = get_object_or_404(UploadedContent, pk=pk)
+    related_apps = UploadedContent.objects.exclude(pk=pk).order_by('?')[:4]
+    return render(request, 'app_detail.html', {'item': item, 'related_apps': related_apps})
+
+# রেটিং লজিক 
 @csrf_exempt
 def update_rating(request):
     if request.method == 'POST':
@@ -74,3 +98,7 @@ def update_rating(request):
         content.rating = (current_total + new_score) / content.total_votes
         content.save()
         return JsonResponse({'status': 'success', 'new_rating': round(content.rating, 1)})
+
+# কাস্টমার কেয়ার পেজ
+def customer_care(request):
+    return render(request, 'customer_care.html')

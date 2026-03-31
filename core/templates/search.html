@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results | App HUB Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-pink: #ff007b; --neon-blue: #00d4ff; --neon-green: #00e676; --bg-dark: #0a0a0b; }
+        body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; overflow-x: hidden; position: relative;}
+        
+        /* Watermark */
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.15; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='350' height='350' viewBox='0 0 350 350'%3E%3Cg transform='rotate(-25 175 175)' fill='white' font-family='Arial, sans-serif'%3E%3Ctext x='10' y='85' font-size='16' font-weight='bold'%3EShuvajit Naskar%3C/text%3E%3Ctext x='10' y='105' font-size='11'%3Eapphubpro.onrender.com%3C/text%3E%3Ctext x='10' y='122' font-size='11'%3EInsta: @shuvajit_naskar%3C/text%3E%3C/g%3E%3C/svg%3E"); background-repeat: repeat; }
+
+        .nav-bar { margin-bottom: 30px; }
+        .back-btn { color: var(--neon-pink); text-decoration: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border: 1px solid var(--neon-pink); border-radius: 30px; transition: 0.3s; display: inline-block; }
+        .back-btn:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
+
+        .search-header { text-align: center; margin-bottom: 40px; background: rgba(28,28,30,0.8); padding: 30px; border-radius: 20px; border: 1px solid #333; }
+        .search-header h2 { font-family: 'Orbitron', sans-serif; font-size: 30px; margin: 0; color: white; }
+        .search-header span { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; }
+        .card { background: rgba(28, 28, 30, 0.95); border: 1px solid #333; border-radius: 20px; padding: 25px 20px; text-align: center; transition: 0.4s; }
+        .card:hover { transform: translateY(-10px); border-color: var(--neon-blue); box-shadow: 0 15px 35px rgba(0, 212, 255, 0.2); }
+        
+        .app-logo { width: 70px; height: 70px; border-radius: 20px; object-fit: cover; margin: 0 auto 15px auto; border: 2px solid #444; display: block; background-color: #151517; }
+        .badge { display: inline-block; background-color: var(--neon-blue); color: #000; padding: 5px 12px; border-radius: 50px; font-size: 10px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
+        
+        .card h3 { margin: 10px 0; font-size: 18px; font-weight: 700; }
+        .uploader-info { font-size: 12px; color: #aaa; margin-bottom: 20px; }
+        .uploader-info strong { color: var(--neon-pink); }
+
+        .preview-btn { display: block; background: #2a2a2c; color: white; padding: 12px; border-radius: 30px; text-decoration: none; font-weight: 600; border: 1px solid #444; transition: 0.3s; font-size: 14px; }
+        .preview-btn:hover { background: #333; border-color: var(--neon-blue); color: var(--neon-blue); }
+    </style>
+</head>
+<body>
+
+    <div class="nav-bar">
+        <a href="{% url 'home' %}" class="back-btn">← Back to Home</a>
+    </div>
+
+    <div class="search-header">
+        <h2>Search Results for <span>"{{ query }}"</span></h2>
+        <p style="color: #aaa; margin-top: 10px;">Found {{ contents|length }} result(s)</p>
+    </div>
+
+    <div class="grid-container">
+        {% for item in contents %}
+        <div class="card">
+            {% if item.logo %}
+                <img src="{{ item.logo.url }}" alt="Logo" class="app-logo">
+            {% else %}
+                <img src="https://cdn-icons-png.flaticon.com/512/873/873120.png" alt="Icon" class="app-logo">
+            {% endif %}
+
+            <span class="badge">{{ item.get_content_type_display }}</span>
+            <h3>{{ item.title }}</h3>
+            
+            <div class="uploader-info">
+                By: <strong>{{ item.uploaded_by.username|default:"Admin" }}</strong>
+            </div>
+            
+            <a href="{% url 'app_detail' item.pk %}" class="preview-btn">View Details</a>
+        </div>
+        {% empty %}
+        <div style="grid-column: 1/-1; text-align: center; margin-top: 50px; opacity: 0.7;">
+            <h2 style="font-family: 'Orbitron'; font-size: 25px; color: var(--neon-pink);">NO APP FOUND</h2>
+            <p>We couldn't find anything matching "{{ query }}".</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

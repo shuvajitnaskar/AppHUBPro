@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Care | App HUB Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-pink: #ff007b; --neon-blue: #00d4ff; --bg-dark: #0a0a0b; }
+        body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        
+        .contact-card { background: rgba(20, 20, 22, 0.95); padding: 40px; border-radius: 25px; border: 1px solid #333; width: 90%; max-width: 500px; text-align: center; box-shadow: 0 0 30px rgba(0, 212, 255, 0.1); }
+        h2 { font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 10px var(--neon-blue); margin-bottom: 10px; font-size: 28px; }
+        p { color: #bbb; font-size: 14px; margin-bottom: 30px; }
+        
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #444; background: #151517; color: white; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        input:focus, textarea:focus { border-color: var(--neon-pink); outline: none; box-shadow: 0 0 10px rgba(255, 0, 123, 0.3); }
+        
+        .btn-send { width: 100%; padding: 15px; border-radius: 30px; border: none; background: linear-gradient(45deg, var(--neon-blue), #007bb5); color: black; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 10px; text-transform: uppercase; }
+        .btn-send:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--neon-blue); color: white; }
+        
+        .back-link { margin-top: 20px; display: block; color: #888; text-decoration: none; font-size: 13px; }
+        .back-link:hover { color: var(--neon-pink); }
+    </style>
+</head>
+<body>
+
+    <div class="contact-card">
+        <h2>CUSTOMER CARE</h2>
+        <p>Need help? Send an email directly to Admin (Shuvajit Naskar).</p>
+        
+        <input type="text" id="subject" placeholder="What is your issue? (e.g. App not opening)" required>
+        <textarea id="body" rows="5" placeholder="Describe your problem in detail..." required></textarea>
+        
+        <button onclick="sendEmail()" class="btn-send">SEND VIA GMAIL</button>
+
+        <a href="{% url 'home' %}" class="back-link">← Cancel</a>
+    </div>
+
+    <script>
+        function sendEmail() {
+            var subject = document.getElementById('subject').value;
+            var body = document.getElementById('body').value;
+            
+            if(subject === "" || body === "") {
+                alert("Please write your issue first.");
+                return;
+            }
+
+            // তোমার ইমেইল অ্যাড্রেস
+            var adminEmail = "shuvajitnaskar374@gmail.com";
+            
+            // Mailto লিঙ্ক তৈরি করা (এটি ইউজারকে সরাসরি জিমেইলে নিয়ে যাবে)
+            var mailtoLink = "mailto:" + adminEmail + "?subject=" + encodeURIComponent("App HUB Pro Issue: " + subject) + "&body=" + encodeURIComponent(body);
+            
+            window.location.href = mailtoLink;
+        }
+    </script>
+</body>
+</html>

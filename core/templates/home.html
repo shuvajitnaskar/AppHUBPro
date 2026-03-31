@@ -38,6 +38,82 @@
             background-repeat: repeat;
         }
 
+        /* --- Sidebar (Hamburger Menu) Styles --- */
+        .sidebar {
+            height: 100%;
+            width: 0; /* শুরুতে লুকানো থাকবে */
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            background-color: rgba(15, 15, 17, 0.95);
+            backdrop-filter: blur(15px);
+            border-right: 2px solid var(--neon-blue);
+            overflow-x: hidden;
+            transition: 0.4s;
+            padding-top: 60px;
+            box-shadow: 5px 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .sidebar a, .sidebar button {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #ddd;
+            display: block;
+            transition: 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            text-align: left;
+            background: none;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover, .sidebar button:hover {
+            color: var(--neon-pink);
+            background-color: rgba(255, 0, 123, 0.1);
+            padding-left: 35px; /* Hover করলে একটু ডানদিকে সরবে */
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 36px;
+            margin-left: 50px;
+            padding: 0;
+            width: auto;
+            color: var(--neon-pink);
+        }
+
+        .openbtn {
+            font-size: 30px;
+            cursor: pointer;
+            color: var(--neon-blue);
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            z-index: 999;
+            transition: 0.3s;
+        }
+
+        .openbtn:hover {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .sidebar-title {
+            color: white;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* --- Main Page Styles --- */
         .header { 
             text-align: center; 
             padding: 50px 20px; 
@@ -47,107 +123,68 @@
             box-shadow: 0 0 35px rgba(0, 0, 0, 0.9); 
             border: 1px solid #333;
             backdrop-filter: blur(15px);
+            margin-top: 10px;
         }
 
-        h1 { 
-            margin: 0; 
-            font-family: 'Orbitron', sans-serif;
-            color: #ffffff; 
-            font-size: 50px; 
-            font-weight: 700;
-            letter-spacing: 10px; 
-            text-transform: uppercase; 
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.8), 0 0 25px rgba(0, 212, 255, 0.4);
-            margin-bottom: 10px;
-        }
-
-        .header h3 { 
-            color: var(--neon-blue); 
-            font-size: 18px; 
-            margin: 5px 0; 
-            font-weight: 400; 
-            letter-spacing: 2px;
-        }
-        .header h4 { 
-            color: var(--neon-pink); 
-            font-size: 14px; 
-            margin: 5px 0 20px 0; 
-            font-weight: 300; 
-            opacity: 0.9;
-        }
-
-        .user-nav { margin-top: 25px; display: flex; justify-content: center; gap: 20px; align-items: center; }
+        h1 { margin: 0; font-family: 'Orbitron', sans-serif; color: #ffffff; font-size: 50px; font-weight: 700; letter-spacing: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 212, 255, 0.8), 0 0 25px rgba(0, 212, 255, 0.4); margin-bottom: 10px; }
+        .header h3 { color: var(--neon-blue); font-size: 18px; margin: 5px 0; font-weight: 400; letter-spacing: 2px; }
+        .header h4 { color: var(--neon-pink); font-size: 14px; margin: 5px 0 20px 0; font-weight: 300; opacity: 0.9; }
         
         .search-container { margin: 30px 0; display: flex; justify-content: center; gap: 12px; }
-        .search-box { 
-            padding: 15px 30px; border-radius: 40px; border: 1px solid #444; 
-            background: #151517; color: white; width: 400px; outline: none; 
-            transition: 0.4s; font-size: 16px;
-        }
+        .search-box { padding: 15px 30px; border-radius: 40px; border: 1px solid #444; background: #151517; color: white; width: 400px; outline: none; transition: 0.4s; font-size: 16px; }
         .search-box:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 212, 255, 0.6); }
-
-        .search-btn { 
-            padding: 12px 35px; border-radius: 40px; border: none; 
-            background: var(--neon-pink); 
-            color: white; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s;
-        }
+        .search-btn { padding: 12px 35px; border-radius: 40px; border: none; background: var(--neon-pink); color: white; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
 
         .filter-container { margin-bottom: 40px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .filter-btn { 
-            padding: 10px 22px; border-radius: 35px; border: 1px solid #444; 
-            background: #1a1a1c; color: #eee; text-decoration: none; 
-            font-size: 14px; font-weight: 600; transition: 0.3s; 
-        }
-        .filter-btn:hover, .filter-btn.active { 
-            background: var(--neon-pink); color: white; border-color: var(--neon-pink);
-            box-shadow: 0 0 20px rgba(255, 0, 123, 0.6);
-        }
+        .filter-btn { padding: 10px 22px; border-radius: 35px; border: 1px solid #444; background: #1a1a1c; color: #eee; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .filter-btn:hover, .filter-btn.active { background: var(--neon-pink); color: white; border-color: var(--neon-pink); box-shadow: 0 0 20px rgba(255, 0, 123, 0.6); }
 
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
-        .card { 
-            background: rgba(28, 28, 30, 0.95); border: 1px solid #333; border-radius: 25px; 
-            padding: 35px; text-align: center; transition: 0.4s; position: relative;
-            overflow: hidden;
-        }
-        .card:hover { transform: translateY(-15px); border-color: var(--neon-blue); box-shadow: 0 20px 45px rgba(0, 212, 255, 0.3); }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         
-        .badge { 
-            display: inline-block; background-color: var(--neon-blue); color: #000; 
-            padding: 8px 20px; border-radius: 50px; font-size: 11px; 
-            text-transform: uppercase; font-weight: 800; margin-bottom: 20px;
-        }
+        .card { background: rgba(28, 28, 30, 0.95); border: 1px solid #333; border-radius: 20px; padding: 30px 20px; text-align: center; transition: 0.4s; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { transform: translateY(-10px); border-color: var(--neon-blue); box-shadow: 0 15px 35px rgba(0, 212, 255, 0.2); }
         
-        .uploader-info { font-size: 14px; color: #aaa; margin-bottom: 20px; }
+        .app-logo { width: 80px; height: 80px; border-radius: 22px; object-fit: cover; margin: 0 auto 15px auto; border: 2px solid #444; display: block; background-color: #151517; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .badge { display: inline-block; background-color: var(--neon-blue); color: #000; padding: 6px 15px; border-radius: 50px; font-size: 10px; text-transform: uppercase; font-weight: 800; margin-bottom: 15px; }
+        
+        .uploader-info { font-size: 13px; color: #aaa; margin-bottom: 20px; }
         .uploader-info strong { color: var(--neon-pink); }
 
-        .btn-group { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
-        .preview-btn { background: #2a2a2c; color: white; padding: 15px; border-radius: 40px; text-decoration: none; font-weight: 600; border: 1px solid #444; }
-        .download-btn { 
-            background: linear-gradient(45deg, var(--neon-green), #00b359); 
-            color: black; padding: 15px; border-radius: 40px; text-decoration: none; 
-            font-weight: 800; transition: 0.3s; font-size: 17px;
-        }
+        .btn-group { display: flex; flex-direction: column; gap: 15px; margin-top: auto; }
+        .preview-btn { background: #2a2a2c; color: white; padding: 14px; border-radius: 30px; text-decoration: none; font-weight: 600; border: 1px solid #444; transition: 0.3s; font-size: 15px; }
+        .preview-btn:hover { background: #333; border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 212, 255, 0.3); }
     </style>
 </head>
 <body>
+
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <div class="sidebar-title">MENU</div>
+        
+        <a href="{% url 'home' %}">🏠 Store Home</a>
+        
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}">⚙️ Dashboard (Settings)</a>
+            <a href="{% url 'upload' %}">☁️ Upload App</a>
+            <a href="{% url 'customer_care' %}">📞 Customer Care</a>
+            
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">🚪 Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">🔑 Login</a>
+            <a href="{% url 'register' %}">📝 Create Account</a>
+            <a href="{% url 'customer_care' %}">📞 Customer Care</a>
+        {% endif %}
+    </div>
+
+    <span class="openbtn" onclick="openNav()">☰</span>
 
     <div class="header">
         <h1>AppHUBPro</h1>
         <h3>Created By 'Shuvajit Naskar'</h3>
         <h4>Follow My Instagram For Updates</h4>
-
-        <div class="user-nav">
-            {% if user.is_authenticated %}
-                <span style="color: var(--neon-green); font-weight: 600;">WELCOME, {{ user.username|upper }}!</span>
-                <a href="{% url 'upload' %}" class="filter-btn active" style="border-color: var(--neon-green); color: var(--neon-green);">Upload Content</a>
-                <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                    {% csrf_token %}<button type="submit" class="filter-btn" style="cursor:pointer; background:none; border:1px solid #444; color:#aaa;">Logout</button>
-                </form>
-            {% else %}
-                <a href="{% url 'login' %}" class="filter-btn">Login</a>
-                <a href="{% url 'register' %}" class="filter-btn active">Create Account</a>
-            {% endif %}
-        </div>
 
         <form method="GET" action="{% url 'home' %}" class="search-container">
             <input type="text" name="q" class="search-box" placeholder="Search premium apps & media..." value="{{ request.GET.q }}">
@@ -169,22 +206,21 @@
     <div class="grid-container">
         {% for item in contents %}
         <div class="card">
+            {% if item.logo %}
+                <img src="{{ item.logo.url }}" alt="Logo" class="app-logo">
+            {% else %}
+                <img src="https://cdn-icons-png.flaticon.com/512/873/873120.png" alt="Default Icon" class="app-logo">
+            {% endif %}
+
             <span class="badge">{{ item.get_content_type_display }}</span>
-            <h3 style="margin: 10px 0; font-size: 26px; font-weight: 700;">{{ item.title }}</h3>
+            <h3 style="margin: 10px 0; font-size: 20px; font-weight: 700;">{{ item.title }}</h3>
             
             <div class="uploader-info">
-                {% if item.uploaded_by %}
-                    Uploaded By: <strong>{{ item.uploaded_by.username }}</strong>
-                {% else %}
-                    Uploaded By: <strong>Admin</strong>
-                {% endif %}
+                By: <strong>{{ item.uploaded_by.username|default:"Admin" }}</strong>
             </div>
-
-            <p style="color: #ccc; font-size: 15px;">{{ item.description|default:"Exclusive premium content for App HUB Pro."|truncatechars:100 }}</p>
             
             <div class="btn-group">
-                <a href="{{ item.file.url }}" class="preview-btn" target="_blank">View Details</a>
-                <a href="{{ item.file.url }}" class="download-btn" download>Download Now</a>
+                <a href="{% url 'app_detail' item.pk %}" class="preview-btn">View Details</a>
             </div>
         </div>
         {% empty %}
@@ -194,6 +230,16 @@
         </div>
         {% endfor %}
     </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "280px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+    </script>
 
 </body>
 </html>
