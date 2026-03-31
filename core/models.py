@@ -16,6 +16,7 @@ class UploadedContent(models.Model):
     
     # অ্যাপের লোগো বা আইকন আপলোড করার জন্য নতুন ফিল্ড
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
+    downloads = models.IntegerField(default=0)
     
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

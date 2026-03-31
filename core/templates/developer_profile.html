@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ developer.username }}'s Profile | App HUB Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-pink: #ff007b; --neon-blue: #00d4ff; --bg-dark: #0a0a0b; }
+        body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; }
+        
+        .profile-header { text-align: center; padding: 40px 20px; background: rgba(20, 20, 22, 0.85); border-radius: 20px; border: 1px solid #333; margin-bottom: 30px; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+        .profile-avatar { width: 100px; height: 100px; background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink)); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 45px; font-family: 'Orbitron', sans-serif; color: white; margin: 0 auto 15px auto; box-shadow: 0 0 20px rgba(0,212,255,0.4); text-transform: uppercase; }
+        h1 { margin: 0; font-family: 'Orbitron', sans-serif; color: white; font-size: 32px; letter-spacing: 2px; }
+        .stats { margin-top: 15px; color: #aaa; font-size: 15px; }
+        .stats strong { color: var(--neon-pink); font-size: 20px; font-family: 'Orbitron', sans-serif; }
+
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .card { background: rgba(28, 28, 30, 0.95); border: 1px solid #333; border-radius: 20px; padding: 30px 20px; text-align: center; transition: 0.4s; }
+        .card:hover { transform: translateY(-10px); border-color: var(--neon-blue); box-shadow: 0 10px 25px rgba(0, 212, 255, 0.2); }
+        .app-logo { width: 80px; height: 80px; border-radius: 20px; object-fit: cover; margin-bottom: 15px; border: 2px solid #444; }
+        .preview-btn { display: inline-block; margin-top: 15px; background: #2a2a2c; color: white; padding: 12px 25px; border-radius: 30px; text-decoration: none; border: 1px solid #444; transition: 0.3s; font-weight: 600; }
+        .preview-btn:hover { background: #333; border-color: var(--neon-blue); color: var(--neon-blue); }
+        .back-btn { display: inline-block; margin-top: 30px; padding: 10px 25px; background: #1a1a1c; color: #ccc; text-decoration: none; border-radius: 30px; border: 1px solid #444; transition: 0.3s; }
+        .back-btn:hover { color: white; border-color: var(--neon-pink); }
+    </style>
+</head>
+<body>
+
+    <div class="profile-header">
+        <div class="profile-avatar">{{ developer.username|make_list|first }}</div>
+        <h1>{{ developer.username }}</h1>
+        <div class="stats">
+            Total Uploads: <strong>{{ total_apps }}</strong> &nbsp;|&nbsp; Total Downloads: <strong>{{ total_downloads }}</strong>
+        </div>
+        <a href="{% url 'home' %}" class="back-btn">← Back to Store</a>
+    </div>
+
+    <h2 style="font-family: 'Orbitron', sans-serif; text-align: center; color: var(--neon-blue); margin-bottom: 30px; letter-spacing: 2px;">DEVELOPER APPS</h2>
+
+    <div class="grid-container">
+        {% for item in dev_apps %}
+        <div class="card">
+            {% if item.logo %}
+                <img src="{{ item.logo.url }}" alt="Logo" class="app-logo">
+            {% else %}
+                <img src="https://cdn-icons-png.flaticon.com/512/873/873120.png" alt="Icon" class="app-logo">
+            {% endif %}
+            <h3 style="margin: 10px 0;">{{ item.title }}</h3>
+            <p style="font-size: 13px; color: #888; margin-top: 5px;">{{ item.get_content_type_display }} | {{ item.downloads }} ⬇️</p>
+            <a href="{% url 'app_detail' item.pk %}" class="preview-btn">View App</a>
+        </div>
+        {% empty %}
+        <div style="grid-column: 1/-1; text-align: center; color: #777; margin-top: 40px;">
+            <h3 style="font-family: 'Orbitron', sans-serif;">NO APPS FOUND</h3>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

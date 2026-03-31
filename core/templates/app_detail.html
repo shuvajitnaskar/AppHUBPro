@@ -90,7 +90,7 @@
             <div class="uploader-name">By {{ item.uploaded_by.username|default:"Admin" }}</div>
             <div class="content-badge">{{ item.get_content_type_display }}</div>
             <br>
-            <a href="{{ item.file.url }}" class="download-btn-large" download>Download APK</a>
+            <a href="{% url 'download_file' item.pk %}" class="download-btn-large">Download APK</a>
         </div>
     </div>
 

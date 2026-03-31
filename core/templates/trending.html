@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Trending | App HUB Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-pink: #ff007b; --neon-blue: #00d4ff; --neon-gold: #ffd700; --bg-dark: #0a0a0b; }
+        body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; overflow-x: hidden; }
+        
+        .header { text-align: center; margin-bottom: 40px; margin-top: 20px; }
+        h1 { font-family: 'Orbitron', sans-serif; color: var(--neon-gold); font-size: 38px; margin: 0; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); letter-spacing: 2px; }
+        .header p { color: #aaa; margin-top: 5px; font-size: 15px; }
+
+        .leaderboard-container { max-width: 800px; margin: 0 auto; }
+        
+        /* Rank Card Style */
+        .rank-card { display: flex; align-items: center; background: rgba(28,28,30,0.9); border: 1px solid #333; padding: 15px 20px; border-radius: 15px; margin-bottom: 15px; transition: 0.3s; position: relative; overflow: hidden; }
+        .rank-card:hover { transform: scale(1.02); background: rgba(40,40,45,0.9); }
+        
+        /* Top 3 Special Styles */
+        .rank-1 { border-color: var(--neon-gold); box-shadow: 0 0 15px rgba(255,215,0,0.2); }
+        .rank-2 { border-color: silver; box-shadow: 0 0 15px rgba(192,192,192,0.2); }
+        .rank-3 { border-color: #cd7f32; box-shadow: 0 0 15px rgba(205,127,50,0.2); }
+
+        .rank-number { font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: bold; width: 50px; text-align: center; color: #555; }
+        .rank-1 .rank-number { color: var(--neon-gold); text-shadow: 0 0 10px var(--neon-gold); }
+        .rank-2 .rank-number { color: silver; text-shadow: 0 0 10px silver; }
+        .rank-3 .rank-number { color: #cd7f32; text-shadow: 0 0 10px #cd7f32; }
+
+        .app-logo { width: 60px; height: 60px; border-radius: 15px; object-fit: cover; margin: 0 20px; border: 2px solid #444; background: #151517; }
+        
+        .app-info { flex: 1; }
+        .app-info h3 { margin: 0; font-size: 18px; color: white; }
+        .app-info p { margin: 5px 0 0 0; font-size: 12px; color: #888; }
+        .creator-name { color: var(--neon-blue); font-weight: bold; text-decoration: none; transition: 0.3s; }
+        .creator-name:hover { color: var(--neon-pink); text-shadow: 0 0 10px var(--neon-pink); }
+
+        .stats { text-align: right; }
+        .stats-down { font-family: 'Orbitron', sans-serif; color: var(--neon-pink); font-size: 18px; font-weight: bold; }
+        .stats-rate { color: var(--neon-green); font-size: 14px; margin-top: 5px; font-weight: bold; }
+
+        .view-btn { position: absolute; right: -100px; top: 0; height: 100%; background: var(--neon-blue); color: black; display: flex; justify-content: center; align-items: center; padding: 0 25px; text-decoration: none; font-weight: bold; transition: 0.3s; font-family: 'Orbitron', sans-serif; }
+        .rank-card:hover .view-btn { right: 0; }
+
+        .back-nav { display: flex; justify-content: center; margin-top: 40px; }
+        .back-btn { padding: 12px 30px; border: 1px solid #555; border-radius: 30px; color: #fff; text-decoration: none; transition: 0.3s; font-weight: bold; background: #1a1a1c; }
+        .back-btn:hover { background: var(--neon-blue); color: black; border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0,212,255,0.4); }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🏆 TOP TRENDING 🏆</h1>
+        <p>The most downloaded and highest-rated apps of all time</p>
+    </div>
+
+    <div class="leaderboard-container">
+        {% for app in top_apps %}
+            <div class="rank-card {% if forloop.counter == 1 %}rank-1{% elif forloop.counter == 2 %}rank-2{% elif forloop.counter == 3 %}rank-3{% endif %}">
+                
+                <div class="rank-number">
+                    #{{ forloop.counter }}
+                </div>
+                
+                {% if app.logo %}
+                    <img src="{{ app.logo.url }}" alt="Logo" class="app-logo">
+                {% else %}
+                    <img src="https://cdn-icons-png.flaticon.com/512/873/873120.png" alt="Icon" class="app-logo">
+                {% endif %}
+                
+                <div class="app-info">
+                    <h3>{{ app.title }} {% if forloop.counter == 1 %}👑{% endif %}</h3>
+                    
+                    <p>By 
+                        {% if app.uploaded_by %}
+                            <a href="{% url 'developer_profile' app.uploaded_by.username %}" class="creator-name">{{ app.uploaded_by.username }}</a>
+                        {% else %}
+                            <span class="creator-name" style="color: #888;">Admin</span>
+                        {% endif %}
+                        • {{ app.get_content_type_display }}
+                    </p>
+                </div>
+                
+                <div class="stats">
+                    <div class="stats-down">{{ app.downloads }} ⬇️</div>
+                    <div class="stats-rate">{{ app.rating|floatformat:1 }} ⭐</div>
+                </div>
+
+                <a href="{% url 'app_detail' app.pk %}" class="view-btn">GET IT</a>
+            </div>
+        {% empty %}
+            <div style="text-align: center; color: #777; margin-top: 50px;">
+                <h3 style="font-family: 'Orbitron', sans-serif; color: var(--neon-pink);">NO APPS FOUND</h3>
+                <p>Upload some apps to see them on the leaderboard!</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="back-nav">
+        <a href="{% url 'home' %}" class="back-btn">← Back to Store</a>
+    </div>
+
+</body>
+</html>

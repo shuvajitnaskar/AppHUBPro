@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from .models import UploadedContent
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Sum
+from django.contrib.auth.models import User
 
 def splash_screen(request):
     return render(request, 'splash.html')
@@ -102,3 +104,64 @@ def update_rating(request):
 # কাস্টমার কেয়ার পেজ
 def customer_care(request):
     return render(request, 'customer_care.html')
+
+# ডাউনলোড ট্র্যাক করার ফাংশন
+def download_file(request, pk):
+    item = get_object_or_404(UploadedContent, pk=pk)
+    
+    # ডাউনলোডের সংখ্যা ১ বাড়িয়ে ডাটাবেসে সেভ করা
+    item.downloads += 1
+    item.save()
+    
+    # কাউন্ট হওয়ার পর ইউজারকে আসল ফাইলে পাঠিয়ে দেওয়া
+    return redirect(item.file.url)
+
+# ক্রিয়েটর অ্যানালিটিক্স ড্যাশবোর্ড
+@login_required
+def analytics_dashboard(request):
+    # ইউজারের আপলোড করা সব অ্যাপ খুঁজে আনা (বেশি ডাউনলোড হওয়াগুলো ওপরে থাকবে)
+    user_apps = UploadedContent.objects.filter(uploaded_by=request.user).order_by('-downloads')
+    
+    total_apps = user_apps.count()
+    
+    # মোট ডাউনলোডের যোগফল বের করা
+    total_downloads = user_apps.aggregate(Sum('downloads'))['downloads__sum'] or 0
+    
+    # গড় রেটিং হিসাব করা
+    avg_rating = 0
+    if total_apps > 0:
+        avg_rating = round(sum(app.rating for app in user_apps) / total_apps, 1)
+
+    context = {
+        'user_apps': user_apps,
+        'total_apps': total_apps,
+        'total_downloads': total_downloads,
+        'avg_rating': avg_rating
+    }
+    return render(request, 'analytics.html', context)
+
+# টপ ট্রেন্ডিং (সেরা ১০টি অ্যাপ)
+def trending_apps(request):
+    # প্রথমে ডাউনলোড এবং তারপর রেটিংয়ের ওপর ভিত্তি করে সেরা ১০টি অ্যাপ বাছাই করা
+    top_apps = UploadedContent.objects.order_by('-downloads', '-rating')[:10]
+    
+    return render(request, 'trending.html', {'top_apps': top_apps})
+
+# পাবলিক ডেভেলপার প্রোফাইল
+def developer_profile(request, username):
+    # নির্দিষ্ট ইউজারকে খুঁজে বের করা
+    developer = get_object_or_404(User, username=username)
+    
+    # সেই ইউজারের আপলোড করা সব অ্যাপ
+    dev_apps = UploadedContent.objects.filter(uploaded_by=developer).order_by('-created_at')
+    
+    total_apps = dev_apps.count()
+    total_downloads = dev_apps.aggregate(Sum('downloads'))['downloads__sum'] or 0
+    
+    context = {
+        'developer': developer,
+        'dev_apps': dev_apps,
+        'total_apps': total_apps,
+        'total_downloads': total_downloads
+    }
+    return render(request, 'developer_profile.html', context)

@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -56,11 +57,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'apphubpro.wsgi.application'
 
 # Database
+# লাইভ PostgreSQL ডাটাবেস যুক্ত করা হলো
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.parse('postgresql://apphub_db_user:du5DGUXFrYMmIpHMYwpXf6uwwgwnEERX@dpg-d75mmb0gjchc73erqus0-a.oregon-postgres.render.com/apphub_db')
 }
 
 # Password validation

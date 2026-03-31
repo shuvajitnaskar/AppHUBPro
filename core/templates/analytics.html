@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Analytics | App HUB Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-pink: #ff007b; --neon-blue: #00d4ff; --neon-green: #00e676; --bg-dark: #0a0a0b; }
+        body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; text-align: center; overflow-x: hidden; }
+        
+        .header { margin-bottom: 40px; margin-top: 20px; }
+        h1 { font-family: 'Orbitron', sans-serif; color: var(--neon-blue); font-size: 35px; margin: 0; text-shadow: 0 0 10px rgba(0,212,255,0.5); }
+        .header p { color: #aaa; margin-top: 5px; }
+        
+        /* Stat Cards */
+        .stats-container { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-bottom: 50px; }
+        .stat-card { background: rgba(28,28,30,0.9); border: 1px solid #333; padding: 30px; border-radius: 20px; min-width: 220px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); transition: 0.3s; position: relative; overflow: hidden; }
+        .stat-card:hover { transform: translateY(-10px); }
+        .stat-card:nth-child(1):hover { border-color: var(--neon-blue); box-shadow: 0 10px 30px rgba(0,212,255,0.2); }
+        .stat-card:nth-child(2):hover { border-color: var(--neon-pink); box-shadow: 0 10px 30px rgba(255,0,123,0.2); }
+        .stat-card:nth-child(3):hover { border-color: var(--neon-green); box-shadow: 0 10px 30px rgba(0,230,118,0.2); }
+        
+        .stat-title { font-size: 14px; color: #ccc; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-number { font-size: 45px; font-family: 'Orbitron', sans-serif; font-weight: bold; margin: 10px 0 0 0; }
+        .c-blue { color: var(--neon-blue); }
+        .c-pink { color: var(--neon-pink); }
+        .c-green { color: var(--neon-green); }
+
+        /* App List Table */
+        .table-container { max-width: 900px; margin: 0 auto; background: #151517; border-radius: 20px; padding: 25px; border: 1px solid #333; overflow-x: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .table-container h3 { font-family: 'Orbitron', sans-serif; margin-top: 0; color: white; border-bottom: 2px solid #444; padding-bottom: 15px; }
+        
+        table { width: 100%; border-collapse: collapse; text-align: left; margin-top: 10px; }
+        th { padding: 15px; color: #aaa; font-size: 13px; text-transform: uppercase; font-weight: 600; }
+        td { padding: 15px; border-bottom: 1px solid #222; color: #ddd; font-size: 15px; }
+        tr:hover td { background: rgba(255,255,255,0.03); color: white; }
+        
+        .badge { background: var(--neon-blue); color: black; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .back-btn { margin-top: 40px; display: inline-block; padding: 12px 30px; border: 1px solid #555; border-radius: 30px; color: #fff; text-decoration: none; transition: 0.3s; font-weight: bold; background: #1a1a1c; }
+        .back-btn:hover { background: var(--neon-pink); border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255,0,123,0.4); }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>CREATOR ANALYTICS</h1>
+        <p>Monitor your performance and downloads in real-time</p>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-title">Total Uploads</div>
+            <div class="stat-number c-blue">{{ total_apps }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Total Downloads</div>
+            <div class="stat-number c-pink">{{ total_downloads }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-title">Average Rating</div>
+            <div class="stat-number c-green">{{ avg_rating }} <span style="font-size: 20px;">⭐</span></div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <h3>App Performance Breakdown</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>App Name</th>
+                    <th>Category</th>
+                    <th>Total Downloads</th>
+                    <th>Current Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in user_apps %}
+                <tr>
+                    <td><strong>{{ app.title }}</strong></td>
+                    <td><span class="badge">{{ app.get_content_type_display }}</span></td>
+                    <td class="c-pink" style="font-weight: bold; font-family: 'Orbitron', sans-serif;">{{ app.downloads }} ⬇️</td>
+                    <td class="c-green" style="font-weight: bold;">{{ app.rating|floatformat:1 }} ⭐</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 30px; color: #777;">You haven't uploaded any content yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="back-btn">← Back to Dashboard</a>
+
+</body>
+</html>

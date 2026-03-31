@@ -14,4 +14,8 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('app/<int:pk>/', views.app_detail, name='app_detail'),
     path('customer-care/', views.customer_care, name='customer_care'),
+    path('download/<int:pk>/', views.download_file, name='download_file'),
+    path('analytics/', views.analytics_dashboard, name='analytics'),
+    path('trending/', views.trending_apps, name='trending'),
+    path('developer/<str:username>/', views.developer_profile, name='developer_profile'),
 ]
