@@ -19,9 +19,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',  # এই লাইনটি এখানে বসবে
     'django.contrib.staticfiles',
-    'core',  # তোমার তৈরি করা অ্যাপ
-]
+    'cloudinary',          # এই লাইনটি এখানে বসবে
+    'core',
+   ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -91,3 +93,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'dashboard'
+
+# Cloudinary Configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'CLOUDINARY_URL=cloudinary://<your_api_key>:<your_api_secret>@dxf0xkwml',
+    'API_KEY': '955543615472557',
+    'API_SECRET': 'Tc5Q-h7_T14RR3pBGgcviZdTeqw'
+}
+
+# ডিফল্ট স্টোরেজ হিসেবে Cloudinary সেট করা
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
