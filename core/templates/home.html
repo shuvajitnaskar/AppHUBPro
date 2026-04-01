@@ -15,7 +15,8 @@
             --text-dark: #ffffff; --text-light: #1a1a1b;
             --main-neon: #00d4ff; 
             --main-neon-deep: #0088aa; 
-            --app-text-color: #ff0000; /* Default Red text */
+            /* New Variable for dynamic Title Text Color, default red */
+            --title-text-color: #ff0000; 
             --card-dark: rgba(20, 20, 22, 0.9); --card-light: #f8f9fa;
         }
 
@@ -28,7 +29,7 @@
             min-height: 100vh;
         }
 
-        /* ওয়াটারমার্ক (Fixed and Visible) */
+        /* Watermark (Fixed and Visible) */
         body::after {
             content: "Shuvajit Naskar | AppHUBPro"; 
             position: fixed; top: 50%; left: 50%;
@@ -43,12 +44,12 @@
             transition: color 0.3s;
         }
 
-        /* Light Mode Fixes (Kept just in case, though switch is gone) */
+        /* Light Mode Fixes */
         body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
         body.light-mode .card { background: var(--card-light); border-color: #ddd; color: var(--text-light); }
         body.light-mode h1, body.light-mode h3, body.light-mode .sb-section-title { color: var(--text-light); }
         body.light-mode .sidebar { background-color: rgba(255, 255, 255, 0.98); }
-        body.light-mode .header h1 { color: var(--text-light); text-shadow: none; }
+        body.light-mode .header h1 { text-shadow: none; color: var(--text-light); } /* Override title color in light mode */
 
         /* Sidebar */
         .sidebar {
@@ -72,8 +73,15 @@
         .dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #333; transition: 0.3s; }
         .dot-wrapper.active .dot { border-color: white; box-shadow: 0 0 10px white; }
 
-        /* Footer Switches - REMOVED DARK/DESKTOP SWITCHES */
+        /* Footer Switches */
         .sidebar-footer { margin-top: auto; padding: 20px 25px; border-top: 1px solid #222; background: rgba(0,0,0,0.3); }
+        .switch-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--main-neon); }
+        input:checked + .slider:before { transform: translateX(20px); }
 
         /* Header & Logo */
         .header { text-align: center; padding: 50px 20px; position: relative; z-index: 10; }
@@ -86,12 +94,13 @@
             transition: 0.3s;
         }
         
+        /* AppHUBPro Title - Dynamic Color */
         .header h1 { 
             font-family: 'Orbitron', sans-serif; 
             font-weight: 900;
             letter-spacing: 6px; 
             font-size: 46px; 
-            color: var(--app-text-color); /* Controlled by JS now */
+            color: var(--title-text-color); /* Uses dynamic variable */
             text-shadow: 0 0 15px var(--main-neon), 0 0 30px var(--main-neon-deep); 
             transition: color 0.3s, text-shadow 0.3s;
             margin-top: 20px;
@@ -114,10 +123,11 @@
             text-shadow: 0 0 10px var(--main-neon); 
             transition: color 0.3s, text-shadow 0.3s;
         }
+        body.light-mode .card h3 { color: var(--text-light); text-shadow: none; }
         
         .openbtn { font-size: 30px; cursor: pointer; color: var(--main-neon); position: fixed; top: 25px; left: 25px; z-index: 9999; text-shadow: 0 0 10px var(--main-neon); }
         
-        /* Desktop View (Class kept if you ever re-enable it via JS/Localstorage) */
+        /* Desktop View */
         body.desktop-view { min-width: 1200px; padding: 40px; }
         body.desktop-view .openbtn { top: 35px; left: 35px; }
     </style>
@@ -135,15 +145,14 @@
 
         <span class="sb-section-title">NEON THEMES (Vertical)</span>
         <div class="dot-container">
-            <div class="dot-wrapper active" onclick="changeTheme('#00d4ff', '#0088aa', this)"><div class="dot" style="background: #00d4ff;"></div> Sky Blue</div>
-            <div class="dot-wrapper" onclick="changeTheme('#ff007b', '#aa0055', this)"><div class="dot" style="background: #ff007b;"></div> Pink Red</div>
-            <div class="dot-wrapper" onclick="changeTheme('#00e676', '#008844', this)"><div class="dot" style="background: #00e676;"></div> Green</div>
-            <div class="dot-wrapper" onclick="changeTheme('#ffcf00', '#aa8800', this)"><div class="dot" style="background: #ffcf00;"></div> Gold</div>
-            <div class="dot-wrapper" onclick="changeTheme('#9c27b0', '#661177', this)"><div class="dot" style="background: #9c27b0;"></div> Purple</div>
-            <div class="dot-wrapper" onclick="changeTheme('#ff5722', '#aa3311', this)"><div class="dot" style="background: #ff5722;"></div> Orange</div>
-            <div class="dot-wrapper" onclick="changeTheme('#2196f3', '#1155aa', this)"><div class="dot" style="background: #2196f3;"></div> Blue</div>
-            <div class="dot-wrapper" onclick="changeTheme('#607d8b', '#334455', this)"><div class="dot" style="background: #607d8b;"></div> Steel</div>
-            <div class="dot-wrapper" onclick="changeTheme('#009688', '#005544', this)"><div class="dot" style="background: #009688;"></div> Teal</div>
+            <div class="dot-wrapper active" onclick="changeTheme('#00d4ff', '#0088aa', '#ff007b', this)"><div class="dot" style="background: #00d4ff;"></div> Sky Blue</div>
+            <div class="dot-wrapper" onclick="changeTheme('#ff007b', '#aa0055', '#ffcf00', this)"><div class="dot" style="background: #ff007b;"></div> Pink Red</div> <div class="dot-wrapper" onclick="changeTheme('#00e676', '#008844', '#ff007b', this)"><div class="dot" style="background: #00e676;"></div> Green</div>
+            <div class="dot-wrapper" onclick="changeTheme('#ffcf00', '#aa8800', '#2196f3', this)"><div class="dot" style="background: #ffcf00;"></div> Gold</div>
+            <div class="dot-wrapper" onclick="changeTheme('#9c27b0', '#661177', '#00e676', this)"><div class="dot" style="background: #9c27b0;"></div> Purple</div>
+            <div class="dot-wrapper" onclick="changeTheme('#ff5722', '#aa3311', '#00d4ff', this)"><div class="dot" style="background: #ff5722;"></div> Orange</div>
+            <div class="dot-wrapper" onclick="changeTheme('#2196f3', '#1155aa', '#ffcf00', this)"><div class="dot" style="background: #2196f3;"></div> Blue</div>
+            <div class="dot-wrapper" onclick="changeTheme('#607d8b', '#334455', '#ff5722', this)"><div class="dot" style="background: #607d8b;"></div> Steel</div>
+            <div class="dot-wrapper" onclick="changeTheme('#009688', '#005544', '#ff007b', this)"><div class="dot" style="background: #009688;"></div> Teal</div>
         </div>
 
         <span class="sb-section-title">ACCOUNT</span>
@@ -163,11 +172,27 @@
 
         <div class="sidebar-footer">
             {% if user.is_authenticated %}
-            <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+            <form action="{% url 'logout' %}" method="post" style="margin: 0 0 15px 0;">
                 {% csrf_token %}<button type="submit" style="color: #ff007b; background:none; border:none; padding:10px 0; cursor:pointer; font-family:'Orbitron'; font-size:14px; width:100%; text-align:left; display:flex; align-items:center; gap:20px;">🚪 Logout</button>
             </form>
             {% endif %}
+
+            <div class="switch-container">
+                <span style="font-size: 11px;">Dark Mode</span>
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+                    <span class="slider"></span>
+                </label>
             </div>
+
+            <div class="switch-container">
+                <span style="font-size: 11px;">Desktop View</span>
+                <label class="switch">
+                    <input type="checkbox" id="desktopModeToggle" onchange="toggleDesktopMode()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
     </div>
 
     <span class="openbtn" onclick="openNav()">☰</span>
@@ -207,37 +232,57 @@
         function openNav() { document.getElementById("mySidebar").style.width = "300px"; }
         function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
 
-        function changeTheme(color, deepColor, el) {
+        // Updated changeTheme to accept text color
+        function changeTheme(color, deepColor, textColor, el) {
             document.documentElement.style.setProperty('--main-neon', color);
             document.documentElement.style.setProperty('--main-neon-deep', deepColor);
-            
-            // Logic for Red -> Yellow text color change when Pink Red is selected
-            if (color === '#ff007b') {
-                document.documentElement.style.setProperty('--app-text-color', '#ffff00'); // Yellow
-            } else {
-                document.documentElement.style.setProperty('--app-text-color', '#ff0000'); // Red
-            }
+            document.documentElement.style.setProperty('--title-text-color', textColor);
             
             localStorage.setItem('selectedTheme', color);
             localStorage.setItem('selectedThemeDeep', deepColor);
+            localStorage.setItem('selectedTextColor', textColor);
             
             document.querySelectorAll('.dot-wrapper').forEach(dot => dot.classList.remove('active'));
-            if(el) el.classList.add('active');
+            el.classList.add('active');
+        }
+
+        function toggleDarkMode() {
+            const body = document.getElementById('mainBody');
+            const toggle = document.getElementById('darkModeToggle');
+            if (toggle.checked) { 
+                body.classList.remove('light-mode'); 
+                localStorage.setItem('themeMode', 'dark'); 
+            } else { 
+                body.classList.add('light-mode'); 
+                localStorage.setItem('themeMode', 'light'); 
+            }
+        }
+
+        function toggleDesktopMode() {
+            const body = document.getElementById('mainBody');
+            const toggle = document.getElementById('desktopModeToggle');
+            const vp = document.getElementById('viewportMeta');
+            if (toggle.checked) { 
+                vp.setAttribute('content', 'width=1200'); 
+                body.classList.add('desktop-view');
+                localStorage.setItem('vM', 'd'); 
+            } else { 
+                vp.setAttribute('content', 'width=device-width, initial-scale=1.0'); 
+                body.classList.remove('desktop-view');
+                localStorage.setItem('vM', 'm'); 
+            }
         }
 
         window.onload = function() {
             const savedTheme = localStorage.getItem('selectedTheme');
             const savedThemeDeep = localStorage.getItem('selectedThemeDeep');
+            // Load saved text color, default to red if not set
+            const savedTextColor = localStorage.getItem('selectedTextColor') || '#ff0000'; 
             
             if (savedTheme && savedThemeDeep) {
                 document.documentElement.style.setProperty('--main-neon', savedTheme);
                 document.documentElement.style.setProperty('--main-neon-deep', savedThemeDeep);
-                
-                if (savedTheme === '#ff007b') {
-                    document.documentElement.style.setProperty('--app-text-color', '#ffff00');
-                } else {
-                    document.documentElement.style.setProperty('--app-text-color', '#ff0000');
-                }
+                document.documentElement.style.setProperty('--title-text-color', savedTextColor);
                 
                 document.querySelectorAll('.dot-wrapper').forEach(dot => {
                     if (dot.getAttribute('onclick').includes(savedTheme)) {
@@ -246,9 +291,20 @@
                         dot.classList.remove('active');
                     }
                 });
+            }
+            
+            const savedMode = localStorage.getItem('themeMode') || 'dark';
+            if (savedMode === 'light') {
+                document.getElementById('darkModeToggle').checked = false;
+                document.getElementById('mainBody').classList.add('light-mode');
             } else {
-                 // Initialize default color behavior on first load if no saved theme
-                 document.documentElement.style.setProperty('--app-text-color', '#ff0000');
+                document.getElementById('darkModeToggle').checked = true;
+            }
+
+            if (localStorage.getItem('vM') === 'd') {
+                document.getElementById('desktopModeToggle').checked = true;
+                document.getElementById('mainBody').classList.add('desktop-view');
+                document.getElementById('viewportMeta').setAttribute('content', 'width=1200');
             }
         }
     </script>
