@@ -9,6 +9,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Sum
 from django.contrib.auth.models import User
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Sum, Max
+from .models import UploadedContent, UserProfile
+from django.contrib.auth.models import User
 
 def splash_screen(request):
     return render(request, 'splash.html')
@@ -186,3 +190,28 @@ def app_request_view(request):
         AppRequest.objects.create(app_name=app_name, description=description, user_email=user_email)
         return redirect('home')
     return render(request, 'app_request.html')
+
+def developer_profile_view(request, username):
+    # ১. ডেভেলপারকে খুঁজে বের করা
+    developer = get_object_or_404(User, username=username)
+    
+    # ২. ডেভেলপারের সব অ্যাপ নিয়ে আসা
+    dev_apps = UploadedContent.objects.filter(uploaded_by=developer).order_by('-created_at')
+    
+    # ৩. স্ট্যাটাস ক্যালকুলেশন
+    total_downloads = dev_apps.aggregate(Sum('downloads'))['downloads__sum'] or 0
+    
+    # ৪. সেরা অ্যাপ (Most Downloaded)
+    most_downloaded = dev_apps.order_by('-downloads').first()
+    
+    # ৫. সেরা রেটিং পাওয়া অ্যাপ
+    top_rated = dev_apps.order_by('-rating').first()
+
+    return render(request, 'developer_profile.html', {
+        'developer': developer,
+        'dev_apps': dev_apps,
+        'total_downloads': total_downloads,
+        'most_downloaded': most_downloaded,
+        'top_rated': top_rated,
+        'app_count': dev_apps.count(),
+    })
