@@ -1,74 +1,60 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
-# ---------------------------------------------------
-# ১. ইউজার প্রোফাইল মডেল (সোশ্যাল লিঙ্ক ও বায়ো সহ)
-# ---------------------------------------------------
+# ১. ইউজার প্রোফাইল মডেল
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    bio = models.TextField(max_length=500, blank=True, null=True, default="Premium App Developer at AppHUBPro")
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(max_length=500, blank=True)
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    
-    # সোশ্যাল মিডিয়া লিঙ্কসমূহ
     instagram = models.URLField(max_length=255, blank=True, null=True)
     facebook = models.URLField(max_length=255, blank=True, null=True)
-    sharechat = models.URLField(max_length=255, blank=True, null=True)
     github = models.URLField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.username}'s Profile"
+        return self.user.username
 
-# অটোমেটিক প্রোফাইল তৈরির সিগন্যাল (ইউজার রেজিস্ট্রেশন করলে প্রোফাইল তৈরি হবে)
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-
-
-# ---------------------------------------------------
-# ২. আপলোড করা অ্যাপ/কন্টেন্ট মডেল
-# ---------------------------------------------------
+# ২. মেইন অ্যাপ/কন্টেন্ট আপলোড মডেল
 class UploadedContent(models.Model):
-    CONTENT_CHOICES = [
-        ('app', 'App'),
+    CONTENT_TYPES = (
+        ('app', 'Application'),
         ('photo', 'Photo'),
         ('video', 'Video'),
-        ('document', 'Document'),
-    ]
+    )
 
     title = models.CharField(max_length=200)
-    description = models.TextField(blank=True, null=True)
-    content_type = models.CharField(max_length=20, choices=CONTENT_CHOICES)
+    # এখানে default দেওয়া হয়েছে যাতে মাইগ্রেশনে এরর না আসে
+    description = models.TextField(default="No description provided")
+    content_type = models.CharField(max_length=10, choices=CONTENT_TYPES, default='app')
     file = models.FileField(upload_to='uploads/')
-    
-    # অ্যাপের লোগো বা আইকন
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
-    downloads = models.IntegerField(default=0)
-    
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    downloads = models.PositiveIntegerField(default=0)
     rating = models.FloatField(default=0.0)
-    total_votes = models.IntegerField(default=0)
-    is_verified = models.BooleanField(default=False) # অ্যাডমিন চেক করলে এটি True হবে
+    is_verified = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.title} - {self.content_type} (by {self.uploaded_by.username})"
+        return self.title
 
+# ৩. অ্যাপ ভার্সন হিস্ট্রি মডেল
+class AppVersion(models.Model):
+    app = models.ForeignKey(UploadedContent, on_delete=models.CASCADE, related_name='versions')
+    version_number = models.CharField(max_length=50) 
+    changelog = models.TextField(blank=True, null=True)
+    file = models.FileField(upload_to='uploads/versions/')
+    created_at = models.DateTimeField(auto_now_add=True)
 
-# ---------------------------------------------------
-# ৩. অ্যাপ রিকোয়েস্ট মডেল
-# ---------------------------------------------------
+    def __str__(self):
+        return f"{self.app.title} - {self.version_number}"
+
+# ৪. অ্যাপ রিকোয়েস্ট মডেল
 class AppRequest(models.Model):
+    # এখানেও null=True দেওয়া হয়েছে পুরনো ডেটা হ্যান্ডেল করার জন্য
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     app_name = models.CharField(max_length=200)
     description = models.TextField()
-    user_email = models.EmailField(blank=True, null=True)
-    date_requested = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default='Pending')
+    requested_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.app_name

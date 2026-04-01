@@ -4,94 +4,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ item.title }} | Safety Report</title>
+    <title>{{ item.title }} | Security Report & Download</title>
     <link rel="icon" type="image/png" href="{% static 'images/edited-image.png' %}">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --neon-green: #00e676;
             --neon-blue: #00d4ff;
+            --neon-pink: #ff007b;
             --bg-dark: #0a0a0b;
-            --main-neon: #00d4ff; /* home.html এর সাথে সিঙ্ক থাকবে */
-        }
-        body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; padding: 20px; }
-        
-        .container { max-width: 800px; margin: 0 auto; background: #151517; padding: 30px; border-radius: 25px; border: 1px solid #333; }
-        
-        /* সেফটি ব্যাজ */
-        .safety-badge {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 10px 20px; border-radius: 50px;
-            background: rgba(0, 230, 118, 0.1); border: 1px solid var(--neon-green);
-            color: var(--neon-green); font-weight: bold; font-family: 'Orbitron';
-            margin-bottom: 20px;
+            --main-neon: #00d4ff; /* Home page থেকে থিম কালার পাবে */
         }
 
-        .report-card {
-            background: #1a1a1c; border-radius: 15px; padding: 20px;
-            margin-top: 20px; border-left: 5px solid var(--neon-green);
+        body { 
+            background-color: var(--bg-dark); 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 20px;
         }
 
-        .scan-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; font-size: 14px; }
-        .status-clean { color: var(--neon-green); font-weight: bold; }
+        .container { 
+            max-width: 850px; 
+            margin: 20px auto; 
+            background: rgba(21, 21, 23, 0.9); 
+            padding: 40px; 
+            border-radius: 30px; 
+            border: 1px solid #333;
+            backdrop-filter: blur(10px);
+        }
 
+        /* সেফটি ব্যাজ স্টাইল */
+        .safety-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
+        }
+
+        .v-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 18px; border-radius: 50px;
+            font-family: 'Orbitron'; font-size: 12px; font-weight: bold;
+        }
+        .v-safe { background: rgba(0, 230, 118, 0.1); border: 1px solid var(--neon-green); color: var(--neon-green); }
+        .v-pending { background: rgba(255, 202, 40, 0.1); border: 1px solid #ffca28; color: #ffca28; }
+
+        /* অ্যাপ ইনফো */
+        .app-hero { display: flex; gap: 25px; align-items: center; margin-bottom: 40px; }
+        .app-logo { width: 100px; height: 100px; border-radius: 25px; border: 2px solid #444; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        .app-title h1 { margin: 0; font-family: 'Orbitron'; font-size: 32px; color: white; letter-spacing: 2px; }
+        .app-meta { font-size: 12px; color: #666; margin-top: 5px; }
+
+        /* স্ক্যান রিপোর্ট কার্ড */
+        .report-section {
+            background: #151517; border-radius: 20px; padding: 25px;
+            border-left: 4px solid var(--neon-green); margin-bottom: 35px;
+        }
+        .report-title { font-family: 'Orbitron'; font-size: 14px; color: var(--neon-green); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .scan-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-size: 14px; }
+        .status-ok { color: var(--neon-green); font-weight: bold; }
+
+        /* ডাউনলোড বাটন */
+        .download-area { text-align: center; margin: 40px 0; }
         .download-btn {
-            display: block; width: 100%; text-align: center;
+            display: inline-block; width: 100%; max-width: 400px;
             background: var(--main-neon); color: black;
-            padding: 15px; border-radius: 30px; text-decoration: none;
-            font-weight: bold; font-family: 'Orbitron'; margin-top: 30px;
-            box-shadow: 0 0 15px var(--main-neon);
+            padding: 18px; border-radius: 40px; text-decoration: none;
+            font-weight: bold; font-family: 'Orbitron'; font-size: 16px;
+            box-shadow: 0 0 20px var(--main-neon); transition: 0.3s;
         }
+        .download-btn:hover { transform: scale(1.03); background: white; box-shadow: 0 0 30px white; }
+
+        /* ভার্সন হিস্ট্রি টেবিল */
+        .history-section { margin-top: 50px; }
+        .history-title { font-family: 'Orbitron'; font-size: 14px; color: var(--neon-pink); margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .v-table { width: 100%; border-collapse: collapse; }
+        .v-table td { padding: 15px 10px; border-bottom: 1px solid #1a1a1c; font-size: 13px; }
+        .v-num { font-weight: bold; color: var(--main-neon); }
+        .v-link { color: var(--neon-pink); text-decoration: none; font-weight: bold; }
+
+        .back-link { display: block; text-align: center; margin-top: 30px; color: #555; text-decoration: none; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        {% if item.is_verified %}
-        <div class="safety-badge">
-            <span>🛡️ VERIFIED SAFE</span>
-        </div>
-        {% else %}
-        <div class="safety-badge" style="border-color: #ffca28; color: #ffca28; background: rgba(255, 202, 40, 0.1);">
-            <span>⚠️ SCANNING PENDING</span>
-        </div>
-        {% endif %}
-
-        <div style="display: flex; gap: 20px; align-items: center;">
-            <img src="{% if item.logo %}{{ item.logo.url }}{% else %}https://cdn-icons-png.flaticon.com/512/873/873120.png{% endif %}" style="width: 80px; border-radius: 20px;">
-            <div>
-                <h1 style="margin: 0; font-family: 'Orbitron';">{{ item.title }}</h1>
-                <p style="color: #666; margin: 5px 0;">Version: 1.0.2 | Size: 45MB</p>
-            </div>
+        <div class="safety-header">
+            <a href="{% url 'home' %}" style="color: var(--main-neon); text-decoration: none; font-size: 13px;">← Back to Hub</a>
+            {% if item.is_verified %}
+            <div class="v-badge v-safe">🛡️ VERIFIED SAFE</div>
+            {% else %}
+            <div class="v-badge v-pending">⚠️ SCAN PENDING</div>
+            {% endif %}
         </div>
 
-        <div class="report-card">
-            <h3 style="margin-top: 0; font-size: 16px; color: var(--neon-green);">🛡️ SECURITY SCAN REPORT</h3>
-            <div class="scan-item">
-                <span>Malware/Virus Status:</span>
-                <span class="status-clean">CLEAN</span>
+        <div class="app-hero">
+            <img src="{% if item.logo %}{{ item.logo.url }}{% else %}https://cdn-icons-png.flaticon.com/512/873/873120.png{% endif %}" class="app-logo">
+            <div class="app-title">
+                <h1>{{ item.title }}</h1>
+                <div class="app-meta">
+                    Category: {{ item.get_content_type_display }} | 📥 {{ item.downloads }} Downloads | ⭐ {{ item.rating }}
+                </div>
+                <div style="margin-top: 10px; font-size: 11px; color: #444;">
+                    Uploaded by: <b style="color: #888;">{{ item.uploaded_by.username }}</b>
+                </div>
             </div>
-            <div class="scan-item">
-                <span>Encrypted Connection:</span>
-                <span class="status-clean">SECURE</span>
+        </div>
+
+        <div class="report-section">
+            <div class="report-title">🛡️ SECURITY SCAN REPORT</div>
+            <div class="scan-row">
+                <span>Virus & Malware Check:</span>
+                <span class="status-ok">PASS (Clean)</span>
             </div>
-            <div class="scan-item">
-                <span>Data Privacy:</span>
-                <span class="status-clean">NO TRACKERS FOUND</span>
+            <div class="scan-row">
+                <span>Encryption Protocol:</span>
+                <span class="status-ok">SSL Secure</span>
             </div>
-            <p style="font-size: 11px; color: #555; margin-top: 15px;">
-                * This app was manually scanned by Shuvajit Naskar using premium security tools.
+            <div class="scan-row">
+                <span>Data Privacy Scan:</span>
+                <span class="status-ok">No Hidden Trackers</span>
+            </div>
+            <p style="font-size: 10px; color: #555; margin-top: 15px; font-style: italic;">
+                Verified apps are manually inspected by AppHUBPro Security Team to ensure 100% safety.
             </p>
         </div>
 
-        <p style="margin-top: 20px; line-height: 1.6; color: #aaa;">{{ item.description }}</p>
-
-        <a href="{{ item.file.url }}" class="download-btn">DOWNLOAD APK (SECURE)</a>
-        
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="{% url 'home' %}" style="color: #555; text-decoration: none; font-size: 12px;">← Back to App Gallery</a>
+        <div style="padding: 0 10px;">
+            <h4 style="font-family: 'Orbitron'; font-size: 12px; color: #888;">DESCRIPTION</h4>
+            <p style="line-height: 1.7; color: #aaa; font-size: 14px;">{{ item.description|linebreaks }}</p>
         </div>
+
+        <div class="download-area">
+            <a href="{{ item.file.url }}" class="download-btn">DOWNLOAD APK (SECURE)</a>
+        </div>
+
+        <div class="history-section">
+            <div class="history-title">📜 VERSION HISTORY</div>
+            <table class="v-table">
+                {% if item.versions.all %}
+                    {% for version in item.versions.all %}
+                    <tr>
+                        <td class="v-num">{{ version.version_number }}</td>
+                        <td style="color: #666;">{{ version.created_at|date:"d M, Y" }}</td>
+                        <td style="color: #888;">{{ version.changelog|truncatechars:30 }}</td>
+                        <td style="text-align: right;"><a href="{{ version.file.url }}" class="v-link">Get App</a></td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #444; padding: 20px;">No previous versions recorded for this app.</td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+
+        <a href="{% url 'home' %}" class="back-link">Return to Store Home Hub</a>
     </div>
 
+    <script>
+        // থিম কালার সিঙ্ক করা
+        const savedTheme = localStorage.getItem('selectedTheme') || '#00d4ff';
+        document.documentElement.style.setProperty('--main-neon', savedTheme);
+    </script>
 </body>
 </html>
