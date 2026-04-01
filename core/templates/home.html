@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* কালার এবং থিম সেট করা হয়েছে */
+        /* কালার এবং থিম সেট করা হয়েছে */
         :root {
             --neon-pink: #ff007b;
             --neon-blue: #00d4ff;
@@ -26,9 +26,7 @@
             position: relative;
         }
 
-        /* ---------------------------------------------------
-           ১. ওয়াটারমার্ক ব্যাকগ্রাউন্ড (তোমার নাম ও ইন্সটাগ্রাম)
-        ---------------------------------------------------- */
+        /* ১. ওয়াটারমার্ক ব্যাকগ্রাউন্ড */
         body::before {
             content: "";
             position: fixed;
@@ -41,9 +39,7 @@
             background-repeat: repeat;
         }
 
-        /* ---------------------------------------------------
-           ২. সাইডবার (Sidebar) এর ডিজাইন
-        ---------------------------------------------------- */
+        /* ২. সাইডবার ডিজাইন */
         .sidebar {
             height: 100%;
             width: 0; 
@@ -68,9 +64,7 @@
         .openbtn:hover { color: var(--neon-pink); text-shadow: 0 0 10px var(--neon-pink); }
         .sidebar-title { color: white; text-align: center; font-family: 'Orbitron', sans-serif; font-size: 22px; margin-bottom: 20px; letter-spacing: 2px; text-shadow: 0 0 10px var(--neon-blue); }
 
-        /* ---------------------------------------------------
-           ৩. ডেস্কটপ/মোবাইল মোড সুইচের ডিজাইন
-        ---------------------------------------------------- */
+        /* ৩. মোড সুইচ */
         .mode-toggle-container { display: flex; align-items: center; justify-content: space-between; padding: 15px 25px; border-bottom: 1px solid #333; border-top: 1px solid #333; margin-bottom: 10px; background: rgba(0,0,0,0.3); }
         .mode-label { color: #ddd; font-size: 13px; font-family: 'Poppins', sans-serif; font-weight: bold;}
         .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
@@ -80,9 +74,7 @@
         input:checked + .slider { background-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
         input:checked + .slider:before { transform: translateX(26px); }
 
-        /* ---------------------------------------------------
-           ৪. মেইন পেজ, হেডার ও সার্চ বক্সের ডিজাইন
-        ---------------------------------------------------- */
+        /* ৪. হেডার ও সার্চ বক্স */
         .header { text-align: center; padding: 50px 20px; background: rgba(20, 20, 22, 0.85); border-radius: 25px; margin-bottom: 35px; box-shadow: 0 0 35px rgba(0, 0, 0, 0.9); border: 1px solid #333; backdrop-filter: blur(15px); margin-top: 10px; }
         h1 { margin: 0; font-family: 'Orbitron', sans-serif; color: #ffffff; font-size: 50px; font-weight: 700; letter-spacing: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 212, 255, 0.8), 0 0 25px rgba(0, 212, 255, 0.4); margin-bottom: 10px; }
         .header h3 { color: var(--neon-blue); font-size: 18px; margin: 5px 0; font-weight: 400; letter-spacing: 2px; }
@@ -97,13 +89,16 @@
         .filter-btn { padding: 10px 22px; border-radius: 35px; border: 1px solid #444; background: #1a1a1c; color: #eee; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
         .filter-btn:hover, .filter-btn.active { background: var(--neon-pink); color: white; border-color: var(--neon-pink); box-shadow: 0 0 20px rgba(255, 0, 123, 0.6); }
 
-        /* ---------------------------------------------------
-           ৫. অ্যাপ কার্ড (Grid) এর ডিজাইন
-        ---------------------------------------------------- */
+        /* ৫. অ্যাপ কার্ড ডিজাইন */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         .card { background: rgba(28, 28, 30, 0.95); border: 1px solid #333; border-radius: 20px; padding: 30px 20px; text-align: center; transition: 0.4s; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
-        .card:hover { transform: translateY(-10px); border-color: var(--neon-blue); box-shadow: 0 15px 35px rgba(0, 212, 255, 0.2); }
-        .app-logo { width: 80px; height: 80px; border-radius: 22px; object-fit: cover; margin: 0 auto 15px auto; border: 2px solid #444; display: block; background-color: #151517; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        
+        /* লোগো গ্লো এনিমেশন */
+        .card:hover { transform: translateY(-10px); border-color: var(--neon-blue); box-shadow: 0 0 25px rgba(0, 212, 255, 0.4); }
+        
+        .app-logo { width: 80px; height: 80px; border-radius: 22px; object-fit: cover; margin: 0 auto 15px auto; border: 2px solid #444; display: block; background-color: #151517; box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s; }
+        .card:hover .app-logo { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
+
         .badge { display: inline-block; background-color: var(--neon-blue); color: #000; padding: 6px 15px; border-radius: 50px; font-size: 10px; text-transform: uppercase; font-weight: 800; margin-bottom: 15px; }
         .uploader-info { font-size: 13px; color: #aaa; margin-bottom: 20px; }
         .creator-link { color: var(--neon-pink); font-weight: bold; text-decoration: none; transition: 0.3s; }
@@ -111,6 +106,8 @@
         .btn-group { display: flex; flex-direction: column; gap: 15px; margin-top: auto; }
         .preview-btn { background: #2a2a2c; color: white; padding: 14px; border-radius: 30px; text-decoration: none; font-weight: 600; border: 1px solid #444; transition: 0.3s; font-size: 15px; }
         .preview-btn:hover { background: #333; border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 212, 255, 0.3); }
+        
+        .rating-stars { color: #ffca28; font-size: 12px; margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -129,12 +126,14 @@
         </div>
 
         <a href="{% url 'home' %}">🏠 Store Home</a>
-        <a href="{% url 'trending' %}">🔥 Top Trending</a> {% if user.is_authenticated %}
+        <a href="{% url 'trending' %}">🔥 Top Trending</a> 
+        {% if user.is_authenticated %}
             <a href="{% url 'dashboard' %}">⚙️ Dashboard</a>
-            <a href="{% url 'analytics' %}">📊 Creator Analytics</a> <a href="{% url 'upload' %}">☁️ Upload App</a>
+            <a href="{% url 'analytics' %}">📊 Creator Analytics</a> 
+            <a href="{% url 'upload' %}">☁️ Upload App</a>
             <a href="{% url 'customer_care' %}">📞 Customer Care</a>
             
-            <form action="{% url 'logout' %}" method="post">
+            <form action="{% url 'logout' %}" method="post" style="margin: 0;">
                 {% csrf_token %}
                 <button type="submit">🚪 Logout</button>
             </form>
@@ -190,7 +189,18 @@
                 {% else %}
                     <span class="creator-link">Admin</span>
                 {% endif %}
-                <br><span style="color:var(--neon-blue); font-size: 11px;">{{ item.downloads }} Downloads</span>
+                
+                <div class="rating-stars">
+                    {% if item.rating > 0 %}
+                        ⭐ {{ item.rating|floatformat:1 }}
+                    {% else %}
+                        <span style="color: #666; font-size: 11px;">No ratings</span>
+                    {% endif %}
+                </div>
+                
+                <span style="color:var(--neon-blue); font-size: 11px; font-weight: bold; letter-spacing: 1px;">
+                    📥 {{ item.downloads }} DOWNLOADS
+                </span>
             </div>
             
             <div class="btn-group">
@@ -207,33 +217,27 @@
     </div>
 
     <script>
-        // সাইডবার খোলার কোড
         function openNav() {
             document.getElementById("mySidebar").style.width = "300px";
         }
 
-        // সাইডবার বন্ধ করার কোড
         function closeNav() {
             document.getElementById("mySidebar").style.width = "0";
         }
 
-        // ডেস্কটপ মোড অন/অফ করার লজিক
         function toggleDesktopMode() {
             const toggle = document.getElementById('desktopModeToggle');
             const viewport = document.querySelector("meta[name=viewport]");
             
             if (toggle.checked) {
-                // Desktop mode: স্ক্রিনকে ১২০০ পিক্সেল চওড়া করে জুম আউট করবে
                 viewport.setAttribute('content', 'width=1200');
                 localStorage.setItem('viewMode', 'desktop');
             } else {
-                // Mobile mode: ফোনের স্ক্রিনের মাপে ফিট করবে
                 viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
                 localStorage.setItem('viewMode', 'mobile');
             }
         }
 
-        // পেজ রিলোড হলে ইউজারের আগের সেটিং মনে রাখা
         window.onload = function() {
             const mode = localStorage.getItem('viewMode');
             const toggle = document.getElementById('desktopModeToggle');
