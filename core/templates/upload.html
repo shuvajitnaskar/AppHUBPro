@@ -19,17 +19,18 @@
             background-color: var(--bg-dark); 
             color: white; 
             font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0;
+            margin: 0; padding: 20px;
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* --- Main Hexagon Container --- */
+        /* --- Elongated Hexagon Container (Cyber Shield) --- */
         .hex-wrapper {
             position: relative;
-            width: 550px;
-            height: 650px;
+            width: 100%;
+            max-width: 480px; /* ফর্মের পারফেক্ট চওড়া */
+            height: 720px; /* লম্বাটে করা হয়েছে যাতে লেখা না কাটে */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -37,7 +38,8 @@
             background: linear-gradient(45deg, var(--main-neon), transparent, var(--main-neon-deep), transparent);
             background-size: 400% 400%;
             animation: neonFlow 3s ease infinite;
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            /* নতুন লম্বাটে হেক্সাগন শেপ */
+            clip-path: polygon(50% 0%, 100% 8%, 100% 92%, 50% 100%, 0% 92%, 0% 8%);
             padding: 4px; /* Border thickness */
             transition: 0.5s;
         }
@@ -49,17 +51,17 @@
             animation: none;
         }
 
-        /* Inner Content Area (The actual form container) */
+        /* Inner Content Area */
         .hex-inner {
             width: 100%;
             height: 100%;
             background-color: var(--card-dark);
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            clip-path: polygon(50% 0%, 100% 8%, 100% 92%, 50% 100%, 0% 92%, 0% 8%);
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start; /* ওপর থেকে শুরু হবে */
             align-items: center;
-            padding: 40px;
+            padding: 70px 30px 40px 30px; /* ওপর-নিচে প্যাডিং বাড়ানো হয়েছে যাতে কোণায় না কাটে */
             box-sizing: border-box;
             position: relative;
             z-index: 10;
@@ -74,7 +76,7 @@
         /* --- Form Elements Inside Hexagon --- */
         h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 22px;
+            font-size: 24px;
             color: white;
             letter-spacing: 3px;
             text-shadow: 0 0 10px var(--main-neon);
@@ -83,29 +85,36 @@
         }
 
         .form-content {
-            width: 80%; /* Keeps inputs inside the safe zone of hexagon */
+            width: 95%; /* ফর্মের জায়গা বাড়ানো হয়েছে */
             display: flex;
             flex-direction: column;
+            overflow-y: auto; /* যদি লেখা বেশি হয়, তবে স্ক্রল করা যাবে */
+            max-height: 100%;
+            padding-right: 5px;
         }
 
+        /* স্ক্রলবার হাইড করা হয়েছে প্রিমিয়াম লুকের জন্য */
+        .form-content::-webkit-scrollbar { display: none; }
+        .form-content { -ms-overflow-style: none; scrollbar-width: none; }
+
         label {
-            font-size: 10px;
+            font-size: 11px;
             color: #aaa;
-            margin-bottom: 3px;
+            margin-bottom: 5px;
             font-family: 'Orbitron';
             letter-spacing: 1px;
         }
 
         input[type="text"], textarea, select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 15px;
             border-radius: 8px;
             border: 1px solid #333;
             background: rgba(10, 10, 12, 0.8);
             color: white;
             font-family: 'Poppins', sans-serif;
-            font-size: 12px;
+            font-size: 13px;
             box-sizing: border-box;
             outline: none;
             transition: 0.3s;
@@ -127,22 +136,22 @@
             width: 100%; height: 100%; cursor: pointer;
         }
         .file-btn {
-            display: block; width: 100%; padding: 10px;
+            display: block; width: 100%; padding: 12px;
             background: #121214; border: 1px dashed var(--main-neon);
             color: #888; text-align: center; border-radius: 8px;
-            font-size: 11px; font-family: 'Orbitron'; box-sizing: border-box;
+            font-size: 12px; font-family: 'Orbitron'; box-sizing: border-box;
             transition: 0.3s;
         }
         .file-input-wrapper:hover .file-btn { background: rgba(0, 212, 255, 0.1); color: white; }
 
         .upload-btn {
             width: 100%;
-            padding: 12px;
+            padding: 15px;
             background: var(--main-neon);
             color: black;
             border: none;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
             font-family: 'Orbitron';
             cursor: pointer;
@@ -154,15 +163,15 @@
 
         .back-link {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 20px;
             color: #666;
             text-decoration: none;
-            font-size: 10px;
+            font-size: 11px;
             font-family: 'Orbitron';
             transition: 0.3s;
         }
         .back-link:hover { color: var(--main-neon); }
-        .error-msg { color: #ff007b; text-align: center; font-size: 11px; margin-bottom: 10px; font-family: 'Orbitron'; }
+        .error-msg { color: #ff007b; text-align: center; font-size: 12px; margin-bottom: 15px; font-family: 'Orbitron'; }
 
         /* --- Fake Loader inside Hexagon --- */
         #uploadProgress {
@@ -176,10 +185,10 @@
             top: 0; left: 0;
             background: var(--card-dark);
             z-index: 20;
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            clip-path: polygon(50% 0%, 100% 8%, 100% 92%, 50% 100%, 0% 92%, 0% 8%);
         }
         .percent-text { font-family: 'Orbitron'; font-size: 50px; color: white; text-shadow: 0 0 20px var(--main-neon); margin: 0; }
-        .status-text { font-family: 'Orbitron'; font-size: 12px; color: var(--main-neon); letter-spacing: 3px; margin-top: 10px; animation: blink 1s infinite; }
+        .status-text { font-family: 'Orbitron'; font-size: 12px; color: var(--main-neon); letter-spacing: 3px; margin-top: 10px; animation: blink 1s infinite; text-align: center;}
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
     </style>
@@ -225,9 +234,9 @@
                 </div>
                 
                 <button type="submit" class="upload-btn">INITIATE UPLOAD</button>
+
+                <a href="{% url 'home' %}" class="back-link">ABORT & RETURN</a>
             </form>
-            
-            <a href="{% url 'home' %}" class="back-link">ABORT & RETURN</a>
 
             <div id="uploadProgress">
                 <h2 class="percent-text" id="progressVal">0%</h2>
