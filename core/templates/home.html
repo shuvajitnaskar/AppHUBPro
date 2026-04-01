@@ -7,14 +7,15 @@
     <meta name="author" content="Shuvajit Naskar">
     <title>App HUB Pro | Premium Digital Hub</title>
     <link rel="icon" type="image/png" href="{% static 'images/edited-image.png' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --bg-dark: #0a0a0b; --bg-light: #ffffff;
             --text-dark: #ffffff; --text-light: #1a1a1b;
             --main-neon: #00d4ff; 
-            --card-dark: rgba(20, 20, 22, 0.8); --card-light: #f8f9fa;
+            --main-neon-deep: #0088aa; /* নতুন ডিপ কালার ভেরিয়েবল */
+            --card-dark: rgba(20, 20, 22, 0.9); --card-light: #f8f9fa;
         }
 
         body { 
@@ -26,74 +27,107 @@
             min-height: 100vh;
         }
 
-        /* ওয়াটারমার্ক (Shuvajit Naskar) */
+        /* ওয়াটারমার্ক (নিয়ন কালার সিঙ্কড) */
         body::before {
             content: "Shuvajit Naskar | AppHUBPro"; 
             position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 5vw; opacity: 0.05; color: gray;
+            font-size: 5vw; opacity: 0.04; color: var(--main-neon);
             z-index: -1; pointer-events: none; white-space: nowrap;
+            transition: color 0.3s;
         }
 
         /* লাইট মোড ফিক্স */
         body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
         body.light-mode .card { background: var(--card-light); border-color: #ddd; color: var(--text-light); }
         body.light-mode h1, body.light-mode h3, body.light-mode .sb-section-title { color: var(--text-light); }
-        body.light-mode .sidebar { background-color: rgba(255, 255, 255, 0.95); }
+        body.light-mode .sidebar { background-color: rgba(255, 255, 255, 0.98); }
 
         /* সাইডবার */
         .sidebar {
             height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; 
             background-color: rgba(15, 15, 17, 0.98); backdrop-filter: blur(15px); 
             border-right: 2px solid var(--main-neon); overflow-y: auto; transition: 0.4s; 
-            display: flex; flex-direction: column; padding-top: 60px;
+            display: flex; flex-direction: column; padding-top: 80px;
         }
-        .sidebar a, .sidebar button {
-            padding: 12px 25px; text-decoration: none; font-size: 14px; color: #bbb; 
-            display: flex; align-items: center; gap: 15px; transition: 0.3s; font-family: 'Orbitron', sans-serif;
-            background: none; border: none; width: 100%; cursor: pointer; text-align: left;
+        .sidebar a {
+            padding: 15px 25px; text-decoration: none; font-size: 16px; color: #bbb; 
+            display: flex; align-items: center; gap: 20px; transition: 0.3s; font-family: 'Orbitron', sans-serif;
         }
-        .sidebar a:hover { color: var(--main-neon); padding-left: 35px; }
+        .sidebar a:hover { color: var(--main-neon); padding-left: 35px; background: rgba(255,255,255,0.03); }
 
-        .sb-section-title { font-size: 10px; color: #555; padding-left: 25px; margin-top: 20px; letter-spacing: 2px; font-family: 'Orbitron'; text-transform: uppercase; }
+        .sb-section-title { font-size: 11px; color: #555; padding-left: 25px; margin-top: 25px; letter-spacing: 2px; font-family: 'Orbitron'; text-transform: uppercase; border-bottom: 1px solid #222; padding-bottom: 5px; }
 
-        /* ৯টি নিয়ন কালার ডটস */
-        .dot-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 25px; }
-        .dot { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; border: 2px solid #333; transition: 0.3s; }
-        .dot:hover { transform: scale(1.2); }
+        /* ভার্টিক্যাল নিয়ন কালার ডটস */
+        .dot-container { display: flex; flex-direction: column; gap: 15px; padding: 15px 25px; }
+        .dot-wrapper { display: flex; align-items: center; gap: 15px; cursor: pointer; color: #888; transition: 0.3s; }
+        .dot-wrapper:hover { color: white; }
+        .dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #333; transition: 0.3s; }
+        .dot-wrapper.active .dot { border-color: white; box-shadow: 0 0 10px white; }
 
         /* ফুটার সুইচ সেকশন */
-        .sidebar-footer { margin-top: auto; padding-bottom: 20px; border-top: 1px solid #222; }
-        .switch-container { display: flex; align-items: center; justify-content: space-between; padding: 10px 25px; }
-        .switch { position: relative; display: inline-block; width: 38px; height: 18px; }
+        .sidebar-footer { margin-top: auto; padding: 20px 25px; border-top: 1px solid #222; background: rgba(0,0,0,0.3); }
+        .switch-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--main-neon); }
         input:checked + .slider:before { transform: translateX(20px); }
 
-        /* হেডার ও কার্ড */
-        .header { text-align: center; padding: 40px 20px; }
-        .header h1 { font-family: 'Orbitron'; letter-spacing: 5px; text-shadow: 0 0 10px var(--main-neon); transition: 0.3s; }
+        /* হেডার ও লোগো (আপডেটেড) */
+        .header { text-align: center; padding: 50px 20px; }
+        /* লোগোর চারপাশে নিয়ন ইফেক্ট বাড়ানো হয়েছে */
+        .main-logo { 
+            width: 110px; 
+            border-radius: 50%; 
+            border: 4px solid var(--main-neon); 
+            box-shadow: 0 0 30px var(--main-neon), inset 0 0 15px var(--main-neon); 
+            transition: 0.3s;
+        }
         
-        .category-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; }
-        .cat-btn { padding: 8px 20px; border-radius: 20px; border: 1px solid #333; color: #888; text-decoration: none; font-family: 'Orbitron'; font-size: 10px; transition: 0.3s; }
+        /* AppHUBPro টেক্সট স্টাইলিশ এবং ডিপ নিয়ন */
+        .header h1 { 
+            font-family: 'Orbitron', sans-serif; 
+            font-weight: 900;
+            letter-spacing: 6px; 
+            font-size: 46px; 
+            color: var(--main-neon-deep); /* ডিপ কালার */
+            text-shadow: 0 0 20px var(--main-neon), 0 0 40px var(--main-neon); 
+            transition: color 0.3s, text-shadow 0.3s;
+            margin-top: 20px;
+        }
+        
+        .category-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; }
+        .cat-btn { padding: 10px 25px; border-radius: 20px; border: 1px solid #333; color: #888; text-decoration: none; font-family: 'Orbitron'; font-size: 11px; transition: 0.3s; }
         .cat-btn.active { border-color: var(--main-neon); color: white; box-shadow: 0 0 10px var(--main-neon); }
 
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
-        .card { background: var(--card-dark); border: 1px solid #222; border-radius: 20px; padding: 25px; text-align: center; transition: 0.4s; }
-        .card h3 { font-size: 16px; margin: 10px 0; font-family: 'Orbitron'; text-shadow: 0 0 5px var(--main-neon); }
+        /* কার্ড এবং অ্যাপের নাম */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .card { background: var(--card-dark); border: 1px solid #222; border-radius: 20px; padding: 30px; text-align: center; transition: 0.4s; position: relative; }
+        .card:hover { transform: translateY(-5px); border-color: var(--main-neon); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        /* অ্যাপের নামের নিয়ন ইফেক্ট সিঙ্ক করা হয়েছে */
+        .card h3 { 
+            font-size: 18px; 
+            margin: 15px 0 5px; 
+            font-family: 'Orbitron'; 
+            color: var(--text-dark);
+            text-shadow: 0 0 10px var(--main-neon); 
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        body.light-mode .card h3 { color: var(--text-light); text-shadow: none; }
         
-        .openbtn { font-size: 28px; cursor: pointer; color: var(--main-neon); position: fixed; top: 20px; left: 25px; z-index: 999; }
+        .openbtn { font-size: 30px; cursor: pointer; color: var(--main-neon); position: fixed; top: 25px; left: 25px; z-index: 999; text-shadow: 0 0 10px var(--main-neon); }
         
         /* ডেস্কটপ ভিউ ফিক্স */
-        body.desktop-view { min-width: 1200px; }
+        body.desktop-view { min-width: 1200px; padding: 40px; }
+        body.desktop-view .openbtn { top: 35px; left: 35px; }
     </style>
 </head>
 <body id="mainBody">
 
     <div id="mySidebar" class="sidebar">
-        <span style="position: absolute; top: 15px; right: 25px; font-size: 30px; color: #ff007b; cursor: pointer;" onclick="closeNav()">×</span>
+        <span style="position: absolute; top: 15px; right: 25px; font-size: 35px; color: #ff007b; cursor: pointer;" onclick="closeNav()">×</span>
         
         <span class="sb-section-title">EXPLORE</span>
         <a href="{% url 'home' %}">🏠 Store Home</a>
@@ -101,17 +135,17 @@
         <a href="{% url 'leaderboard' %}">🥇 Leaderboard</a>
         <a href="{% url 'app_request' %}">💡 Request App</a>
 
-        <span class="sb-section-title">NEON THEMES (9 Colors)</span>
+        <span class="sb-section-title">NEON THEMES (Vertical)</span>
         <div class="dot-container">
-            <div class="dot" style="background: #00d4ff;" onclick="changeTheme('#00d4ff')"></div>
-            <div class="dot" style="background: #ff007b;" onclick="changeTheme('#ff007b')"></div>
-            <div class="dot" style="background: #00e676;" onclick="changeTheme('#00e676')"></div>
-            <div class="dot" style="background: #ffcf00;" onclick="changeTheme('#ffcf00')"></div>
-            <div class="dot" style="background: #9c27b0;" onclick="changeTheme('#9c27b0')"></div>
-            <div class="dot" style="background: #ff5722;" onclick="changeTheme('#ff5722')"></div>
-            <div class="dot" style="background: #e91e63;" onclick="changeTheme('#e91e63')"></div>
-            <div class="dot" style="background: #2196f3;" onclick="changeTheme('#2196f3')"></div>
-            <div class="dot" style="background: #607d8b;" onclick="changeTheme('#607d8b')"></div>
+            <div class="dot-wrapper active" onclick="changeTheme('#00d4ff', '#0088aa', this)"><div class="dot" style="background: #00d4ff;"></div> Sky Blue</div>
+            <div class="dot-wrapper" onclick="changeTheme('#ff007b', '#aa0055', this)"><div class="dot" style="background: #ff007b;"></div> Pink Red</div>
+            <div class="dot-wrapper" onclick="changeTheme('#00e676', '#008844', this)"><div class="dot" style="background: #00e676;"></div> Green</div>
+            <div class="dot-wrapper" onclick="changeTheme('#ffcf00', '#aa8800', this)"><div class="dot" style="background: #ffcf00;"></div> Gold</div>
+            <div class="dot-wrapper" onclick="changeTheme('#9c27b0', '#661177', this)"><div class="dot" style="background: #9c27b0;"></div> Purple</div>
+            <div class="dot-wrapper" onclick="changeTheme('#ff5722', '#aa3311', this)"><div class="dot" style="background: #ff5722;"></div> Orange</div>
+            <div class="dot-wrapper" onclick="changeTheme('#2196f3', '#1155aa', this)"><div class="dot" style="background: #2196f3;"></div> Blue</div>
+            <div class="dot-wrapper" onclick="changeTheme('#607d8b', '#334455', this)"><div class="dot" style="background: #607d8b;"></div> Steel</div>
+            <div class="dot-wrapper" onclick="changeTheme('#009688', '#005544', this)"><div class="dot" style="background: #009688;"></div> Teal</div>
         </div>
 
         <span class="sb-section-title">ACCOUNT</span>
@@ -123,10 +157,15 @@
             <a href="{% url 'login' %}">🔑 Login</a>
         {% endif %}
 
+        <span class="sb-section-title">SUPPORT</span>
+        <a href="{% url 'faq' %}">❓ Help & FAQ</a>
+        <a href="{% url 'customer_care' %}">🎧 Customer Care</a>
+        <a href="{% url 'privacy' %}">📜 Privacy Policy</a>
+
         <div class="sidebar-footer">
             {% if user.is_authenticated %}
-            <form action="{% url 'logout' %}" method="post" style="margin:0;">
-                {% csrf_token %}<button type="submit" style="color: #ff007b;">🚪 Logout</button>
+            <form action="{% url 'logout' %}" method="post" style="margin: 0 0 15px 0;">
+                {% csrf_token %}<button type="submit" style="color: #ff007b; background:none; border:none; padding:10px 0; cursor:pointer; font-family:'Orbitron'; font-size:14px; width:100%; text-align:left; display:flex; align-items:center; gap:20px;">🚪 Logout</button>
             </form>
             {% endif %}
 
@@ -151,18 +190,19 @@
     <span class="openbtn" onclick="openNav()">☰</span>
 
     <div class="header">
-        <img src="{% static 'images/edited-image.png' %}" style="width: 80px; border-radius: 50%; border: 2px solid var(--main-neon); box-shadow: 0 0 20px var(--main-neon);">
+        <img src="{% static 'images/edited-image.png' %}" class="main-logo">
         <h1>AppHUBPro</h1>
+        <p style="color: #555; font-size: 12px; letter-spacing: 5px; font-family: 'Orbitron'; margin-top: 5px;">PREMIUM DIGITAL SECURE HUB</p>
         
-        <form method="GET" action="{% url 'home' %}" style="margin:20px 0; display:flex; justify-content:center; gap:10px;">
-            <input type="text" name="q" placeholder="Search..." style="padding:10px 20px; border-radius:20px; border:1px solid #333; background:#151517; color:white; width: 250px;" value="{{ request.GET.q }}">
-            <button type="submit" style="background:var(--main-neon); border:none; padding:10px 20px; border-radius:20px; cursor:pointer; font-weight:bold;">Search</button>
+        <form method="GET" action="{% url 'home' %}" style="margin:30px 0; display:flex; justify-content:center; gap:10px;">
+            <input type="text" name="q" placeholder="Search safe apps..." style="padding:12px 25px; border-radius:30px; border:1px solid #333; background:#151517; color:white; width: 300px; font-size:14px;" value="{{ request.GET.q }}">
+            <button type="submit" style="background:var(--main-neon); border:none; padding:12px 30px; border-radius:30px; cursor:pointer; font-weight:bold; font-family:'Orbitron'; font-size:12px; color:black;">Search</button>
         </form>
     </div>
 
     <div class="category-container">
         <a href="{% url 'home' %}" class="cat-btn {% if not request.GET.category %}active{% endif %}">All Hub</a>
-        <a href="{% url 'home' %}?category=app" class="cat-btn {% if request.GET.category == 'app' %}active{% endif %}">Apps</a>
+        <a href="{% url 'home' %}?category=app" class="cat-btn {% if request.GET.category == 'app' %}active{% endif %}">Applications</a>
         <a href="{% url 'home' %}?category=photo" class="cat-btn {% if request.GET.category == 'photo' %}active{% endif %}">Photos</a>
         <a href="{% url 'home' %}?category=video" class="cat-btn {% if request.GET.category == 'video' %}active{% endif %}">Videos</a>
     </div>
@@ -170,29 +210,36 @@
     <div class="grid-container">
         {% for item in contents %}
         <div class="card">
-            <img src="{% if item.logo %}{{ item.logo.url }}{% else %}https://cdn-icons-png.flaticon.com/512/873/873120.png{% endif %}" style="width:60px; height:60px; border-radius:12px;">
+            <img src="{% if item.logo %}{{ item.logo.url }}{% else %}https://cdn-icons-png.flaticon.com/512/873/873120.png{% endif %}" style="width:70px; height:70px; border-radius:15px; object-fit: cover; border: 1px solid #333;">
             <h3>{{ item.title }}</h3>
-            <p style="font-size: 11px; opacity: 0.6;">Dev: {{ item.uploaded_by.username }}</p>
-            <a href="{% url 'app_detail' item.pk %}" style="display:block; background:var(--main-neon); color:black; padding:8px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:11px; font-family:'Orbitron';">VIEW REPORT</a>
+            <p style="font-size: 12px; opacity: 0.6; margin-bottom: 15px;">Dev: <span style="color:var(--main-neon); font-weight:bold;">{{ item.uploaded_by.username }}</span></p>
+            <a href="{% url 'app_detail' item.pk %}" style="display:block; background:var(--main-neon); color:black; padding:10px; border-radius:25px; text-decoration:none; font-weight:bold; font-size:12px; font-family:'Orbitron';">VIEW REPORT</a>
         </div>
         {% empty %}
-        <div style="grid-column: 1/-1; text-align: center; opacity: 0.3; padding: 50px;">No items found in this category.</div>
+        <div style="grid-column: 1/-1; text-align: center; opacity: 0.3; padding: 80px; font-family:'Orbitron';">No items found in this category.</div>
         {% endfor %}
     </div>
 
     <script>
-        function openNav() { document.getElementById("mySidebar").style.width = "280px"; }
+        function openNav() { document.getElementById("mySidebar").style.width = "300px"; }
         function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
 
-        function changeTheme(color) {
+        // changeTheme এখন দুটো কালার রিসিভ করে (main color এবং deep color)
+        function changeTheme(color, deepColor, el) {
             document.documentElement.style.setProperty('--main-neon', color);
+            document.documentElement.style.setProperty('--main-neon-deep', deepColor);
+            
             localStorage.setItem('selectedTheme', color);
+            localStorage.setItem('selectedThemeDeep', deepColor);
+            
+            // Active state update
+            document.querySelectorAll('.dot-wrapper').forEach(dot => dot.classList.remove('active'));
+            el.classList.add('active');
         }
 
         function toggleDarkMode() {
             const body = document.getElementById('mainBody');
             const toggle = document.getElementById('darkModeToggle');
-            // Logic: Checked = Dark mode, Unchecked = Light mode
             if (toggle.checked) { 
                 body.classList.remove('light-mode'); 
                 localStorage.setItem('themeMode', 'dark'); 
@@ -218,11 +265,25 @@
         }
 
         window.onload = function() {
-            // Theme Color
+            // Theme Color Load
             const savedTheme = localStorage.getItem('selectedTheme');
-            if (savedTheme) document.documentElement.style.setProperty('--main-neon', savedTheme);
+            const savedThemeDeep = localStorage.getItem('selectedThemeDeep');
             
-            // Dark Mode (Default: Dark)
+            if (savedTheme && savedThemeDeep) {
+                document.documentElement.style.setProperty('--main-neon', savedTheme);
+                document.documentElement.style.setProperty('--main-neon-deep', savedThemeDeep);
+                
+                // Set active dot
+                document.querySelectorAll('.dot-wrapper').forEach(dot => {
+                    if (dot.getAttribute('onclick').includes(savedTheme)) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Dark Mode
             const savedMode = localStorage.getItem('themeMode') || 'dark';
             if (savedMode === 'light') {
                 document.getElementById('darkModeToggle').checked = false;
