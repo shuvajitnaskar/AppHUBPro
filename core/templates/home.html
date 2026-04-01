@@ -15,7 +15,7 @@
             --neon-blue: #00d4ff;
             --neon-green: #00e676;
             --bg-dark: #0a0a0b;
-            --main-neon: #00d4ff; /* এই ভেরিয়েবলটি থিম সুইচার দিয়ে কন্ট্রোল হবে */
+            --main-neon: #00d4ff;
         }
 
         body { 
@@ -24,15 +24,13 @@
             font-family: 'Poppins', sans-serif; 
             margin: 0; padding: 20px;
             overflow-x: hidden;
-            position: relative;
         }
 
         /* ওয়াটারমার্ক ব্যাকগ্রাউন্ড */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; opacity: 0.15; pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='350' height='350' viewBox='0 0 350 350'%3E%3Cg transform='rotate(-25 175 175)' fill='white' font-family='Arial, sans-serif'%3E%3Crect x='10' y='10' width='45' height='45' fill='white'/%3E%3Crect x='18' y='18' width='29' height='29' fill='black'/%3E%3Crect x='25' y='25' width='15' height='15' fill='white'/%3E%3Ctext x='10' y='85' font-size='16' font-weight='bold'%3EShuvajit Naskar%3C/text%3E%3Ctext x='10' y='105' font-size='11'%3Eapphubpro.onrender.com%3C/text%3E%3Ctext x='10' y='122' font-size='11'%3EInsta: @shuvajit_naskar%3C/text%3E%3C/g%3E%3C/svg%3E");
-            background-repeat: repeat;
+            z-index: -1; opacity: 0.1; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Ctext x='10' y='40' fill='white' font-size='12' font-family='Arial' transform='rotate(-25)'%3EAppHUBPro - Shuvajit Naskar%3C/text%3E%3C/svg%3E");
         }
 
         /* সাইডবার ডিজাইন */
@@ -40,72 +38,59 @@
             height: 100%; width: 0; position: fixed; z-index: 1000;
             top: 0; left: 0; background-color: rgba(15, 15, 17, 0.98);
             backdrop-filter: blur(15px); border-right: 2px solid var(--main-neon);
-            overflow-x: hidden; transition: 0.4s; padding-top: 40px;
+            overflow-x: hidden; transition: 0.4s; padding-top: 60px;
             box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5);
         }
 
         .sidebar a, .sidebar button {
-            padding: 12px 25px; text-decoration: none; font-size: 14px; color: #ddd; 
-            display: block; transition: 0.3s; font-family: 'Orbitron', sans-serif;
-            text-align: left; background: none; border: none; width: 100%; cursor: pointer;
+            padding: 12px 25px; text-decoration: none; font-size: 14px; color: #bbb; 
+            display: flex; align-items: center; gap: 15px; transition: 0.3s; font-family: 'Orbitron', sans-serif;
+            background: none; border: none; width: 100%; cursor: pointer;
         }
         .sidebar a:hover, .sidebar button:hover { color: var(--main-neon); background-color: rgba(255, 255, 255, 0.05); padding-left: 35px; }
-        .sidebar .closebtn { position: absolute; top: 10px; right: 20px; font-size: 36px; color: var(--neon-pink); }
-        .openbtn { font-size: 30px; cursor: pointer; color: var(--main-neon); position: absolute; top: 25px; left: 25px; z-index: 999; transition: 0.3s; }
+        .sidebar .closebtn { position: absolute; top: 15px; right: 25px; font-size: 30px; color: var(--neon-pink); cursor: pointer; }
+        .openbtn { font-size: 28px; cursor: pointer; color: var(--main-neon); position: fixed; top: 20px; left: 25px; z-index: 999; text-shadow: 0 0 10px var(--main-neon); }
 
-        /* সাইডবার সেকশন টাইটেল */
-        .sb-section-title { font-size: 10px; color: #555; padding-left: 25px; margin-top: 20px; display: block; letter-spacing: 2px; font-family: 'Orbitron'; }
+        .sb-section-title { font-size: 10px; color: #555; padding-left: 25px; margin-top: 25px; display: block; letter-spacing: 2px; font-family: 'Orbitron'; border-bottom: 1px solid #222; padding-bottom: 5px; margin-bottom: 10px; }
 
-        /* থিম ও মোড সুইচ ডিজাইন */
-        .switch-container { display: flex; align-items: center; justify-content: space-between; padding: 10px 25px; }
-        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--main-neon); }
-        input:checked + .slider:before { transform: translateX(20px); }
-
-        .dot-container { display: flex; gap: 12px; padding: 10px 25px; }
-        .dot { width: 20px; height: 20px; border-radius: 50%; cursor: pointer; border: 2px solid #444; transition: 0.3s; }
-        .dot:hover { transform: scale(1.2); border-color: white; }
+        /* ক্যাটাগরি বাটন */
+        .category-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+        .cat-btn { padding: 8px 25px; border-radius: 20px; border: 1px solid #333; background: #151517; color: #888; text-decoration: none; font-family: 'Orbitron'; font-size: 11px; transition: 0.3s; }
+        .cat-btn:hover, .cat-btn.active { border-color: var(--main-neon); color: white; box-shadow: 0 0 10px var(--main-neon); }
 
         /* হেডার ও লোগো */
-        .header { text-align: center; padding: 50px 20px; }
-        .main-logo { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--main-neon); box-shadow: 0 0 15px var(--main-neon); margin-bottom: 15px; }
-        h1 { margin: 0; font-family: 'Orbitron', sans-serif; font-size: 45px; letter-spacing: 8px; text-transform: uppercase; text-shadow: 0 0 10px var(--main-neon); }
+        .header { text-align: center; padding: 40px 20px; }
+        .main-logo { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--main-neon); box-shadow: 0 0 20px var(--main-neon); margin-bottom: 10px; }
+        h1 { margin: 0; font-family: 'Orbitron', sans-serif; font-size: 38px; letter-spacing: 5px; text-transform: uppercase; text-shadow: 0 0 10px var(--main-neon); }
         
-        .search-container { margin: 30px 0; display: flex; justify-content: center; gap: 12px; }
-        .search-box { padding: 15px 30px; border-radius: 40px; border: 1px solid #444; background: #151517; color: white; width: 400px; outline: none; transition: 0.4s; }
-        .search-box:focus { border-color: var(--main-neon); box-shadow: 0 0 10px var(--main-neon); }
-        .search-btn { padding: 12px 35px; border-radius: 40px; border: none; background: var(--neon-pink); color: white; cursor: pointer; font-weight: bold; }
+        .search-container { margin: 20px 0; display: flex; justify-content: center; gap: 10px; }
+        .search-box { padding: 12px 25px; border-radius: 30px; border: 1px solid #333; background: #151517; color: white; width: 350px; outline: none; transition: 0.4s; font-size: 14px; }
+        .search-box:focus { border-color: var(--main-neon); box-shadow: 0 0 15px var(--main-neon); }
+        .search-btn { padding: 10px 30px; border-radius: 30px; border: none; background: var(--neon-pink); color: white; cursor: pointer; font-weight: bold; font-family: 'Orbitron'; font-size: 12px; }
 
-        /* কার্ড গ্রিড */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .card { background: rgba(28, 28, 30, 0.95); border: 1px solid #333; border-radius: 20px; padding: 30px 20px; text-align: center; transition: 0.4s; position: relative; }
-        .card:hover { transform: translateY(-10px); border-color: var(--main-neon); box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); }
+        /* গ্রিড */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+        .card { background: rgba(20, 20, 22, 0.8); border: 1px solid #222; border-radius: 20px; padding: 25px; text-align: center; transition: 0.4s; position: relative; backdrop-filter: blur(5px); }
+        .card:hover { transform: translateY(-8px); border-color: var(--main-neon); box-shadow: 0 0 25px rgba(0,0,0,0.5); }
         
-        /* ভেরিফাইড ব্যাজ */
-        .v-badge { position: absolute; top: 15px; right: 15px; background: rgba(0, 230, 118, 0.1); color: var(--neon-green); padding: 4px 10px; border-radius: 50px; font-size: 9px; font-weight: bold; border: 1px solid var(--neon-green); font-family: 'Orbitron'; }
+        .v-badge { position: absolute; top: 15px; right: 15px; background: rgba(0, 230, 118, 0.1); color: var(--neon-green); padding: 4px 10px; border-radius: 50px; font-size: 8px; font-weight: bold; border: 1px solid var(--neon-green); font-family: 'Orbitron'; }
 
-        .app-logo { width: 75px; height: 75px; border-radius: 20px; object-fit: cover; margin-bottom: 15px; border: 2px solid #444; }
-        .preview-btn { display: block; margin-top: 20px; background: var(--main-neon); color: black; padding: 12px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 13px; transition: 0.3s; font-family: 'Orbitron'; }
+        .app-logo { width: 70px; height: 70px; border-radius: 18px; object-fit: cover; margin-bottom: 12px; border: 1px solid #333; }
+        .preview-btn { display: block; margin-top: 15px; background: var(--main-neon); color: black; padding: 10px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 12px; transition: 0.3s; font-family: 'Orbitron'; }
         .preview-btn:hover { background: white; box-shadow: 0 0 15px white; }
 
-        .creator-link { color: var(--neon-pink); text-decoration: none; font-weight: bold; font-size: 12px; }
+        .dot-container { display: flex; gap: 10px; padding: 10px 25px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; cursor: pointer; border: 2px solid #333; }
     </style>
 </head>
 <body>
 
     <div id="mySidebar" class="sidebar">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <span class="closebtn" onclick="closeNav()">×</span>
         
-        <div style="text-align: center; margin-bottom: 20px; padding-top: 20px;">
-            <img src="{% static 'images/edited-image.png' %}" style="width: 70px; border-radius: 50%; border: 2px solid var(--main-neon);">
-        </div>
-
         <span class="sb-section-title">PREFERENCES</span>
-        <div class="switch-container">
-            <span style="font-size: 12px;">Desktop Mode</span>
+        <div class="switch-container" style="display:flex; justify-content:space-between; padding: 0 25px;">
+            <span style="font-size: 11px;">Desktop Mode</span>
             <label class="switch">
                 <input type="checkbox" id="desktopModeToggle" onchange="toggleDesktopMode()">
                 <span class="slider"></span>
@@ -121,14 +106,16 @@
 
         <span class="sb-section-title">EXPLORE</span>
         <a href="{% url 'home' %}">🏠 Store Home</a>
-        <a href="{% url 'home' %}?filter=verified" style="color: var(--neon-green);">🛡️ Verified Apps</a>
-        <a href="{% url 'faq' %}">❓ Help & FAQ</a>
+        <a href="{% url 'trending' %}">🔥 Trending Apps</a>
+        <a href="{% url 'leaderboard' %}">🥇 Leaderboard</a>
+        <a href="{% url 'home' %}?filter=verified" style="color: var(--neon-green);">🛡️ Verified Hub</a>
         <a href="{% url 'app_request' %}">💡 Request App</a>
 
         <span class="sb-section-title">ACCOUNT</span>
         {% if user.is_authenticated %}
             <a href="{% url 'developer_profile' user.username %}">👤 My Profile</a>
-            <a href="{% url 'dashboard' %}">📊 Dashboard</a>
+            <a href="{% url 'analytics' %}">📊 Analytics</a>
+            <a href="{% url 'dashboard' %}">📂 Dashboard</a>
             <a href="{% url 'upload' %}">☁️ Upload</a>
             <form action="{% url 'logout' %}" method="post" style="margin:0;">
                 {% csrf_token %}<button type="submit" style="color: var(--neon-pink);">🚪 Logout</button>
@@ -136,6 +123,11 @@
         {% else %}
             <a href="{% url 'login' %}">🔑 Login / Register</a>
         {% endif %}
+
+        <span class="sb-section-title">SUPPORT</span>
+        <a href="{% url 'faq' %}">❓ Help & FAQ</a>
+        <a href="{% url 'customer_care' %}">🎧 Customer Care</a>
+        <a href="{% url 'privacy' %}">📜 Privacy Policy</a>
     </div>
 
     <span class="openbtn" onclick="openNav()">☰</span>
@@ -143,12 +135,19 @@
     <div class="header">
         <img src="{% static 'images/edited-image.png' %}" alt="Logo" class="main-logo">
         <h1>AppHUBPro</h1>
-        <p style="color: #666; font-size: 14px; letter-spacing: 3px;">PREMIUM DIGITAL SECURE HUB</p>
+        <p style="color: #444; font-size: 11px; letter-spacing: 5px; font-family: 'Orbitron';">PREMIUM DIGITAL SECURE HUB</p>
 
         <form method="GET" action="{% url 'home' %}" class="search-container">
             <input type="text" name="q" class="search-box" placeholder="Search for safe apps..." value="{{ request.GET.q }}">
             <button type="submit" class="search-btn">Search</button>
         </form>
+    </div>
+
+    <div class="category-container">
+        <a href="{% url 'home' %}" class="cat-btn active">All Hub</a>
+        <a href="{% url 'home' %}?category=app" class="cat-btn">Applications</a>
+        <a href="{% url 'home' %}?category=photo" class="cat-btn">Photos</a>
+        <a href="{% url 'home' %}?category=video" class="cat-btn">Videos</a>
     </div>
 
     <div class="grid-container">
@@ -160,21 +159,21 @@
             
             <img src="{% if item.logo %}{{ item.logo.url }}{% else %}https://cdn-icons-png.flaticon.com/512/873/873120.png{% endif %}" class="app-logo">
             
-            <h3 style="margin: 5px 0; font-size: 18px;">{{ item.title }}</h3>
-            <div style="margin-bottom: 10px;">
-                <span style="font-size: 11px; color: #555;">By: </span>
-                <a href="{% url 'developer_profile' item.uploaded_by.username %}" class="creator-link">{{ item.uploaded_by.username }}</a>
+            <h3 style="margin: 5px 0; font-size: 16px; color: white;">{{ item.title }}</h3>
+            <div style="margin-bottom: 8px;">
+                <span style="font-size: 10px; color: #555;">Dev: </span>
+                <a href="{% url 'developer_profile' item.uploaded_by.username %}" style="color: var(--neon-pink); text-decoration:none; font-size:11px; font-weight:bold;">{{ item.uploaded_by.username }}</a>
             </div>
 
-            <div style="font-size: 11px; color: #888;">
+            <div style="font-size: 10px; color: #888; font-family: 'Orbitron';">
                 ⭐ {{ item.rating|floatformat:1 }} | 📥 {{ item.downloads }}
             </div>
             
             <a href="{% url 'app_detail' item.pk %}" class="preview-btn">VIEW REPORT</a>
         </div>
         {% empty %}
-        <div style="grid-column: 1/-1; text-align: center; opacity: 0.5; padding: 100px;">
-            <h2>No content found in this category...</h2>
+        <div style="grid-column: 1/-1; text-align: center; opacity: 0.5; padding: 80px;">
+            <h2 style="font-family:'Orbitron'; color:#333;">No items found...</h2>
         </div>
         {% endfor %}
     </div>
@@ -203,7 +202,6 @@
         window.onload = function() {
             const savedTheme = localStorage.getItem('selectedTheme');
             if (savedTheme) document.documentElement.style.setProperty('--main-neon', savedTheme);
-            
             if (localStorage.getItem('vM') === 'd') {
                 document.getElementById('desktopModeToggle').checked = true;
                 document.querySelector("meta[name=viewport]").setAttribute('content', 'width=1200');
