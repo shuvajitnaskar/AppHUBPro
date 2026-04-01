@@ -4,159 +4,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="Shuvajit Naskar">
-    <title>Welcome to AppHUBPro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>App Hub Pro - Security Check</title>
+    
+    <link rel="icon" type="image/png" href="{% static 'images/edited-image.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-dark: #0a0a0b;
-            --main-neon: #00d4ff;
+            --neon-blue: #00d4ff;
+            --neon-pink: #ff007b;
+            --bg-dark: #000000;
         }
 
         body {
-            margin: 0; padding: 0;
             background-color: var(--bg-dark);
+            color: white;
+            margin: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-            color: white;
+            text-align: center;
         }
 
-        /* --- Gemini Splash Screens (Part A) --- */
-        #gemini-splash-container {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 50;
-        }
-
-        .splash-screen {
-            position: absolute;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            opacity: 0; visibility: hidden;
-            transition: opacity 0.6s ease-in-out, visibility 0.6s;
-        }
-
-        .splash-screen.active {
-            opacity: 1; visibility: visible;
-        }
-
-        #splash-1 h2 { font-size: 14px; color: #888; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; text-align: center; }
-        #splash-1 h1 { font-family: 'Orbitron'; font-size: 28px; color: white; letter-spacing: 5px; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); text-align: center; }
-
-        #splash-2 .gemini-logo { width: 120px; border-radius: 50%; border: 4px solid var(--main-neon); box-shadow: 0 0 30px var(--main-neon), inset 0 0 15px var(--main-neon); margin-bottom: 20px; animation: pulseGemini 1.5s infinite alternate; }
-        #splash-2 h1 { font-family: 'Orbitron'; font-size: 40px; letter-spacing: 8px; color: var(--main-neon); text-shadow: 0 0 20px var(--main-neon); margin: 0; text-align: center; }
-        #splash-2 p { color: #666; font-size: 12px; letter-spacing: 5px; font-family: 'Orbitron'; text-align: center; }
-
-        @keyframes pulseGemini {
-            0% { transform: scale(0.95); box-shadow: 0 0 20px var(--main-neon); }
-            100% { transform: scale(1.05); box-shadow: 0 0 40px var(--main-neon); }
-        }
-
-        /* --- User Original Splash Screen (Part B) --- */
-        #user-original-splash {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden;
-            transition: opacity 0.8s ease-in-out;
-            z-index: 10;
-            background-color: var(--bg-dark);
-        }
-        #user-original-splash.active {
-            opacity: 1; visibility: visible;
-        }
-
-        #user-original-splash .logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 3px solid var(--main-neon);
-            box-shadow: 0 0 20px var(--main-neon);
-            animation: pulseOriginal 1.5s infinite alternate;
-        }
-        #user-original-splash h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 30px;
-            letter-spacing: 5px;
-            margin-top: 20px;
-            text-shadow: 0 0 10px var(--main-neon);
-            color: white; 
-        }
-        #user-original-splash .loader {
-            margin-top: 20px;
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top: 5px solid var(--main-neon);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        /* QR Code Container */
+        .qr-box {
+            background: white;
+            padding: 10px;
+            border-radius: 20px;
+            border: 4px solid var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-blue);
+            margin-bottom: 20px;
+            transition: 0.3s;
         }
         
-        @keyframes pulseOriginal {
-            0% { box-shadow: 0 0 15px var(--main-neon); }
-            100% { box-shadow: 0 0 30px var(--main-neon), 0 0 50px var(--main-neon); }
+        .qr-box img {
+            width: 200px;
+            height: 200px;
+            display: block;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        h2 {
+            font-family: 'Orbitron';
+            font-size: 20px;
+            color: var(--neon-pink);
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
+
+        /* Follow Button */
+        .follow-btn {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            display: inline-block;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(188, 24, 136, 0.5);
+        }
+
+        .follow-btn:hover { transform: scale(1.05); }
+
+        /* Enter Website Button (Hidden by default) */
+        #enter-btn {
+            display: none;
+            margin-top: 20px;
+            background: var(--neon-blue);
+            color: black;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            text-decoration: none;
+            font-family: 'Orbitron';
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .note { font-size: 11px; color: #555; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <div id="gemini-splash-container">
-        <div id="splash-1" class="splash-screen active">
-            <h2>From the desk of</h2>
-            <h1>SHUVAJIT NASKAR</h1>
-        </div>
-
-        <div id="splash-2" class="splash-screen">
-            <img src="{% static 'images/edited-image.png' %}" alt="AppHUBPro Logo" class="gemini-logo">
-            <h1>AppHUBPro</h1>
-            <p>PREMIUM DIGITAL SECURE HUB</p>
-        </div>
+    <div style="margin-bottom: 20px;">
+        <img src="{% static 'images/edited-image.png' %}" style="width: 70px; border-radius: 50%; border: 2px solid var(--neon-blue);">
     </div>
 
-    <div id="user-original-splash">
-        <img src="{% static 'images/edited-image.png' %}" alt="AppHUBPro Logo" class="logo">
-        <h1>AppHUBPro</h1>
-        <p style="color: #888; font-size: 14px; letter-spacing: 2px;">SECURE DIGITAL HUB</p>
-        <div class="loader"></div>
+    <h2>Follow to Unlock Website</h2>
+
+    <div class="qr-box">
+        <img src="{% static 'images/qr_code.png' %}" alt="Instagram QR Code">
     </div>
+
+    <p style="font-size: 14px; margin-bottom: 20px; color: #aaa;">Scan QR or Click below to follow @shuvajit_naskar</p>
+
+    <a href="https://www.instagram.com/shuvajit_naskar" target="_blank" class="follow-btn" id="follow-link">
+        FOLLOW ON INSTAGRAM
+    </a>
+
+    <a href="{% url 'home' %}" id="enter-btn">ENTER WEBSPACE →</a>
+
+    <p class="note">Security System: Website unlocks after visiting profile</p>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // ইউজারের সিলেক্ট করা থিম কালার লোড করা (আপনার লোডারটিও সেই কালারের হবে)
-            const savedTheme = localStorage.getItem('selectedTheme') || '#00d4ff';
-            document.documentElement.style.setProperty('--main-neon', savedTheme);
+        const followLink = document.getElementById('follow-link');
+        const enterBtn = document.getElementById('enter-btn');
 
-            const splash1 = document.getElementById('splash-1');
-            const splash2 = document.getElementById('splash-2');
-            const myContainer = document.getElementById('gemini-splash-container');
-            const yourSplash = document.getElementById('user-original-splash');
-
-            // ১.৫ সেকেন্ড পর প্রথম স্ক্রিন (Shuvajit Naskar) হাইড হয়ে লোগো আসবে
+        followLink.addEventListener('click', () => {
+            // ইউজার ক্লিক করার ৩ সেকেন্ড পর এন্টার বাটন দেখাবে
             setTimeout(() => {
-                splash1.classList.remove('active');
-                splash2.classList.add('active');
-            }, 1500);
-
-            // ৩.৫ সেকেন্ড পর নতুন লোগো হাইড হয়ে আপনার আগের স্প্ল্যাশ স্ক্রিন (লোডার) শো করবে
-            setTimeout(() => {
-                myContainer.style.display = 'none';
-                yourSplash.classList.add('active');
-            }, 3500);
-
-            // ৬.৫ সেকেন্ড পর মেইন হোম পেজে চলে যাবে
-            setTimeout(() => {
-                window.location.href = "{% url 'home' %}";
-            }, 6500);
+                enterBtn.style.display = 'inline-block';
+                followLink.innerText = "THANKS FOR SUPPORTING!";
+                followLink.style.opacity = "0.5";
+                followLink.style.pointerEvents = "none";
+            }, 3000);
         });
     </script>
 
