@@ -12,7 +12,7 @@ class UserProfile(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     
     # সোশ্যাল মিডিয়া লিঙ্কসমূহ
-    instagram = models.URLField(max_length=255, blank=True, null=True, placeholder="https://instagram.com/yourprofile")
+    instagram = models.URLField(max_length=255, blank=True, null=True)
     facebook = models.URLField(max_length=255, blank=True, null=True)
     sharechat = models.URLField(max_length=255, blank=True, null=True)
     github = models.URLField(max_length=255, blank=True, null=True)
