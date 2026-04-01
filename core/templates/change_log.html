@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Log | AppHUBPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-green: #00e676; --neon-blue: #00d4ff; --bg-dark: #0a0a0b; }
+        body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; padding: 50px 20px; }
+        
+        .timeline { max-width: 800px; margin: 0 auto; position: relative; border-left: 2px solid #333; padding-left: 30px; }
+        h1 { font-family: 'Orbitron'; color: var(--neon-green); text-align: center; margin-bottom: 50px; }
+        
+        .log-entry { margin-bottom: 40px; position: relative; }
+        .log-entry::before { content: ""; position: absolute; left: -41px; top: 5px; width: 20px; height: 20px; background: var(--neon-green); border-radius: 50%; box-shadow: 0 0 10px var(--neon-green); }
+        
+        .version { font-family: 'Orbitron'; color: var(--neon-blue); font-size: 20px; margin: 0; }
+        .date { font-size: 12px; color: #555; margin-bottom: 10px; display: block; }
+        .changes { background: #151517; padding: 20px; border-radius: 15px; border: 1px solid #222; }
+        ul { margin: 0; padding-left: 20px; color: #aaa; font-size: 14px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+    <h1>SYSTEM CHANGE LOG</h1>
+
+    <div class="timeline">
+        <div class="log-entry">
+            <h3 class="version">v2.0 - The Neon Update</h3>
+            <span class="date">April 01, 2026</span>
+            <div class="changes">
+                <ul>
+                    <li>Integrated Futuristic Dark UI with Neon accents.</li>
+                    <li>Added Hexagon-themed upload system with live progress bar.</li>
+                    <li>New Splash Screen with custom branding.</li>
+                    <li>Added FAQ and Privacy Policy pages.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="log-entry">
+            <h3 class="version">v1.5 - Storage Overhaul</h3>
+            <span class="date">March 15, 2026</span>
+            <div class="changes">
+                <ul>
+                    <li>Migrated database to PostgreSQL for better reliability.</li>
+                    <li>Implemented Cloudinary for encrypted media storage.</li>
+                    <li>Added Download tracking and Creator Analytics.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 50px;">
+        <a href="{% url 'home' %}" style="color: var(--neon-blue); text-decoration: none; font-weight: bold;">← Back to Home</a>
+    </div>
+
+</body>
+</html>

@@ -14,7 +14,7 @@ class UploadedContent(models.Model):
     content_type = models.CharField(max_length=20, choices=CONTENT_CHOICES)
     file = models.FileField(upload_to='uploads/')
     
-    # অ্যাপের লোগো বা আইকন আপলোড করার জন্য নতুন ফিল্ড
+    # অ্যাপের লোগো বা আইকন
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     downloads = models.IntegerField(default=0)
     
@@ -25,3 +25,13 @@ class UploadedContent(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.content_type}"
+
+# ইউজারদের অ্যাপ রিকোয়েস্ট সেভ করার জন্য নতুন মডেল
+class AppRequest(models.Model):
+    app_name = models.CharField(max_length=200)
+    description = models.TextField()
+    user_email = models.EmailField(blank=True, null=True)
+    date_requested = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.app_name

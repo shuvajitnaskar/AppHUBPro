@@ -165,3 +165,24 @@ def developer_profile(request, username):
         'total_downloads': total_downloads
     }
     return render(request, 'developer_profile.html', context)
+
+from django.shortcuts import render, redirect
+from .models import AppRequest
+
+def faq_view(request):
+    return render(request, 'faq.html')
+
+def privacy_view(request):
+    return render(request, 'privacy_policy.html')
+
+def changelog_view(request):
+    return render(request, 'change_log.html')
+
+def app_request_view(request):
+    if request.method == "POST":
+        app_name = request.POST.get('app_name')
+        description = request.POST.get('description')
+        user_email = request.POST.get('user_email')
+        AppRequest.objects.create(app_name=app_name, description=description, user_email=user_email)
+        return redirect('home')
+    return render(request, 'app_request.html')

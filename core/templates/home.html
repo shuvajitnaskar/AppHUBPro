@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Shuvajit Naskar">
     <title>App HUB Pro | Premium Gallery</title>
+    <link rel="icon" type="image/png" href="{% static 'images/edited-image.png' %}">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* কালার এবং থিম সেট করা হয়েছে */
         :root {
             --neon-pink: #ff007b;
             --neon-blue: #00d4ff;
@@ -20,150 +21,125 @@
             background-color: var(--bg-dark); 
             color: white; 
             font-family: 'Poppins', sans-serif; 
-            margin: 0; 
-            padding: 20px;
+            margin: 0; padding: 20px;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* ১. ওয়াটারমার্ক ব্যাকগ্রাউন্ড */
+        /* ওয়াটারমার্ক ব্যাকগ্রাউন্ড */
         body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            opacity: 0.15; 
-            pointer-events: none;
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0.15; pointer-events: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='350' height='350' viewBox='0 0 350 350'%3E%3Cg transform='rotate(-25 175 175)' fill='white' font-family='Arial, sans-serif'%3E%3Crect x='10' y='10' width='45' height='45' fill='white'/%3E%3Crect x='18' y='18' width='29' height='29' fill='black'/%3E%3Crect x='25' y='25' width='15' height='15' fill='white'/%3E%3Ctext x='10' y='85' font-size='16' font-weight='bold'%3EShuvajit Naskar%3C/text%3E%3Ctext x='10' y='105' font-size='11'%3Eapphubpro.onrender.com%3C/text%3E%3Ctext x='10' y='122' font-size='11'%3EInsta: @shuvajit_naskar%3C/text%3E%3C/g%3E%3C/svg%3E");
             background-repeat: repeat;
         }
 
-        /* ২. সাইডবার ডিজাইন */
+        /* সাইডবার ডিজাইন */
         .sidebar {
-            height: 100%;
-            width: 0; 
-            position: fixed;
-            z-index: 1000;
-            top: 0; left: 0;
-            background-color: rgba(15, 15, 17, 0.95);
-            backdrop-filter: blur(15px);
-            border-right: 2px solid var(--neon-blue);
-            overflow-x: hidden;
-            transition: 0.4s;
-            padding-top: 60px;
+            height: 100%; width: 0; position: fixed; z-index: 1000;
+            top: 0; left: 0; background-color: rgba(15, 15, 17, 0.98);
+            backdrop-filter: blur(15px); border-right: 2px solid var(--neon-blue);
+            overflow-x: hidden; transition: 0.4s; padding-top: 40px;
             box-shadow: 5px 0 20px rgba(0, 212, 255, 0.3);
         }
 
         .sidebar a, .sidebar button {
-            padding: 15px 25px; text-decoration: none; font-size: 17px; color: #ddd; display: block; transition: 0.3s; font-family: 'Orbitron', sans-serif; text-align: left; background: none; border: none; width: 100%; cursor: pointer;
+            padding: 12px 25px; text-decoration: none; font-size: 15px; color: #ddd; 
+            display: block; transition: 0.3s; font-family: 'Orbitron', sans-serif;
+            text-align: left; background: none; border: none; width: 100%; cursor: pointer;
         }
         .sidebar a:hover, .sidebar button:hover { color: var(--neon-pink); background-color: rgba(255, 0, 123, 0.1); padding-left: 35px; }
-        .sidebar .closebtn { position: absolute; top: 10px; right: 20px; font-size: 36px; margin-left: 50px; padding: 0; width: auto; color: var(--neon-pink); }
-        .openbtn { font-size: 30px; cursor: pointer; color: var(--neon-blue); position: absolute; top: 25px; left: 25px; z-index: 999; transition: 0.3s; }
-        .openbtn:hover { color: var(--neon-pink); text-shadow: 0 0 10px var(--neon-pink); }
-        .sidebar-title { color: white; text-align: center; font-family: 'Orbitron', sans-serif; font-size: 22px; margin-bottom: 20px; letter-spacing: 2px; text-shadow: 0 0 10px var(--neon-blue); }
+        .sidebar .closebtn { position: absolute; top: 10px; right: 20px; font-size: 36px; color: var(--neon-pink); }
+        .openbtn { font-size: 30px; cursor: pointer; color: var(--neon-blue); position: absolute; top: 25px; left: 25px; z-index: 999; }
 
-        /* ৩. মোড সুইচ */
-        .mode-toggle-container { display: flex; align-items: center; justify-content: space-between; padding: 15px 25px; border-bottom: 1px solid #333; border-top: 1px solid #333; margin-bottom: 10px; background: rgba(0,0,0,0.3); }
-        .mode-label { color: #ddd; font-size: 13px; font-family: 'Poppins', sans-serif; font-weight: bold;}
-        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        /* মোড সুইচ */
+        .mode-toggle-container { display: flex; align-items: center; justify-content: space-between; padding: 15px 25px; border-bottom: 1px solid #333; margin-bottom: 10px; }
+        .switch { position: relative; display: inline-block; width: 45px; height: 22px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
-        input:checked + .slider:before { transform: translateX(26px); }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--neon-blue); }
+        input:checked + .slider:before { transform: translateX(23px); }
 
-        /* ৪. হেডার ও সার্চ বক্স */
-        .header { text-align: center; padding: 50px 20px; background: rgba(20, 20, 22, 0.85); border-radius: 25px; margin-bottom: 35px; box-shadow: 0 0 35px rgba(0, 0, 0, 0.9); border: 1px solid #333; backdrop-filter: blur(15px); margin-top: 10px; }
-        h1 { margin: 0; font-family: 'Orbitron', sans-serif; color: #ffffff; font-size: 50px; font-weight: 700; letter-spacing: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 212, 255, 0.8), 0 0 25px rgba(0, 212, 255, 0.4); margin-bottom: 10px; }
-        .header h3 { color: var(--neon-blue); font-size: 18px; margin: 5px 0; font-weight: 400; letter-spacing: 2px; }
-        .header h4 { color: var(--neon-pink); font-size: 14px; margin: 5px 0 20px 0; font-weight: 300; opacity: 0.9; }
+        /* হেডার ও লোগো */
+        .header { text-align: center; padding: 50px 20px; background: rgba(20, 20, 22, 0.85); border-radius: 25px; margin-bottom: 35px; border: 1px solid #333; backdrop-filter: blur(15px); }
+        .main-logo { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); margin-bottom: 15px; }
+        h1 { margin: 0; font-family: 'Orbitron', sans-serif; font-size: 50px; letter-spacing: 10px; text-transform: uppercase; text-shadow: 0 0 10px var(--neon-blue); }
         
         .search-container { margin: 30px 0; display: flex; justify-content: center; gap: 12px; }
-        .search-box { padding: 15px 30px; border-radius: 40px; border: 1px solid #444; background: #151517; color: white; width: 400px; outline: none; transition: 0.4s; font-size: 16px; }
-        .search-box:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 212, 255, 0.6); }
-        .search-btn { padding: 12px 35px; border-radius: 40px; border: none; background: var(--neon-pink); color: white; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .search-box { padding: 15px 30px; border-radius: 40px; border: 1px solid #444; background: #151517; color: white; width: 400px; outline: none; }
+        .search-btn { padding: 12px 35px; border-radius: 40px; border: none; background: var(--neon-pink); color: white; cursor: pointer; font-weight: bold; }
 
-        .filter-container { margin-bottom: 40px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .filter-btn { padding: 10px 22px; border-radius: 35px; border: 1px solid #444; background: #1a1a1c; color: #eee; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .filter-btn:hover, .filter-btn.active { background: var(--neon-pink); color: white; border-color: var(--neon-pink); box-shadow: 0 0 20px rgba(255, 0, 123, 0.6); }
+        .filter-container { margin-bottom: 40px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 20px; border-radius: 35px; border: 1px solid #444; background: #1a1a1c; color: #eee; text-decoration: none; font-size: 13px; transition: 0.3s; }
+        .filter-btn.active, .filter-btn:hover { background: var(--neon-pink); border-color: var(--neon-pink); }
 
-        /* ৫. অ্যাপ কার্ড ডিজাইন */
+        /* কার্ড গ্রিড */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .card { background: rgba(28, 28, 30, 0.95); border: 1px solid #333; border-radius: 20px; padding: 30px 20px; text-align: center; transition: 0.4s; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
-        
-        /* লোগো গ্লো এনিমেশন */
-        .card:hover { transform: translateY(-10px); border-color: var(--neon-blue); box-shadow: 0 0 25px rgba(0, 212, 255, 0.4); }
-        
-        .app-logo { width: 80px; height: 80px; border-radius: 22px; object-fit: cover; margin: 0 auto 15px auto; border: 2px solid #444; display: block; background-color: #151517; box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s; }
-        .card:hover .app-logo { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
-
-        .badge { display: inline-block; background-color: var(--neon-blue); color: #000; padding: 6px 15px; border-radius: 50px; font-size: 10px; text-transform: uppercase; font-weight: 800; margin-bottom: 15px; }
-        .uploader-info { font-size: 13px; color: #aaa; margin-bottom: 20px; }
-        .creator-link { color: var(--neon-pink); font-weight: bold; text-decoration: none; transition: 0.3s; }
-        .creator-link:hover { text-shadow: 0 0 10px var(--neon-pink); }
-        .btn-group { display: flex; flex-direction: column; gap: 15px; margin-top: auto; }
-        .preview-btn { background: #2a2a2c; color: white; padding: 14px; border-radius: 30px; text-decoration: none; font-weight: 600; border: 1px solid #444; transition: 0.3s; font-size: 15px; }
-        .preview-btn:hover { background: #333; border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 212, 255, 0.3); }
-        
-        .rating-stars { color: #ffca28; font-size: 12px; margin-bottom: 5px; }
+        .card { background: rgba(28, 28, 30, 0.95); border: 1px solid #333; border-radius: 20px; padding: 30px 20px; text-align: center; transition: 0.4s; }
+        .card:hover { transform: translateY(-10px); border-color: var(--neon-blue); box-shadow: 0 0 25px rgba(0, 212, 255, 0.2); }
+        .app-logo { width: 80px; height: 80px; border-radius: 22px; object-fit: cover; margin-bottom: 15px; border: 2px solid #444; }
+        .badge { display: inline-block; background-color: var(--neon-blue); color: #000; padding: 4px 12px; border-radius: 50px; font-size: 10px; text-transform: uppercase; font-weight: 800; }
+        .preview-btn { display: block; margin-top: 20px; background: #2a2a2c; color: white; padding: 12px; border-radius: 30px; text-decoration: none; font-weight: 600; border: 1px solid #444; transition: 0.3s; }
+        .preview-btn:hover { background: var(--neon-blue); color: black; }
     </style>
 </head>
 <body>
 
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-        <div class="sidebar-title">MENU</div>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="{% static 'images/edited-image.png' %}" style="width: 60px; border-radius: 50%; border: 2px solid var(--neon-blue);">
+        </div>
+        <div style="color: white; text-align: center; font-family: 'Orbitron'; margin-bottom: 20px;">AppHubPro</div>
         
         <div class="mode-toggle-container">
-            <span class="mode-label">📱 Mobile</span>
+            <span style="font-size: 10px;">📱 Mobile</span>
             <label class="switch">
                 <input type="checkbox" id="desktopModeToggle" onchange="toggleDesktopMode()">
                 <span class="slider"></span>
             </label>
-            <span class="mode-label">💻 Desktop</span>
+            <span style="font-size: 10px;">💻 Desktop</span>
         </div>
 
         <a href="{% url 'home' %}">🏠 Store Home</a>
-        <a href="{% url 'trending' %}">🔥 Top Trending</a> 
+        <a href="{% url 'app_request' %}">💡 Request App</a>
+        <a href="{% url 'changelog' %}">📜 Change Log</a>
+        <a href="{% url 'faq' %}">❓ FAQ</a>
+        <a href="{% url 'privacy' %}">🛡️ Privacy Policy</a>
+
+        <hr style="border: 0.1px solid #222; margin: 10px 20px;">
+
         {% if user.is_authenticated %}
             <a href="{% url 'dashboard' %}">⚙️ Dashboard</a>
-            <a href="{% url 'analytics' %}">📊 Creator Analytics</a> 
-            <a href="{% url 'upload' %}">☁️ Upload App</a>
-            <a href="{% url 'customer_care' %}">📞 Customer Care</a>
-            
-            <form action="{% url 'logout' %}" method="post" style="margin: 0;">
-                {% csrf_token %}
-                <button type="submit">🚪 Logout</button>
+            <a href="{% url 'analytics' %}">📊 Analytics</a>
+            <a href="{% url 'upload' %}">☁️ Upload</a>
+            <form action="{% url 'logout' %}" method="post" style="margin:0;">
+                {% csrf_token %}<button type="submit">🚪 Logout</button>
             </form>
         {% else %}
             <a href="{% url 'login' %}">🔑 Login</a>
-            <a href="{% url 'register' %}">📝 Create Account</a>
-            <a href="{% url 'customer_care' %}">📞 Customer Care</a>
         {% endif %}
     </div>
 
     <span class="openbtn" onclick="openNav()">☰</span>
 
     <div class="header">
+        <img src="{% static 'images/edited-image.png' %}" alt="Logo" class="main-logo">
         <h1>AppHUBPro</h1>
-        <h3>Created By 'Shuvajit Naskar'</h3>
-        <h4>Follow My Instagram For Updates</h4>
+        <h3>Premium Digital Store</h3>
 
         <form method="GET" action="{% url 'home' %}" class="search-container">
-            <input type="text" name="q" class="search-box" placeholder="Search premium apps & media..." value="{{ request.GET.q }}">
+            <input type="text" name="q" class="search-box" placeholder="Search apps..." value="{{ request.GET.q }}">
             <button type="submit" class="search-btn">Search</button>
         </form>
 
         <div class="filter-container">
-            <a href="{% url 'home' %}?category=all" class="filter-btn {% if not request.GET.category or request.GET.category == 'all' %}active{% endif %}">Explore All</a>
+            <a href="{% url 'home' %}?category=all" class="filter-btn {% if not request.GET.category or request.GET.category == 'all' %}active{% endif %}">All</a>
             <a href="{% url 'home' %}?category=app" class="filter-btn {% if request.GET.category == 'app' %}active{% endif %}">Apps</a>
-            
             {% if user.is_superuser %}
-                <a href="{% url 'home' %}?category=photo" class="filter-btn {% if request.GET.category == 'photo' %}active{% endif %}">Photos</a>
-                <a href="{% url 'home' %}?category=video" class="filter-btn {% if request.GET.category == 'video' %}active{% endif %}">Videos</a>
-                <a href="{% url 'home' %}?category=document" class="filter-btn {% if request.GET.category == 'document' %}active{% endif %}">Documents</a>
+                <a href="{% url 'home' %}?category=photo" class="filter-btn">Photos</a>
+                <a href="{% url 'home' %}?category=video" class="filter-btn">Videos</a>
             {% endif %}
         </div>
     </div>
@@ -171,87 +147,32 @@
     <div class="grid-container">
         {% for item in contents %}
         <div class="card">
-            {% if item.logo %}
-                <img src="{{ item.logo.url }}" alt="Logo" class="app-logo">
-            {% else %}
-                <img src="https://cdn-icons-png.flaticon.com/512/873/873120.png" alt="Default Icon" class="app-logo">
-            {% endif %}
-
-            <span class="badge">{{ item.get_content_type_display }}</span>
-            <h3 style="margin: 10px 0; font-size: 20px; font-weight: 700;">{{ item.title }}</h3>
-            
-            <div class="uploader-info">
-                By: 
-                {% if item.uploaded_by %}
-                    <a href="{% url 'developer_profile' item.uploaded_by.username %}" class="creator-link">
-                        {{ item.uploaded_by.username }}
-                    </a>
-                {% else %}
-                    <span class="creator-link">Admin</span>
-                {% endif %}
-                
-                <div class="rating-stars">
-                    {% if item.rating > 0 %}
-                        ⭐ {{ item.rating|floatformat:1 }}
-                    {% else %}
-                        <span style="color: #666; font-size: 11px;">No ratings</span>
-                    {% endif %}
-                </div>
-                
-                <span style="color:var(--neon-blue); font-size: 11px; font-weight: bold; letter-spacing: 1px;">
-                    📥 {{ item.downloads }} DOWNLOADS
-                </span>
+            <img src="{% if item.logo %}{{ item.logo.url }}{% else %}https://cdn-icons-png.flaticon.com/512/873/873120.png{% endif %}" class="app-logo">
+            <br><span class="badge">{{ item.get_content_type_display }}</span>
+            <h3 style="margin: 15px 0 5px 0;">{{ item.title }}</h3>
+            <div style="font-size: 11px; color: #666;">
+                ⭐ {{ item.rating|floatformat:1 }} | 📥 {{ item.downloads }}
             </div>
-            
-            <div class="btn-group">
-                <a href="{% url 'app_detail' item.pk %}" class="preview-btn">View Details</a>
-            </div>
-        </div>
-        
-        {% empty %}
-        <div style="grid-column: 1/-1; text-align: center; margin-top: 120px; opacity: 0.7;">
-            <h2 style="font-family: 'Orbitron'; font-size: 35px; letter-spacing: 3px; color: var(--neon-pink);">NO CONTENT FOUND</h2>
-            <p style="font-size: 18px;">Try a different keyword or check other categories.</p>
+            <a href="{% url 'app_detail' item.pk %}" class="preview-btn">View Details</a>
         </div>
         {% endfor %}
     </div>
 
     <script>
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "300px";
-        }
-
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-        }
-
+        function openNav() { document.getElementById("mySidebar").style.width = "280px"; }
+        function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
         function toggleDesktopMode() {
             const toggle = document.getElementById('desktopModeToggle');
-            const viewport = document.querySelector("meta[name=viewport]");
-            
-            if (toggle.checked) {
-                viewport.setAttribute('content', 'width=1200');
-                localStorage.setItem('viewMode', 'desktop');
-            } else {
-                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
-                localStorage.setItem('viewMode', 'mobile');
-            }
+            const vp = document.querySelector("meta[name=viewport]");
+            if (toggle.checked) { vp.setAttribute('content', 'width=1200'); localStorage.setItem('vM', 'd'); }
+            else { vp.setAttribute('content', 'width=device-width, initial-scale=1.0'); localStorage.setItem('vM', 'm'); }
         }
-
         window.onload = function() {
-            const mode = localStorage.getItem('viewMode');
-            const toggle = document.getElementById('desktopModeToggle');
-            const viewport = document.querySelector("meta[name=viewport]");
-            
-            if (mode === 'desktop') {
-                toggle.checked = true;
-                viewport.setAttribute('content', 'width=1200');
-            } else {
-                toggle.checked = false;
-                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+            if (localStorage.getItem('vM') === 'd') {
+                document.getElementById('desktopModeToggle').checked = true;
+                document.querySelector("meta[name=viewport]").setAttribute('content', 'width=1200');
             }
         }
     </script>
-
 </body>
 </html>

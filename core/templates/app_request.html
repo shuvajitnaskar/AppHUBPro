@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request an App | AppHUBPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-pink: #ff007b; --neon-blue: #00d4ff; --bg-dark: #0a0a0b; }
+        body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0; }
+        
+        .request-card { background: rgba(20, 20, 22, 0.9); border: 1px solid #333; padding: 40px; border-radius: 25px; width: 400px; text-align: center; box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); }
+        h2 { font-family: 'Orbitron'; color: var(--neon-blue); margin-bottom: 25px; }
+        
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #444; background: #151517; color: white; box-sizing: border-box; }
+        textarea { height: 100px; resize: none; }
+        
+        .submit-btn { width: 100%; padding: 12px; border-radius: 10px; border: none; background: var(--neon-pink); color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .submit-btn:hover { box-shadow: 0 0 20px var(--neon-pink); transform: scale(1.02); }
+    </style>
+</head>
+<body>
+
+    <div class="request-card">
+        <h2>REQUEST AN APP</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="app_name" placeholder="App Name (Required)" required>
+            <textarea name="description" placeholder="Describe the features you want..."></textarea>
+            <input type="email" name="user_email" placeholder="Your Email (Optional)">
+            <button type="submit" class="submit-btn">SUBMIT REQUEST</button>
+        </form>
+        <a href="{% url 'home' %}" style="display: block; margin-top: 20px; color: #555; text-decoration: none; font-size: 13px;">Cancel and Go Back</a>
+    </div>
+
+</body>
+</html>

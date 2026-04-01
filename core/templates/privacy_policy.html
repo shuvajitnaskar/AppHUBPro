@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | AppHUBPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-blue: #00d4ff; --neon-pink: #ff007b; --bg-dark: #0a0a0b; }
+        body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; padding: 50px 20px; line-height: 1.8; }
+        
+        .container { max-width: 900px; margin: 0 auto; background: rgba(20, 20, 22, 0.9); padding: 40px; border-radius: 25px; border: 1px solid #333; }
+        h1 { font-family: 'Orbitron'; color: var(--neon-blue); text-align: center; margin-bottom: 30px; text-shadow: 0 0 10px var(--neon-blue); }
+        h2 { color: var(--neon-pink); font-size: 20px; margin-top: 30px; border-left: 4px solid var(--neon-pink); padding-left: 15px; }
+        p { color: #ccc; font-size: 15px; }
+        .back-btn { display: inline-block; margin-top: 40px; color: var(--neon-blue); text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>PRIVACY POLICY</h1>
+        <p style="text-align: center; font-size: 13px; color: #666;">Last Updated: April 2026</p>
+
+        <h2>1. Data Collection</h2>
+        <p>At AppHUBPro, we prioritize your privacy. We only collect basic account information (username, email) required for app uploads and interactions. We do not sell your personal data to third parties.</p>
+
+        <h2>2. App Safety & Security</h2>
+        <p>Every APK or file uploaded to this platform undergoes a basic manual check by the administrator (Shuvajit Naskar). However, we recommend users to use their own discretion while installing third-party apps.</p>
+
+        <h2>3. Cloud Storage</h2>
+        <p>Your uploaded files are stored securely using Cloudinary's encrypted servers. We ensure that only authorized links are generated for downloads.</p>
+
+        <h2>4. Cookies</h2>
+        <p>We use minimal cookies to keep you logged in and to remember your theme preferences (Mobile/Desktop mode).</p>
+
+        <a href="{% url 'home' %}" class="back-btn">← Back to Store</a>
+    </div>
+
+</body>
+</html>

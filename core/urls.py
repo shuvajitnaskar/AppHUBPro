@@ -18,4 +18,8 @@ urlpatterns = [
     path('analytics/', views.analytics_dashboard, name='analytics'),
     path('trending/', views.trending_apps, name='trending'),
     path('developer/<str:username>/', views.developer_profile, name='developer_profile'),
+    path('faq/', views.faq_view, name='faq'),
+    path('privacy/', views.privacy_view, name='privacy'),
+    path('changelog/', views.changelog_view, name='changelog'),
+    path('request-app/', views.app_request_view, name='app_request'),
 ]

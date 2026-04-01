@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | AppHUBPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-blue: #00d4ff; --neon-pink: #ff007b; --bg-dark: #0a0a0b; }
+        body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; padding: 40px 20px; text-align: center; }
+        
+        .faq-container { max-width: 800px; margin: 0 auto; text-align: left; }
+        h1 { font-family: 'Orbitron'; color: var(--neon-blue); text-align: center; margin-bottom: 40px; text-shadow: 0 0 10px var(--neon-blue); }
+        
+        .faq-item { background: #151517; border: 1px solid #333; border-radius: 15px; margin-bottom: 15px; padding: 20px; transition: 0.3s; cursor: pointer; }
+        .faq-item:hover { border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255, 0, 123, 0.2); }
+        
+        .question { font-weight: 600; color: var(--neon-blue); font-size: 18px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .answer { color: #aaa; font-size: 15px; line-height: 1.6; display: none; border-top: 1px solid #222; pt: 15px; margin-top: 10px; }
+        
+        .active .answer { display: block; }
+        .back-btn { display: inline-block; margin-top: 30px; color: var(--neon-pink); text-decoration: none; font-weight: bold; border-bottom: 1px solid var(--neon-pink); }
+    </style>
+</head>
+<body>
+
+    <h1>FREQUENTLY ASKED QUESTIONS</h1>
+
+    <div class="faq-container">
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+            <div class="question">How to download apps safely? <span>+</span></div>
+            <div class="answer">Go to the App Detail page and click the "Download APK" button. All apps are scanned and verified by Shuvajit Naskar.</div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+            <div class="question">Are these apps free? <span>+</span></div>
+            <div class="answer">Yes! Most of the premium apps showcased here are free for our community.</div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+            <div class="question">Can I upload my own app? <span>+</span></div>
+            <div class="answer">Yes, you need to create an account and go to the "Upload App" section. Other users can only upload .apk files.</div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+            <div class="question">Is my data secure? <span>+</span></div>
+            <div class="answer">We use Cloudinary and high-end encryption for storage. Your privacy is our top priority.</div>
+        </div>
+    </div>
+
+    <a href="{% url 'home' %}" class="back-btn">← Return to Store</a>
+
+</body>
+</html>
