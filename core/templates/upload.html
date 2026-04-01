@@ -1,217 +1,169 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload | App HUB Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Upload Content | AppHUBPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --neon-pink: #ff007b; --neon-blue: #00d4ff; --neon-green: #00e676; --bg-dark: #0a0a0b; }
+        :root {
+            --bg-dark: #0a0a0b;
+            --main-neon: #00d4ff; 
+            --card-dark: rgba(20, 20, 22, 0.95);
+        }
+
         body { 
             background-color: var(--bg-dark); 
             color: white; 
             font-family: 'Poppins', sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            overflow: hidden;
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
         }
 
-        /* Hexagon Outer Border */
-        .hex-border {
-            width: 420px;
-            height: 480px;
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
-            animation: pulse 3s infinite alternate;
+        .upload-container {
+            background: var(--card-dark);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            position: relative;
         }
 
-        /* Hexagon Inner Card */
-        .hex-card {
-            width: 410px;
-            height: 470px;
-            background: rgba(15, 15, 17, 0.95);
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        h1 {
+            font-family: 'Orbitron', sans-serif;
             text-align: center;
+            font-size: 28px;
+            color: white;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--main-neon);
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+            display: block;
+            font-family: 'Orbitron';
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background: #151517;
+            color: white;
+            font-family: 'Poppins', sans-serif;
             box-sizing: border-box;
-        }
-
-        @keyframes pulse {
-            0% { filter: drop-shadow(0 0 15px var(--neon-blue)); }
-            100% { filter: drop-shadow(0 0 30px var(--neon-pink)); }
-        }
-
-        h2 { font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 10px var(--neon-blue); margin-bottom: 15px; font-size: 22px; }
-        
-        /* Form Elements */
-        .form-container { width: 85%; }
-        input[type="text"], textarea, select, input[type="file"] { 
-            width: 100%; padding: 10px; margin-bottom: 12px; 
-            border-radius: 8px; border: 1px solid #444; 
-            background: #151517; color: white; box-sizing: border-box; font-size: 13px;
-        }
-        
-        label { display: block; text-align: left; font-size: 12px; color: var(--neon-blue); margin-bottom: 3px; font-weight: bold; }
-        
-        .submit-btn { 
-            width: 100%; padding: 12px; border-radius: 0; border: none; 
-            background: linear-gradient(45deg, var(--neon-pink), #9c0035); 
-            color: white; font-weight: bold; cursor: pointer; margin-top: 5px;
-            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); /* Slanted Button */
+            outline: none;
             transition: 0.3s;
         }
-        .submit-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
 
-        /* Progress Screen (Hidden initially) */
-        .progress-screen {
-            display: none;
+        input[type="text"]:focus, textarea:focus, select:focus {
+            border-color: var(--main-neon);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+            color: #bbb;
+            font-size: 12px;
+        }
+
+        .upload-btn {
             width: 100%;
+            padding: 15px;
+            background: var(--main-neon);
+            color: black;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Orbitron';
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .upload-btn:hover {
+            background: white;
+            box-shadow: 0 0 20px var(--main-neon);
+        }
+
+        .back-link {
+            display: block;
             text-align: center;
-        }
-        
-        .progress-hexagon {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px auto;
-            background: #222;
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid var(--neon-pink);
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: 'Orbitron';
+            transition: 0.3s;
         }
 
-        .progress-text { font-family: 'Orbitron', sans-serif; font-size: 24px; color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
-        .loading-text { font-size: 16px; color: #aaa; margin-top: 15px; letter-spacing: 2px; }
-        
-        .progress-bar-bg { width: 100%; height: 10px; background: #333; border-radius: 10px; overflow: hidden; margin-top: 15px; }
-        .progress-bar-fill { height: 100%; width: 0%; background: var(--neon-blue); transition: width 0.2s; }
+        .back-link:hover {
+            color: var(--main-neon);
+        }
 
-        .back-link { margin-top: 15px; font-size: 12px; }
-        .back-link a { color: #888; text-decoration: none; }
-        .back-link a:hover { color: white; }
+        .error-msg {
+            color: #ff007b;
+            text-align: center;
+            font-size: 12px;
+            margin-bottom: 15px;
+            font-family: 'Orbitron';
+        }
     </style>
 </head>
 <body>
 
-    <div class="hex-border">
-        <div class="hex-card">
+    <div class="upload-container">
+        <h1>☁️ UPLOAD HUB</h1>
+        
+        {% if error %}
+            <div class="error-msg">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
             
-            <div id="formContainer" class="form-container">
-                <h2>HEX UPLOAD</h2>
-                <form id="uploadForm" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    
-                    <input type="text" name="title" placeholder="App/Content Title" required>
-                    
-                    <select name="content_type">
-                        <option value="app">App (APK)</option>
-                        <option value="photo">Photo</option>
-                        <option value="video">Video</option>
-                        <option value="document">Document</option>
-                    </select>
+            <label>CONTENT TITLE</label>
+            <input type="text" name="title" placeholder="Enter app or content name" required>
+            
+            <label>DESCRIPTION</label>
+            <textarea name="description" placeholder="Write a short description about this content..." rows="4" required></textarea>
+            
+            <label>CONTENT TYPE</label>
+            <select name="content_type" required>
+                <option value="app">📱 Android App (.apk)</option>
+                <option value="photo">🖼️ Photo / Wallpaper</option>
+                <option value="video">🎥 Video File</option>
+            </select>
+            
+            <label>UPLOAD LOGO / THUMBNAIL</label>
+            <input type="file" name="logo" accept="image/*" required>
+            
+            <label>UPLOAD MAIN FILE (.APK, .JPG, .MP4)</label>
+            <input type="file" name="file" required>
+            
+            <button type="submit" class="upload-btn">PUBLISH SECURELY</button>
+        </form>
 
-                    <label>App Logo (Optional)</label>
-                    <input type="file" name="logo" accept="image/*">
-                    
-                    <label>Main Content File</label>
-                    <input type="file" name="file" accept="*/*" required>
-
-                    <button type="submit" class="submit-btn">INITIATE UPLOAD</button>
-                </form>
-                <div class="back-link"><a href="{% url 'dashboard' %}">← Cancel</a></div>
-            </div>
-
-            <div id="progressScreen" class="progress-screen">
-                <div class="progress-hexagon">
-                    <div id="progressPercent" class="progress-text">0%</div>
-                </div>
-                <div id="statusText" class="loading-text">UPLOADING DATA...</div>
-                
-                <div class="progress-bar-bg">
-                    <div id="progressBarFill" class="progress-bar-fill"></div>
-                </div>
-            </div>
-
-        </div>
+        <a href="{% url 'home' %}" class="back-link">← BACK TO HOME</a>
     </div>
 
     <script>
-        const form = document.getElementById('uploadForm');
-        const formContainer = document.getElementById('formContainer');
-        const progressScreen = document.getElementById('progressScreen');
-        const progressPercent = document.getElementById('progressPercent');
-        const progressBarFill = document.getElementById('progressBarFill');
-        const statusText = document.getElementById('statusText');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault(); // ফর্মের সাধারণ লোডিং বন্ধ করা হলো
-
-            // ফর্ম লুকিয়ে প্রোগ্রেস স্ক্রিন দেখানো
-            formContainer.style.display = 'none';
-            progressScreen.style.display = 'block';
-
-            const formData = new FormData(form);
-            const xhr = new XMLHttpRequest();
-
-            xhr.open('POST', window.location.href, true);
-
-            // আপলোডের লাইভ ডেটা ট্র্যাক করা
-            xhr.upload.addEventListener('progress', function(e) {
-                if (e.lengthComputable) {
-                    const percentComplete = Math.round((e.loaded / e.total) * 100);
-                    
-                    // UI আপডেট করা
-                    progressPercent.innerText = percentComplete + '%';
-                    progressBarFill.style.width = percentComplete + '%';
-
-                    if (percentComplete === 100) {
-                        statusText.innerText = 'PROCESSING... PLEASE WAIT';
-                        statusText.style.color = 'var(--neon-blue)';
-                    }
-                }
-            });
-
-            // আপলোড শেষ হলে
-            xhr.onload = function() {
-                if (xhr.status === 200 || xhr.status === 302) {
-                    statusText.innerText = 'UPLOAD COMPLETE!';
-                    statusText.style.color = 'var(--neon-green)';
-                    progressPercent.style.color = 'var(--neon-green)';
-                    
-                    // ১ সেকেন্ড পর ড্যাশবোর্ডে নিয়ে যাওয়া
-                    setTimeout(() => {
-                        window.location.href = "{% url 'dashboard' %}";
-                    }, 1000);
-                } else {
-                    statusText.innerText = 'UPLOAD FAILED!';
-                    statusText.style.color = 'red';
-                    progressPercent.innerText = 'ERR';
-                    progressPercent.style.color = 'red';
-                    
-                    // ৩ সেকেন্ড পর আবার ফর্ম ফিরিয়ে আনা
-                    setTimeout(() => {
-                        formContainer.style.display = 'block';
-                        progressScreen.style.display = 'none';
-                    }, 3000);
-                }
-            };
-
-            // সার্ভারে ডেটা পাঠানো
-            xhr.send(formData);
+        // হোম পেজ থেকে ইউজারের সিলেক্ট করা নিয়ন কালার এখানেও সিঙ্ক হবে
+        document.addEventListener("DOMContentLoaded", function() {
+            const savedTheme = localStorage.getItem('selectedTheme') || '#00d4ff';
+            document.documentElement.style.setProperty('--main-neon', savedTheme);
         });
     </script>
-
 </body>
 </html>
