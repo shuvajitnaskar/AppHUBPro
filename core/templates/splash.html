@@ -4,10 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Hub Pro - Loading...</title>
+    <title>App Hub Pro - Security Check</title>
     
     <link rel="icon" type="image/png" href="{% static 'images/edited-image.png' %}">
-
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
@@ -27,106 +26,107 @@
             justify-content: center;
             align-items: center;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden;
+            text-align: center;
         }
 
-        /* লোগো এনিমেশন */
-        .logo-container {
-            position: relative;
-            width: 180px;
-            height: 180px;
-            margin-bottom: 30px;
-        }
-
-        .main-logo {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
+        /* QR Code Container */
+        .qr-box {
+            background: white;
+            padding: 10px;
+            border-radius: 20px;
             border: 4px solid var(--neon-blue);
-            box-shadow: 0 0 20px var(--neon-blue), 0 0 40px rgba(0, 212, 255, 0.3);
-            animation: pulse 2s infinite alternate;
-            z-index: 2;
-            position: relative;
+            box-shadow: 0 0 20px var(--neon-blue);
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        
+        .qr-box img {
+            width: 200px;
+            height: 200px;
+            display: block;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 20px var(--neon-blue); }
-            100% { transform: scale(1.05); box-shadow: 0 0 40px var(--neon-pink); border-color: var(--neon-pink); }
-        }
-
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 32px;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            margin: 0;
-            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .loading-bar {
-            width: 250px;
-            height: 4px;
-            background: #222;
-            margin-top: 25px;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .bar-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-            box-shadow: 0 0 10px var(--neon-blue);
-            transition: width 0.1s linear;
-        }
-
-        .status {
-            font-size: 12px;
-            color: #555;
-            margin-top: 10px;
-            letter-spacing: 2px;
+        h2 {
+            font-family: 'Orbitron';
+            font-size: 20px;
+            color: var(--neon-pink);
+            margin-bottom: 20px;
             text-transform: uppercase;
         }
+
+        /* Follow Button */
+        .follow-btn {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            display: inline-block;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(188, 24, 136, 0.5);
+        }
+
+        .follow-btn:hover { transform: scale(1.05); }
+
+        /* Enter Website Button (Hidden by default) */
+        #enter-btn {
+            display: none;
+            margin-top: 20px;
+            background: var(--neon-blue);
+            color: black;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            text-decoration: none;
+            font-family: 'Orbitron';
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .note { font-size: 11px; color: #555; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="logo-container">
-        <img src="{% static 'images/edited-image.png' %}" alt="AppHUBPro Logo" class="main-logo">
+    <div style="margin-bottom: 20px;">
+        <img src="{% static 'images/edited-image.png' %}" style="width: 70px; border-radius: 50%; border: 2px solid var(--neon-blue);">
     </div>
 
-    <h1>AppHUBPro</h1>
-    
-    <div class="loading-bar">
-        <div class="bar-fill" id="fill"></div>
+    <h2>Follow to Unlock Website</h2>
+
+    <div class="qr-box">
+        <img src="{% static 'images/qr_code.png' %}" alt="Instagram QR Code">
     </div>
-    
-    <div class="status" id="status-text">Initializing Systems...</div>
+
+    <p style="font-size: 14px; margin-bottom: 20px; color: #aaa;">Scan QR or Click below to follow @shuvajit_naskar</p>
+
+    <a href="https://www.instagram.com/shuvajit_naskar" target="_blank" class="follow-btn" id="follow-link">
+        FOLLOW ON INSTAGRAM
+    </a>
+
+    <a href="{% url 'home' %}" id="enter-btn">ENTER WEBSPACE →</a>
+
+    <p class="note">Security System: Website unlocks after visiting profile</p>
 
     <script>
-        // ৩ সেকেন্ডের লোডিং এনিমেশন এরপর হোম পেজে ট্রান্সফার
-        let fill = document.getElementById('fill');
-        let status = document.getElementById('status-text');
-        let width = 0;
+        const followLink = document.getElementById('follow-link');
+        const enterBtn = document.getElementById('enter-btn');
 
-        let interval = setInterval(() => {
-            if (width >= 100) {
-                clearInterval(interval);
-                status.innerText = "Access Granted";
-                setTimeout(() => {
-                    window.location.href = "{% url 'home' %}";
-                }, 500);
-            } else {
-                width += 1;
-                fill.style.width = width + "%";
-                if(width == 40) status.innerText = "Loading Modules...";
-                if(width == 80) status.innerText = "Securing Connection...";
-            }
-        }, 30);
+        followLink.addEventListener('click', () => {
+            // ইউজার ক্লিক করার ৩ সেকেন্ড পর এন্টার বাটন দেখাবে
+            setTimeout(() => {
+                enterBtn.style.display = 'inline-block';
+                followLink.innerText = "THANKS FOR SUPPORTING!";
+                followLink.style.opacity = "0.5";
+                followLink.style.pointerEvents = "none";
+            }, 3000);
+        });
     </script>
+
 </body>
 </html>
