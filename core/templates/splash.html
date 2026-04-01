@@ -1,80 +1,132 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Hub Pro - Locked</title>
+    <title>App Hub Pro - Loading...</title>
+    
+    <link rel="icon" type="image/png" href="{% static 'images/edited-image.png' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --neon-blue: #00d4ff;
+            --neon-pink: #ff007b;
+            --bg-dark: #000000;
+        }
+
         body {
-            background-color: black;
+            background-color: var(--bg-dark);
             color: white;
-            text-align: center;
-            font-family: Arial, sans-serif;
-            margin-top: 60px;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
         }
-        .qr-box {
-            border: 2px solid #444;
-            border-radius: 20px;
-            padding: 10px;
-            display: inline-block;
-            background-color: white;
+
+        /* লোগো এনিমেশন */
+        .logo-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin-bottom: 30px;
         }
-        .qr-box img {
+
+        .main-logo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-blue), 0 0 40px rgba(0, 212, 255, 0.3);
+            animation: pulse 2s infinite alternate;
+            z-index: 2;
+            position: relative;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 20px var(--neon-blue); }
+            100% { transform: scale(1.05); box-shadow: 0 0 40px var(--neon-pink); border-color: var(--neon-pink); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin: 0;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .loading-bar {
             width: 250px;
-            height: 250px;
-            border-radius: 15px;
-            object-fit: contain;
+            height: 4px;
+            background: #222;
+            margin-top: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
         }
-        .follow-btn {
-            background-color: #ff4081; /* আপনার অ্যাপের গোলাপি রঙের মতো */
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 30px;
+
+        .bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            box-shadow: 0 0 10px var(--neon-blue);
+            transition: width 0.1s linear;
         }
-        h1 { font-size: 28px; font-weight: bold; }
-        p { color: gray; font-size: 16px; margin-bottom: 30px; padding: 0 20px; }
-        .username { font-size: 20px; font-weight: bold; letter-spacing: 1px; margin-top: 15px; }
+
+        .status {
+            font-size: 12px;
+            color: #555;
+            margin-top: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
 
-    <h1>App Hub Pro is Locked</h1>
-    <p>You must follow the developer on Instagram to unlock the website.</p>
-
-    <div class="qr-box">
-        <img src="/media/shuvajit_naskar_qr.png" alt="QR Code">
+    <div class="logo-container">
+        <img src="{% static 'images/edited-image.png' %}" alt="AppHUBPro Logo" class="main-logo">
     </div>
 
-    <div class="username">@shuvajit_naskar</div>
-
-    <button onclick="unlockWebsite()" class="follow-btn">Follow to Unlock</button>
+    <h1>AppHUBPro</h1>
+    
+    <div class="loading-bar">
+        <div class="bar-fill" id="fill"></div>
+    </div>
+    
+    <div class="status" id="status-text">Initializing Systems...</div>
 
     <script>
-        // পেজ লোড হলেই চেক করবে আগে থেকে ফলো করা আছে কি না
-        if (localStorage.getItem('hasFollowed') === 'true') {
-            window.location.href = '/home/';
-        }
+        // ৩ সেকেন্ডের লোডিং এনিমেশন এরপর হোম পেজে ট্রান্সফার
+        let fill = document.getElementById('fill');
+        let status = document.getElementById('status-text');
+        let width = 0;
 
-        function unlockWebsite() {
-            // ১. ইন্সটাগ্রাম ওপেন হবে নতুন ট্যাবে
-            window.open("https://www.instagram.com/shuvajit_naskar?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", "_blank");
-            
-            // ২. ব্রাউজারে সেভ হয়ে যাবে যে ইউজার ফলো করেছে
-            localStorage.setItem('hasFollowed', 'true');
-            
-            // ৩. ২ সেকেন্ড পর মূল ওয়েবসাইটে (Home) নিয়ে যাবে
-            setTimeout(function() {
-                window.location.href = '/home/';
-            }, 2000);
-        }
+        let interval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(interval);
+                status.innerText = "Access Granted";
+                setTimeout(() => {
+                    window.location.href = "{% url 'home' %}";
+                }, 500);
+            } else {
+                width += 1;
+                fill.style.width = width + "%";
+                if(width == 40) status.innerText = "Loading Modules...";
+                if(width == 80) status.innerText = "Securing Connection...";
+            }
+        }, 30);
     </script>
-
 </body>
 </html>

@@ -41,7 +41,7 @@
         .back-btn { color: var(--neon-blue); text-decoration: none; font-size: 16px; font-weight: bold; padding: 10px 20px; border: 1px solid var(--neon-blue); border-radius: 30px; transition: 0.3s; display: inline-block; }
         .back-btn:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
 
-        /* Main App Header Section (Uptodown Style) */
+        /* Main App Header Section */
         .app-header-card { background: rgba(28, 28, 30, 0.95); border: 1px solid #333; border-radius: 25px; padding: 40px; display: flex; flex-wrap: wrap; gap: 30px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
         
         .app-logo-large { width: 150px; height: 150px; border-radius: 30px; object-fit: cover; border: 2px solid #555; box-shadow: 0 0 20px rgba(0,0,0,0.8); background-color: #151517; }
@@ -51,16 +51,21 @@
         .uploader-name { color: var(--neon-pink); font-size: 16px; margin: 10px 0; font-weight: 600; }
         .content-badge { display: inline-block; background: #333; color: #ddd; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; border: 1px solid #555; margin-bottom: 20px; text-transform: uppercase; }
 
-        /* Big Download Button */
+        /* Download Button */
         .download-btn-large { display: inline-block; background: linear-gradient(45deg, var(--neon-green), #00a052); color: black; padding: 15px 40px; border-radius: 40px; text-decoration: none; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; box-shadow: 0 0 20px rgba(0, 230, 118, 0.4); }
         .download-btn-large:hover { transform: scale(1.05); box-shadow: 0 0 30px var(--neon-green); }
 
-        /* Description Section */
+        /* Description & Rating Section */
         .desc-section { margin-top: 40px; background: rgba(20, 20, 22, 0.8); padding: 30px; border-radius: 20px; border: 1px solid #333; }
         .desc-section h3 { color: var(--neon-pink); font-size: 22px; margin-top: 0; font-family: 'Orbitron', sans-serif; }
         .desc-section p { color: #ccc; line-height: 1.8; font-size: 16px; white-space: pre-wrap; }
 
-        /* Related Apps Section */
+        /* Rating Stars */
+        .rating-stars { font-size: 35px; color: #444; cursor: pointer; transition: 0.3s; margin: 15px 0; display: inline-block; }
+        .star.active { color: #ffca28; text-shadow: 0 0 10px rgba(255, 202, 40, 0.5); }
+        .star:hover { transform: scale(1.2); }
+
+        /* Related Apps */
         .related-section { margin-top: 50px; }
         .related-section h3 { font-family: 'Orbitron', sans-serif; font-size: 24px; color: white; border-bottom: 2px solid var(--neon-blue); padding-bottom: 10px; display: inline-block; margin-bottom: 20px; }
         
@@ -99,6 +104,20 @@
         <p>{{ item.description|default:"No specific details or disclaimer provided for this item." }}</p>
     </div>
 
+    <div class="desc-section" style="margin-top: 25px; text-align: center; border-color: var(--neon-blue);">
+        <h3 style="color: var(--neon-blue);">USER FEEDBACK</h3>
+        <div class="rating-stars" id="star-container">
+            <span class="star" onclick="submitRating(1)">★</span>
+            <span class="star" onclick="submitRating(2)">★</span>
+            <span class="star" onclick="submitRating(3)">★</span>
+            <span class="star" onclick="submitRating(4)">★</span>
+            <span class="star" onclick="submitRating(5)">★</span>
+        </div>
+        <p id="rating-status" style="color: var(--neon-green); font-weight: bold; margin-top: 10px;">
+            Rating: {{ item.rating|floatformat:1 }} ⭐ ({{ item.total_votes }} votes)
+        </p>
+    </div>
+
     <div class="related-section">
         <h3>More Like This</h3>
         <div class="related-grid">
@@ -109,7 +128,6 @@
                     {% else %}
                         <img src="https://cdn-icons-png.flaticon.com/512/873/873120.png" alt="Icon" class="related-logo">
                     {% endif %}
-                    
                     <a href="{% url 'app_detail' related.pk %}" class="related-title">{{ related.title }}</a>
                 </div>
             {% empty %}
@@ -117,6 +135,39 @@
             {% endfor %}
         </div>
     </div>
+
+    <script>
+        function submitRating(score) {
+            // তারার রঙ পরিবর্তন করার লজিক
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((s, index) => {
+                if(index < score) s.classList.add('active');
+                else s.classList.remove('active');
+            });
+
+            // AJAX এর মাধ্যমে সার্ভারে ডেটা পাঠানো
+            fetch("{% url 'update_rating' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: "{{ item.id }}",
+                    score: score
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    document.getElementById('rating-status').innerText = "Thanks for voting! New Rating: " + data.new_rating + " ⭐";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Something went wrong with the rating system.");
+            });
+        }
+    </script>
 
 </body>
 </html>

@@ -102,3 +102,9 @@ CLOUDINARY_STORAGE = {
 
 # ডিফল্ট স্টোরেজ হিসেবে Cloudinary সেট করা
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+STATIC_URL = 'static/'
+# নিচের লাইনটি নিশ্চিত করুন যাতে Django জানে আপনার অ্যাপের ভেতরেও static ফোল্ডার আছে
+STATICFILES_DIRS = [
+    BASE_DIR / "core" / "static",
+]
