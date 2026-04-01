@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Content | AppHUBPro</title>
+    <title>Secure Upload | AppHUBPro</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --bg-dark: #0a0a0b;
             --main-neon: #00d4ff; 
+            --main-neon-deep: #0088aa;
             --card-dark: rgba(20, 20, 22, 0.95);
         }
 
@@ -21,23 +22,45 @@
             margin: 0; padding: 0;
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
+            position: relative;
+        }
+
+        /* Hexagon Container / Icon */
+        .hex-icon-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: -30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hexagon {
+            width: 80px;
+            height: 90px;
+            background-color: var(--bg-dark);
+            border: 2px solid var(--main-neon);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 20px var(--main-neon);
+            font-size: 30px;
         }
 
         .upload-container {
             background: var(--card-dark);
             border: 1px solid #333;
             border-radius: 20px;
-            padding: 40px;
+            padding: 50px 40px 40px 40px;
             width: 100%;
             max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
             position: relative;
+            z-index: 5;
         }
 
         h1 {
             font-family: 'Orbitron', sans-serif;
             text-align: center;
-            font-size: 28px;
+            font-size: 24px;
             color: white;
             letter-spacing: 3px;
             text-shadow: 0 0 10px var(--main-neon);
@@ -45,11 +68,12 @@
         }
 
         label {
-            font-size: 12px;
+            font-size: 11px;
             color: #888;
             margin-bottom: 5px;
             display: block;
             font-family: 'Orbitron';
+            letter-spacing: 1px;
         }
 
         input[type="text"], textarea, select {
@@ -58,7 +82,7 @@
             margin-bottom: 20px;
             border-radius: 10px;
             border: 1px solid #333;
-            background: #151517;
+            background: #121214;
             color: white;
             font-family: 'Poppins', sans-serif;
             box-sizing: border-box;
@@ -75,6 +99,13 @@
             margin-bottom: 20px;
             color: #bbb;
             font-size: 12px;
+            background: #121214;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px dashed #444;
+            width: 100%;
+            box-sizing: border-box;
+            cursor: pointer;
         }
 
         .upload-btn {
@@ -90,54 +121,93 @@
             cursor: pointer;
             transition: 0.3s;
             margin-top: 10px;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px var(--main-neon-deep);
         }
 
         .upload-btn:hover {
             background: white;
-            box-shadow: 0 0 20px var(--main-neon);
+            box-shadow: 0 0 25px var(--main-neon);
         }
 
         .back-link {
             display: block;
             text-align: center;
-            margin-top: 20px;
-            color: #888;
+            margin-top: 25px;
+            color: #666;
             text-decoration: none;
-            font-size: 12px;
+            font-size: 11px;
             font-family: 'Orbitron';
             transition: 0.3s;
         }
+        .back-link:hover { color: var(--main-neon); }
+        .error-msg { color: #ff007b; text-align: center; font-size: 12px; margin-bottom: 15px; font-family: 'Orbitron'; }
 
-        .back-link:hover {
-            color: var(--main-neon);
+        /* --- Full Screen Upload Overlay Animation --- */
+        #uploadOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 11, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 99999;
+            display: none; /* Hidden by default */
+            flex-direction: column; justify-content: center; align-items: center;
         }
 
-        .error-msg {
-            color: #ff007b;
-            text-align: center;
-            font-size: 12px;
-            margin-bottom: 15px;
-            font-family: 'Orbitron';
+        /* Spinning Hexagon Loader */
+        .spinner-hex {
+            width: 100px; height: 115px;
+            background: transparent;
+            border: 4px solid transparent;
+            border-top-color: var(--main-neon);
+            border-bottom-color: var(--main-neon);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            animation: spinHex 1.5s linear infinite;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 20px;
         }
+        
+        /* Inner Hexagon */
+        .spinner-hex::before {
+            content: '';
+            width: 60px; height: 70px;
+            background: var(--main-neon);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            animation: pulseHex 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes spinHex { 100% { transform: rotate(360deg); } }
+        @keyframes pulseHex { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 20px var(--main-neon); } }
+
+        .progress-text { font-family: 'Orbitron'; font-size: 40px; color: white; text-shadow: 0 0 15px var(--main-neon); margin: 0; }
+        .status-text { font-family: 'Orbitron'; font-size: 12px; color: #888; letter-spacing: 3px; margin-top: 10px; animation: blink 1s infinite; }
+        
+        .progress-bar-container { width: 300px; height: 4px; background: #222; border-radius: 2px; margin-top: 20px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: var(--main-neon); box-shadow: 0 0 10px var(--main-neon); transition: width 0.2s ease; }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
 <body>
 
+    <div class="hex-icon-container">
+        <div class="hexagon">☁️</div>
+    </div>
+
     <div class="upload-container">
-        <h1>☁️ UPLOAD HUB</h1>
+        <h1>SECURE UPLOAD</h1>
         
         {% if error %}
             <div class="error-msg">⚠️ {{ error }}</div>
         {% endif %}
 
-        <form method="POST" enctype="multipart/form-data">
+        <form id="uploadForm" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             
             <label>CONTENT TITLE</label>
-            <input type="text" name="title" placeholder="Enter app or content name" required>
+            <input type="text" name="title" placeholder="e.g. Modded App v2.0" required>
             
             <label>DESCRIPTION</label>
-            <textarea name="description" placeholder="Write a short description about this content..." rows="4" required></textarea>
+            <textarea name="description" placeholder="Write features and details..." rows="3" required></textarea>
             
             <label>CONTENT TYPE</label>
             <select name="content_type" required>
@@ -146,23 +216,79 @@
                 <option value="video">🎥 Video File</option>
             </select>
             
-            <label>UPLOAD LOGO / THUMBNAIL</label>
+            <label>UPLOAD THUMBNAIL / LOGO</label>
             <input type="file" name="logo" accept="image/*" required>
             
-            <label>UPLOAD MAIN FILE (.APK, .JPG, .MP4)</label>
+            <label>UPLOAD MAIN FILE</label>
             <input type="file" name="file" required>
             
-            <button type="submit" class="upload-btn">PUBLISH SECURELY</button>
+            <button type="submit" class="upload-btn">PUBLISH TO HUB</button>
         </form>
 
-        <a href="{% url 'home' %}" class="back-link">← BACK TO HOME</a>
+        <a href="{% url 'home' %}" class="back-link">← CANCEL & RETURN HOME</a>
+    </div>
+
+    <div id="uploadOverlay">
+        <div class="spinner-hex"></div>
+        <h2 class="progress-text" id="progressVal">0%</h2>
+        <div class="progress-bar-container">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="status-text" id="statusText">ENCRYPTING DATA...</p>
     </div>
 
     <script>
-        // হোম পেজ থেকে ইউজারের সিলেক্ট করা নিয়ন কালার এখানেও সিঙ্ক হবে
         document.addEventListener("DOMContentLoaded", function() {
+            // Theme Sync
             const savedTheme = localStorage.getItem('selectedTheme') || '#00d4ff';
+            const savedThemeDeep = localStorage.getItem('selectedThemeDeep') || '#0088aa';
             document.documentElement.style.setProperty('--main-neon', savedTheme);
+            document.documentElement.style.setProperty('--main-neon-deep', savedThemeDeep);
+
+            // Upload Animation Logic
+            const form = document.getElementById('uploadForm');
+            const overlay = document.getElementById('uploadOverlay');
+            const progressVal = document.getElementById('progressVal');
+            const progressFill = document.getElementById('progressFill');
+            const statusText = document.getElementById('statusText');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); // Stop normal submission instantly
+
+                // Show the cool overlay
+                overlay.style.display = 'flex';
+                
+                let percent = 0;
+                
+                // Simulate fake upload progress
+                let interval = setInterval(() => {
+                    // Random jump between 2 to 15 percent
+                    percent += Math.floor(Math.random() * 10) + 2; 
+                    
+                    if(percent >= 50 && percent < 80) {
+                        statusText.innerText = "UPLOADING TO SERVER...";
+                    } else if (percent >= 80) {
+                        statusText.innerText = "FINALIZING...";
+                    }
+
+                    if(percent >= 100) {
+                        percent = 100;
+                        clearInterval(interval);
+                        progressVal.innerText = "100%";
+                        progressFill.style.width = "100%";
+                        statusText.innerText = "UPLOAD COMPLETE!";
+                        statusText.style.color = "#00e676"; // Green success text
+                        
+                        // Actually submit the form to Django after 1 second of showing 100%
+                        setTimeout(() => {
+                            form.submit();
+                        }, 1000);
+                    } else {
+                        progressVal.innerText = percent + "%";
+                        progressFill.style.width = percent + "%";
+                    }
+                }, 250); // Speed of the fake loader
+            });
         });
     </script>
 </body>
