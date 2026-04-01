@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Developers | Leaderboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --neon-gold: #ffcf00; --neon-silver: #c0c0c0; --neon-bronze: #cd7f32; 
+            --bg-dark: #0a0a0b; --main-neon: #00d4ff; 
+        }
+        body { 
+            background-color: var(--bg-dark); color: white; 
+            font-family: 'Poppins', sans-serif; margin: 0; padding: 20px;
+        }
+        .container { max-width: 600px; margin: 50px auto; background: rgba(255,255,255,0.03); padding: 30px; border-radius: 30px; border: 1px solid #222; backdrop-filter: blur(10px); }
+        h1 { font-family: 'Orbitron'; text-align: center; color: var(--neon-gold); text-shadow: 0 0 15px var(--neon-gold); font-size: 22px; margin-bottom: 30px; }
+        
+        .rank-card {
+            display: flex; align-items: center; gap: 15px; background: #151517; 
+            padding: 15px; border-radius: 20px; margin-bottom: 12px; 
+            border-left: 4px solid transparent; transition: 0.3s;
+        }
+        .rank-card:hover { transform: scale(1.02); background: #1a1a1c; }
+        .rank-1 { border-color: var(--neon-gold); box-shadow: 0 0 15px rgba(255, 207, 0, 0.1); }
+        .rank-2 { border-color: var(--neon-silver); }
+        .rank-3 { border-color: var(--neon-bronze); }
+
+        .medal { font-size: 22px; width: 35px; text-align: center; }
+        .dev-img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #333; object-fit: cover; }
+        .dev-info { flex-grow: 1; }
+        .dev-name { font-weight: bold; font-size: 15px; display: block; color: white; }
+        .dev-tag { font-size: 10px; color: #555; text-transform: uppercase; font-family: 'Orbitron'; }
+        .downloads { font-family: 'Orbitron'; color: var(--main-neon); font-size: 13px; text-align: right; }
+
+        .back-btn { display: block; text-align: center; margin-top: 30px; color: #444; text-decoration: none; font-size: 11px; font-family: 'Orbitron'; }
+        .back-btn:hover { color: var(--main-neon); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🥇 TOP DEVELOPERS</h1>
+    
+    {% for dev in top_developers %}
+    <div class="rank-card rank-{{ forloop.counter }}">
+        <div class="medal">
+            {% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% else %}{{ forloop.counter }}{% endif %}
+        </div>
+        
+        <img src="{% if dev.userprofile.profile_pic %}{{ dev.userprofile.profile_pic.url }}{% else %}https://cdn-icons-png.flaticon.com/512/3135/3135715.png{% endif %}" class="dev-img">
+        
+        <div class="dev-info">
+            <span class="dev-name">{{ dev.username }}</span>
+            <span class="dev-tag">{% if forloop.counter == 1 %}Grand Master{% else %}Elite Dev{% endif %}</span>
+        </div>
+        
+        <div class="downloads">
+            {{ dev.total_downloads }} <br><span style="font-size: 8px; color: #444;">DOWNLOADS</span>
+        </div>
+    </div>
+    {% empty %}
+    <p style="text-align: center; color: #444;">No developer data found yet.</p>
+    {% endfor %}
+
+    <a href="{% url 'home' %}" class="back-btn">← BACK TO STORE</a>
+</div>
+
+<script>
+    // আপনার অন্য পেজ থেকে থিম কালার নিয়ে আসা
+    const savedTheme = localStorage.getItem('selectedTheme') || '#00d4ff';
+    document.documentElement.style.setProperty('--main-neon', savedTheme);
+</script>
+
+</body>
+</html>
