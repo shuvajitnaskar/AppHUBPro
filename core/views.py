@@ -21,7 +21,8 @@ def splash_screen(request):
 def home(request):
     query = request.GET.get('q')
     category = request.GET.get('category')
-    contents = UploadedContent.objects.all().order_by('-created_at')
+    # views.py এর ভেতরে যেখানে এই লাইনটি আছে
+contents = UploadedContent.objects.all().order_by('-uploaded_at') # created_at এর বদলে uploaded_at দিন
 
     # যদি ইউজার সার্চ বক্সে কিছু লিখে সার্চ করে:
     if query:
