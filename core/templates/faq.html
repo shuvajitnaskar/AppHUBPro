@@ -4,52 +4,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ | AppHUBPro</title>
+    <title>FAQ | AppHUBPro Support</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --neon-blue: #00d4ff; --neon-pink: #ff007b; --bg-dark: #0a0a0b; }
-        body { background-color: var(--bg-dark); color: white; font-family: 'Poppins', sans-serif; padding: 40px 20px; text-align: center; }
+        :root { 
+            --neon-blue: #00d4ff; 
+            --neon-pink: #ff007b; 
+            --bg-dark: #0a0a0b; 
+        }
+        body { 
+            background-color: var(--bg-dark); 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            padding: 40px 20px; 
+            margin: 0;
+        }
+        .faq-container { max-width: 900px; margin: 0 auto; text-align: left; }
         
-        .faq-container { max-width: 800px; margin: 0 auto; text-align: left; }
-        h1 { font-family: 'Orbitron'; color: var(--neon-blue); text-align: center; margin-bottom: 40px; text-shadow: 0 0 10px var(--neon-blue); }
+        h1 { 
+            font-family: 'Orbitron'; 
+            color: var(--neon-blue); 
+            text-align: center; 
+            margin-bottom: 20px; 
+            text-shadow: 0 0 10px var(--neon-blue); 
+            letter-spacing: 3px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 25px;
+            margin-bottom: 40px;
+            border-radius: 30px;
+            border: 1px solid #333;
+            background: #151517;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+        .search-box:focus { border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255, 0, 123, 0.3); }
+
+        .faq-item { 
+            background: rgba(21, 21, 23, 0.8); 
+            border: 1px solid #333; 
+            border-radius: 15px; 
+            margin-bottom: 12px; 
+            padding: 18px 25px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        .faq-item:hover { border-color: var(--neon-blue); background: #1a1a1c; }
         
-        .faq-item { background: #151517; border: 1px solid #333; border-radius: 15px; margin-bottom: 15px; padding: 20px; transition: 0.3s; cursor: pointer; }
-        .faq-item:hover { border-color: var(--neon-pink); box-shadow: 0 0 15px rgba(255, 0, 123, 0.2); }
+        .question { 
+            font-weight: 600; 
+            color: var(--neon-blue); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 17px;
+        }
+        .question span { color: var(--neon-pink); font-size: 20px; transition: 0.3s; }
+
+        .answer { 
+            color: #aaa; 
+            font-size: 14px; 
+            display: none; 
+            padding-top: 15px; 
+            border-top: 1px solid #222; 
+            margin-top: 15px; 
+            line-height: 1.6; 
+        }
         
-        .question { font-weight: 600; color: var(--neon-blue); font-size: 18px; margin-bottom: 10px; display: flex; justify-content: space-between; }
-        .answer { color: #aaa; font-size: 15px; line-height: 1.6; display: none; border-top: 1px solid #222; pt: 15px; margin-top: 10px; }
-        
-        .active .answer { display: block; }
-        .back-btn { display: inline-block; margin-top: 30px; color: var(--neon-pink); text-decoration: none; font-weight: bold; border-bottom: 1px solid var(--neon-pink); }
+        .faq-item.active { border-color: var(--neon-pink); }
+        .faq-item.active .answer { display: block; }
+        .faq-item.active .question span { transform: rotate(45deg); }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 40px;
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
 
-    <h1>FREQUENTLY ASKED QUESTIONS</h1>
-
     <div class="faq-container">
-        <div class="faq-item" onclick="this.classList.toggle('active')">
-            <div class="question">How to download apps safely? <span>+</span></div>
-            <div class="answer">Go to the App Detail page and click the "Download APK" button. All apps are scanned and verified by Shuvajit Naskar.</div>
+        <h1>HELP CENTER & FAQ</h1>
+        <input type="text" id="faqSearch" class="search-box" placeholder="Search for questions (e.g. 'download', 'security')...">
+
+        <div id="faqList">
+            <div class="faq-item">
+                <div class="question">What is AppHUBPro? <span>+</span></div>
+                <div class="answer">AppHUBPro is a premium digital gallery where verified developers and administrators share high-quality applications, tools, and digital assets.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">How to download applications safely? <span>+</span></div>
+                <div class="answer">Go to the App Detail page and click the "Download" button. All files are scanned for safety, but we recommend using caution with third-party APKs.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Are all apps on this platform free? <span>+</span></div>
+                <div class="answer">Yes, most of the apps and tools shared here are free for the community. Any premium content will be clearly marked.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Is my personal data secure? <span>+</span></div>
+                <div class="answer">We prioritize your privacy. We only store essential account information like your username and email. We do not sell data to third parties.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Why does my phone show a "Harmful App" warning? <span>+</span></div>
+                <div class="answer">This often happens with modified (Mod) or premium apps because they are not signed by the Play Store. You can check our Safety Report for details.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Can I upload my own applications? <span>+</span></div>
+                <div class="answer">Yes! Registered users can upload apps via the "Upload" section in the sidebar. Your content will be visible on your profile.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">How do I update my Developer Profile? <span>+</span></div>
+                <div class="answer">Go to your Dashboard or Settings. You can add a bio, profile picture, and social links like Instagram and Facebook.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">What is Desktop Mode? <span>+</span></div>
+                <div class="answer">Desktop Mode is a toggle in the sidebar that allows mobile users to view the website in a wide-screen desktop layout for better navigation.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Why do I need to follow on Instagram to unlock the site? <span>+</span></div>
+                <div class="answer">The Instagram lock is part of our community security and branding. It helps keep the platform exclusive for our supporters.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">What should I do if a download link is broken? <span>+</span></div>
+                <div class="answer">Please contact us via the "Customer Care" section or send a DM to @shuvajit_naskar on Instagram to report the link.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Can I delete an app I uploaded? <span>+</span></div>
+                <div class="answer">Yes, you can manage and delete your uploaded content directly from your Developer Dashboard.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">What is the "App Request" feature? <span>+</span></div>
+                <div class="answer">If you need an app that isn't available in our hub, you can use the Request form to ask Shuvajit Naskar to add it.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">How is the "Total Rating" calculated? <span>+</span></div>
+                <div class="answer">Ratings are based on user votes. We take the average score from all users who have rated the application.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">How can I become a Verified Developer? <span>+</span></div>
+                <div class="answer">Consistently upload high-quality, safe apps. The administrator will manually grant the Verified badge to top contributors.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Does AppHUBPro host illegal content? <span>+</span></div>
+                <div class="answer">No. We host tools and educational assets. Users are responsible for complying with their local laws when using any software.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Can I change my username? <span>+</span></div>
+                <div class="answer">Username changes are currently restricted. Please contact support if you have a valid reason for a change.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">What file formats are supported for upload? <span>+</span></div>
+                <div class="answer">We support .apk, .zip, .pdf, .jpg, .png, and .mp4 files depending on the category selected.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Is there a limit on file size for uploads? <span>+</span></div>
+                <div class="answer">Yes, basic users have a limit of 100MB per file. Premium contributors have higher limits.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">How do I report a bug on the website? <span>+</span></div>
+                <div class="answer">Go to the "Customer Care" page and fill out the bug report form with details about your issue.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Will my app stay on the hub forever? <span>+</span></div>
+                <div class="answer">As long as the content is safe and active, it will remain. Inactive or broken apps may be removed after 6 months.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Where are my files stored? <span>+</span></div>
+                <div class="answer">We use Cloudinary and encrypted secure servers to ensure your files are always accessible and safe.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">What is the "Trending" section? <span>+</span></div>
+                <div class="answer">The Trending section showcases apps that have received the most downloads and positive ratings in the last 7 days.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">Can I use AppHUBPro on my PC? <span>+</span></div>
+                <div class="answer">Absolutely! The website is fully responsive and works perfectly on Windows, macOS, and Linux browsers.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="question">How can I support Shuvajit Naskar? <span>+</span></div>
+                <div class="answer">You can support by following on Instagram, sharing the website with friends, and rating the apps you use!</div>
+            </div>
         </div>
 
-        <div class="faq-item" onclick="this.classList.toggle('active')">
-            <div class="question">Are these apps free? <span>+</span></div>
-            <div class="answer">Yes! Most of the premium apps showcased here are free for our community.</div>
-        </div>
-
-        <div class="faq-item" onclick="this.classList.toggle('active')">
-            <div class="question">Can I upload my own app? <span>+</span></div>
-            <div class="answer">Yes, you need to create an account and go to the "Upload App" section. Other users can only upload .apk files.</div>
-        </div>
-
-        <div class="faq-item" onclick="this.classList.toggle('active')">
-            <div class="question">Is my data secure? <span>+</span></div>
-            <div class="answer">We use Cloudinary and high-end encryption for storage. Your privacy is our top priority.</div>
-        </div>
+        <a href="{% url 'home' %}" class="back-link">← RETURN TO HOME HUB</a>
     </div>
 
-    <a href="{% url 'home' %}" class="back-btn">← Return to Store</a>
+    <script>
+        // FAQ Accordion Logic
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
 
+        // Search Filter Logic
+        const searchInput = document.getElementById('faqSearch');
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            faqItems.forEach(item => {
+                const question = item.querySelector('.question').innerText.toLowerCase();
+                const answer = item.querySelector('.answer').innerText.toLowerCase();
+                if (question.includes(term) || answer.includes(term)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
