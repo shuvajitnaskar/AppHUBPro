@@ -134,6 +134,12 @@ def developer_profile_view(request, username):
         'app_count': dev_apps.count(),
     })
 
+# ১০ নম্বর ফাংশনের পরে এটি যোগ করুন
+def trending_apps(request):
+    # সবথেকে বেশি ডাউনলোড হওয়া ১০টি অ্যাপ বাছাই করা
+    top_apps = UploadedContent.objects.order_by('-downloads', '-rating')[:10]
+    return render(request, 'trending.html', {'top_apps': top_apps})
+
 # ১১. অন্যান্য স্ট্যাটিক পেজ
 def faq_view(request):
     return render(request, 'faq.html')
