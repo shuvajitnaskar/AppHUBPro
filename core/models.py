@@ -55,6 +55,7 @@ class UploadedContent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     rating = models.FloatField(default=0.0)
     total_votes = models.IntegerField(default=0)
+    is_verified = models.BooleanField(default=False) # অ্যাডমিন চেক করলে এটি True হবে
 
     def __str__(self):
         return f"{self.title} - {self.content_type} (by {self.uploaded_by.username})"
