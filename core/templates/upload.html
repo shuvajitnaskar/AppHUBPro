@@ -280,11 +280,13 @@
 
             // Populate Watermarks
             const wmContainer = document.getElementById('watermarkContainer');
-            const numWatermarks = 150; // Add 150 instances
+            const numWatermarks = 150; 
             const watermarkHTML = '<div class="watermark-text">Shuvajit Naskar</div>';
             wmContainer.innerHTML = watermarkHTML.repeat(numWatermarks);
 
-            // Upload Animation Logic
+            // ----------------------------------------------------
+            // REAL-TIME UPLOAD PROGRESS LOGIC (AJAX)
+            // ----------------------------------------------------
             const form = document.getElementById('uploadForm');
             const startBtn = document.getElementById('startUploadBtn');
             const progressOverlay = document.getElementById('uploadProgress');
@@ -293,30 +295,40 @@
             const hexContainer = document.getElementById('hexContainer');
 
             startBtn.addEventListener('click', function() {
-                // Basic validation check before starting animation
+                // 1. Basic validation check before starting upload
                 if (!form.checkValidity()) {
                     form.reportValidity();
                     return;
                 }
 
-                // Show the progress screen over the form
+                // 2. Show the progress screen over the form
                 progressOverlay.style.display = 'flex';
+                statusText.innerText = "STARTING UPLOAD...";
                 
-                let percent = 0;
-                
-                // Simulate fake upload progress
-                let interval = setInterval(() => {
-                    percent += Math.floor(Math.random() * 15) + 5; 
-                    
-                    if(percent >= 50 && percent < 80) {
-                        statusText.innerText = "ENCRYPTING PACKAGES...";
-                    } else if (percent >= 80) {
-                        statusText.innerText = "FINALIZING...";
-                    }
+                // 3. Create AJAX request
+                const xhr = new XMLHttpRequest();
+                const formData = new FormData(form);
 
-                    if(percent >= 100) {
-                        percent = 100;
-                        clearInterval(interval);
+                // 4. Track Real Progress Event
+                xhr.upload.addEventListener("progress", function(e) {
+                    if (e.lengthComputable) {
+                        const percentComplete = Math.round((e.loaded / e.total) * 100);
+                        
+                        progressVal.innerText = percentComplete + "%";
+
+                        if (percentComplete < 50) {
+                            statusText.innerText = "UPLOADING DATA...";
+                        } else if (percentComplete >= 50 && percentComplete < 99) {
+                            statusText.innerText = "ENCRYPTING PACKAGES...";
+                        } else if (percentComplete === 100) {
+                            statusText.innerText = "FINALIZING...";
+                        }
+                    }
+                });
+
+                // 5. Handle successful upload
+                xhr.addEventListener("load", function() {
+                    if (xhr.status >= 200 && xhr.status < 300) {
                         progressVal.innerText = "100%";
                         statusText.innerText = "UPLOAD COMPLETE!";
                         statusText.style.color = "white"; 
@@ -324,14 +336,36 @@
                         // Full Glow Effect
                         hexContainer.classList.add('glow-complete');
                         
-                        // Use HTMLFormElement.prototype.submit to bypass any listeners preventing it
+                        // Redirect to home page after success
                         setTimeout(() => {
-                            HTMLFormElement.prototype.submit.call(form);
-                        }, 1500);
+                            window.location.href = "{% url 'home' %}"; 
+                        }, 2000);
                     } else {
-                        progressVal.innerText = percent + "%";
+                        // Handle server errors
+                        progressVal.innerText = "ERROR";
+                        statusText.innerText = "UPLOAD FAILED. TRY AGAIN.";
+                        statusText.style.color = "red";
+                        setTimeout(() => { progressOverlay.style.display = 'none'; }, 3000);
                     }
-                }, 300); // Speed of the fake loader
+                });
+
+                // Handle network errors
+                xhr.addEventListener("error", function() {
+                    progressVal.innerText = "ERROR";
+                    statusText.innerText = "NETWORK ERROR.";
+                    statusText.style.color = "red";
+                    setTimeout(() => { progressOverlay.style.display = 'none'; }, 3000);
+                });
+
+                // 6. Send Data to Server
+                xhr.open("POST", form.action || window.location.href, true);
+                
+                // Important: We need to send the CSRF token correctly if using AJAX
+                // Django usually requires this header for AJAX POST requests
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                
+                xhr.send(formData);
             });
         });
     </script>

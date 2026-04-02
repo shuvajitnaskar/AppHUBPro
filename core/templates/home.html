@@ -19,28 +19,36 @@
             --card-dark: rgba(20, 20, 22, 0.9); --card-light: #f8f9fa;
         }
 
+        /* Set base background on HTML so body can have transparent elements if needed, 
+           but mostly just ensure body background covers but watermark stays visible */
+        html {
+            background-color: var(--bg-dark);
+            transition: background-color 0.3s;
+        }
+
         body { 
-            background-color: var(--bg-dark); 
+            background-color: transparent; /* Let HTML background show through */
             color: var(--text-dark); 
             font-family: 'Poppins', sans-serif; 
             margin: 0; padding: 20px; 
-            transition: background 0.3s, color 0.3s;
+            transition: color 0.3s;
             min-height: 100vh;
-            position: relative; /* For watermark positioning */
+            position: relative;
+            z-index: 1; /* Content sits above watermarks */
         }
 
         /* --- Dense Watermark Background --- */
         .watermark-container {
-            position: fixed; /* Fixed to cover whole screen even when scrolling */
+            position: fixed; 
             top: 0; left: 0; width: 100%; height: 100%;
             overflow: hidden;
-            z-index: -1; /* Behind everything */
+            z-index: -1; /* Behind body content, but visible because body is transparent */
             pointer-events: none;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
             align-content: space-around;
-            opacity: 0.05; /* Subtle */
+            opacity: 0.08; /* Slightly more visible */
         }
         
         .watermark-text {
@@ -50,11 +58,12 @@
             transform: rotate(-30deg);
             padding: 20px;
             white-space: nowrap;
-            transition: color 0.3s; /* Smooth color transition */
+            transition: color 0.3s; 
         }
 
         /* Light Mode Fixes */
-        body.light-mode { background-color: var(--bg-light); color: var(--text-light); }
+        html.light-mode { background-color: var(--bg-light); }
+        body.light-mode { color: var(--text-light); }
         body.light-mode .card { background: var(--card-light); border-color: #ddd; color: var(--text-light); }
         body.light-mode h1, body.light-mode h3, body.light-mode .sb-section-title { color: var(--text-light); }
         body.light-mode .sidebar { background-color: rgba(255, 255, 255, 0.98); }
@@ -65,16 +74,15 @@
             height: 100%; width: 0; position: fixed; z-index: 10000; top: 0; left: 0; 
             background-color: rgba(15, 15, 17, 0.98); backdrop-filter: blur(15px); 
             border-right: 2px solid var(--main-neon); overflow-y: auto; transition: 0.4s; 
-            display: flex; flex-direction: column; padding-top: 60px; /* Reduced to make room for close btn */
+            display: flex; flex-direction: column; padding-top: 60px; 
         }
         
-        /* Close Button inside Sidebar */
         .closebtn {
             position: absolute;
             top: 10px;
             right: 20px;
             font-size: 36px;
-            color: var(--title-text-color); /* Sync with title color for contrast */
+            color: var(--title-text-color); 
             cursor: pointer;
             transition: 0.3s;
             text-shadow: 0 0 10px var(--main-neon);
@@ -96,15 +104,23 @@
         .dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #333; transition: 0.3s; }
         .dot-wrapper.active .dot { border-color: white; box-shadow: 0 0 10px white; }
 
-        /* Footer Switches */
-        .sidebar-footer { margin-top: auto; padding: 20px 25px; border-top: 1px solid #222; background: rgba(0,0,0,0.3); }
-        .switch-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        /* Footer Switches - ENSURING THEY SHOW */
+        .sidebar-footer { 
+            margin-top: auto; 
+            padding: 20px 25px; 
+            border-top: 1px solid #222; 
+            background: rgba(0,0,0,0.3); 
+            width: 100%; /* Force full width */
+            box-sizing: border-box; /* Prevent padding from overflowing */
+        }
+        .switch-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; width: 100%; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; flex-shrink: 0; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--main-neon); }
         input:checked + .slider:before { transform: translateX(20px); }
+        .switch-container span { color: #bbb; } /* Ensure text is visible in sidebar */
 
         /* Header & Logo */
         .header { text-align: center; padding: 50px 20px; position: relative; z-index: 10; }
@@ -117,7 +133,6 @@
             transition: 0.3s;
         }
         
-        /* AppHUBPro Title - Dynamic Color */
         .header h1 { 
             font-family: 'Orbitron', sans-serif; 
             font-weight: 900;
@@ -173,7 +188,8 @@
         <span class="sb-section-title">NEON THEMES (Vertical)</span>
         <div class="dot-container">
             <div class="dot-wrapper active" onclick="changeTheme('#00d4ff', '#0088aa', '#ff0000', this)"><div class="dot" style="background: #00d4ff;"></div> Sky Blue</div>
-            <div class="dot-wrapper" onclick="changeTheme('#ff007b', '#aa0055', '#ffea00', this)"><div class="dot" style="background: #ff007b;"></div> Pink Red</div> <div class="dot-wrapper" onclick="changeTheme('#00e676', '#008844', '#ff007b', this)"><div class="dot" style="background: #00e676;"></div> Green</div>
+            <div class="dot-wrapper" onclick="changeTheme('#ff007b', '#aa0055', '#ffea00', this)"><div class="dot" style="background: #ff007b;"></div> Pink Red</div> 
+            <div class="dot-wrapper" onclick="changeTheme('#00e676', '#008844', '#ff007b', this)"><div class="dot" style="background: #00e676;"></div> Green</div>
             <div class="dot-wrapper" onclick="changeTheme('#ffcf00', '#aa8800', '#0044ff', this)"><div class="dot" style="background: #ffcf00;"></div> Gold</div>
             <div class="dot-wrapper" onclick="changeTheme('#9c27b0', '#661177', '#00e676', this)"><div class="dot" style="background: #9c27b0;"></div> Purple</div>
             <div class="dot-wrapper" onclick="changeTheme('#ff5722', '#aa3311', '#00d4ff', this)"><div class="dot" style="background: #ff5722;"></div> Orange</div>
@@ -273,12 +289,15 @@
         }
 
         function toggleDarkMode() {
+            const htmlElement = document.documentElement;
             const body = document.getElementById('mainBody');
             const toggle = document.getElementById('darkModeToggle');
             if (toggle.checked) { 
+                htmlElement.classList.remove('light-mode');
                 body.classList.remove('light-mode'); 
                 localStorage.setItem('themeMode', 'dark'); 
             } else { 
+                htmlElement.classList.add('light-mode');
                 body.classList.add('light-mode'); 
                 localStorage.setItem('themeMode', 'light'); 
             }
@@ -309,11 +328,10 @@
             // Load Theme
             const savedTheme = localStorage.getItem('selectedTheme') || '#00d4ff';
             const savedThemeDeep = localStorage.getItem('selectedThemeDeep') || '#0088aa';
-            const savedTextColor = localStorage.getItem('selectedTextColor') || '#ff0000'; // Default red text
+            const savedTextColor = localStorage.getItem('selectedTextColor') || '#ff0000'; 
             
             changeTheme(savedTheme, savedThemeDeep, savedTextColor, null);
 
-            // Set active dot based on loaded theme
             document.querySelectorAll('.dot-wrapper').forEach(dot => {
                 if (dot.getAttribute('onclick').includes(savedTheme)) {
                     dot.classList.add('active');
@@ -323,16 +341,21 @@
             // Load Dark Mode
             const savedMode = localStorage.getItem('themeMode') || 'dark';
             const darkModeToggle = document.getElementById('darkModeToggle');
+            const htmlElement = document.documentElement;
+            const body = document.getElementById('mainBody');
+
             if (savedMode === 'light') {
                 darkModeToggle.checked = false;
-                document.getElementById('mainBody').classList.add('light-mode');
+                htmlElement.classList.add('light-mode');
+                body.classList.add('light-mode');
             } else {
                 darkModeToggle.checked = true;
             }
 
             // Load Desktop Mode
+            const desktopToggle = document.getElementById('desktopModeToggle');
             if (localStorage.getItem('vM') === 'd') {
-                document.getElementById('desktopModeToggle').checked = true;
+                desktopToggle.checked = true;
                 document.getElementById('mainBody').classList.add('desktop-view');
                 document.getElementById('viewportMeta').setAttribute('content', 'width=1200');
             }
