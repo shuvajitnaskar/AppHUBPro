@@ -15,7 +15,6 @@
             --text-dark: #ffffff; --text-light: #1a1a1b;
             --main-neon: #00d4ff; 
             --main-neon-deep: #0088aa; 
-            /* New Variable for dynamic Title Text Color, default red */
             --title-text-color: #ff0000; 
             --card-dark: rgba(20, 20, 22, 0.9); --card-light: #f8f9fa;
         }
@@ -27,21 +26,31 @@
             margin: 0; padding: 20px; 
             transition: background 0.3s, color 0.3s;
             min-height: 100vh;
+            position: relative; /* For watermark positioning */
         }
 
-        /* Watermark (Fixed and Visible) */
-        body::after {
-            content: "Shuvajit Naskar | AppHUBPro"; 
-            position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 6vw; 
-            font-weight: 900;
-            opacity: 0.08; 
+        /* --- Dense Watermark Background --- */
+        .watermark-container {
+            position: fixed; /* Fixed to cover whole screen even when scrolling */
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: -1; /* Behind everything */
+            pointer-events: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-content: space-around;
+            opacity: 0.05; /* Subtle */
+        }
+        
+        .watermark-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
             color: var(--main-neon);
-            z-index: 9999; 
-            pointer-events: none; 
+            transform: rotate(-30deg);
+            padding: 20px;
             white-space: nowrap;
-            transition: color 0.3s;
+            transition: color 0.3s; /* Smooth color transition */
         }
 
         /* Light Mode Fixes */
@@ -49,15 +58,29 @@
         body.light-mode .card { background: var(--card-light); border-color: #ddd; color: var(--text-light); }
         body.light-mode h1, body.light-mode h3, body.light-mode .sb-section-title { color: var(--text-light); }
         body.light-mode .sidebar { background-color: rgba(255, 255, 255, 0.98); }
-        body.light-mode .header h1 { text-shadow: none; color: var(--text-light); } /* Override title color in light mode */
+        body.light-mode .header h1 { text-shadow: none; color: var(--text-light); } 
 
         /* Sidebar */
         .sidebar {
             height: 100%; width: 0; position: fixed; z-index: 10000; top: 0; left: 0; 
             background-color: rgba(15, 15, 17, 0.98); backdrop-filter: blur(15px); 
             border-right: 2px solid var(--main-neon); overflow-y: auto; transition: 0.4s; 
-            display: flex; flex-direction: column; padding-top: 80px;
+            display: flex; flex-direction: column; padding-top: 60px; /* Reduced to make room for close btn */
         }
+        
+        /* Close Button inside Sidebar */
+        .closebtn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 36px;
+            color: var(--title-text-color); /* Sync with title color for contrast */
+            cursor: pointer;
+            transition: 0.3s;
+            text-shadow: 0 0 10px var(--main-neon);
+        }
+        .closebtn:hover { color: white; text-shadow: 0 0 15px white; }
+
         .sidebar a {
             padding: 15px 25px; text-decoration: none; font-size: 16px; color: #bbb; 
             display: flex; align-items: center; gap: 20px; transition: 0.3s; font-family: 'Orbitron', sans-serif;
@@ -100,7 +123,7 @@
             font-weight: 900;
             letter-spacing: 6px; 
             font-size: 46px; 
-            color: var(--title-text-color); /* Uses dynamic variable */
+            color: var(--title-text-color); 
             text-shadow: 0 0 15px var(--main-neon), 0 0 30px var(--main-neon-deep); 
             transition: color 0.3s, text-shadow 0.3s;
             margin-top: 20px;
@@ -125,7 +148,8 @@
         }
         body.light-mode .card h3 { color: var(--text-light); text-shadow: none; }
         
-        .openbtn { font-size: 30px; cursor: pointer; color: var(--main-neon); position: fixed; top: 25px; left: 25px; z-index: 9999; text-shadow: 0 0 10px var(--main-neon); }
+        /* Open Button */
+        .openbtn { font-size: 30px; cursor: pointer; color: var(--main-neon); position: fixed; top: 25px; left: 25px; z-index: 999; text-shadow: 0 0 10px var(--main-neon); transition: color 0.3s; }
         
         /* Desktop View */
         body.desktop-view { min-width: 1200px; padding: 40px; }
@@ -134,8 +158,11 @@
 </head>
 <body id="mainBody">
 
+    <div class="watermark-container" id="watermarkContainer">
+        </div>
+
     <div id="mySidebar" class="sidebar">
-        <span style="position: absolute; top: 15px; right: 25px; font-size: 35px; color: #ff007b; cursor: pointer;" onclick="closeNav()">×</span>
+        <span class="closebtn" onclick="closeNav()">&times;</span>
         
         <span class="sb-section-title">EXPLORE</span>
         <a href="{% url 'home' %}">🏠 Store Home</a>
@@ -145,12 +172,12 @@
 
         <span class="sb-section-title">NEON THEMES (Vertical)</span>
         <div class="dot-container">
-            <div class="dot-wrapper active" onclick="changeTheme('#00d4ff', '#0088aa', '#ff007b', this)"><div class="dot" style="background: #00d4ff;"></div> Sky Blue</div>
-            <div class="dot-wrapper" onclick="changeTheme('#ff007b', '#aa0055', '#ffcf00', this)"><div class="dot" style="background: #ff007b;"></div> Pink Red</div> <div class="dot-wrapper" onclick="changeTheme('#00e676', '#008844', '#ff007b', this)"><div class="dot" style="background: #00e676;"></div> Green</div>
-            <div class="dot-wrapper" onclick="changeTheme('#ffcf00', '#aa8800', '#2196f3', this)"><div class="dot" style="background: #ffcf00;"></div> Gold</div>
+            <div class="dot-wrapper active" onclick="changeTheme('#00d4ff', '#0088aa', '#ff0000', this)"><div class="dot" style="background: #00d4ff;"></div> Sky Blue</div>
+            <div class="dot-wrapper" onclick="changeTheme('#ff007b', '#aa0055', '#ffea00', this)"><div class="dot" style="background: #ff007b;"></div> Pink Red</div> <div class="dot-wrapper" onclick="changeTheme('#00e676', '#008844', '#ff007b', this)"><div class="dot" style="background: #00e676;"></div> Green</div>
+            <div class="dot-wrapper" onclick="changeTheme('#ffcf00', '#aa8800', '#0044ff', this)"><div class="dot" style="background: #ffcf00;"></div> Gold</div>
             <div class="dot-wrapper" onclick="changeTheme('#9c27b0', '#661177', '#00e676', this)"><div class="dot" style="background: #9c27b0;"></div> Purple</div>
             <div class="dot-wrapper" onclick="changeTheme('#ff5722', '#aa3311', '#00d4ff', this)"><div class="dot" style="background: #ff5722;"></div> Orange</div>
-            <div class="dot-wrapper" onclick="changeTheme('#2196f3', '#1155aa', '#ffcf00', this)"><div class="dot" style="background: #2196f3;"></div> Blue</div>
+            <div class="dot-wrapper" onclick="changeTheme('#2196f3', '#1155aa', '#ffea00', this)"><div class="dot" style="background: #2196f3;"></div> Blue</div>
             <div class="dot-wrapper" onclick="changeTheme('#607d8b', '#334455', '#ff5722', this)"><div class="dot" style="background: #607d8b;"></div> Steel</div>
             <div class="dot-wrapper" onclick="changeTheme('#009688', '#005544', '#ff007b', this)"><div class="dot" style="background: #009688;"></div> Teal</div>
         </div>
@@ -173,7 +200,7 @@
         <div class="sidebar-footer">
             {% if user.is_authenticated %}
             <form action="{% url 'logout' %}" method="post" style="margin: 0 0 15px 0;">
-                {% csrf_token %}<button type="submit" style="color: #ff007b; background:none; border:none; padding:10px 0; cursor:pointer; font-family:'Orbitron'; font-size:14px; width:100%; text-align:left; display:flex; align-items:center; gap:20px;">🚪 Logout</button>
+                {% csrf_token %}<button type="submit" id="logoutBtn" style="color: var(--title-text-color); background:none; border:none; padding:10px 0; cursor:pointer; font-family:'Orbitron'; font-size:14px; width:100%; text-align:left; display:flex; align-items:center; gap:20px; transition: color 0.3s;">🚪 Logout</button>
             </form>
             {% endif %}
 
@@ -195,7 +222,7 @@
         </div>
     </div>
 
-    <span class="openbtn" onclick="openNav()">☰</span>
+    <span class="openbtn" onclick="openNav()">&#9776;</span>
 
     <div class="header">
         <img src="{% static 'images/edited-image.png' %}" class="main-logo">
@@ -204,7 +231,7 @@
         
         <form method="GET" action="{% url 'home' %}" style="margin:30px 0; display:flex; justify-content:center; gap:10px;">
             <input type="text" name="q" placeholder="Search safe apps..." style="padding:12px 25px; border-radius:30px; border:1px solid #333; background:#151517; color:white; width: 300px; font-size:14px;" value="{{ request.GET.q }}">
-            <button type="submit" style="background:var(--main-neon); border:none; padding:12px 30px; border-radius:30px; cursor:pointer; font-weight:bold; font-family:'Orbitron'; font-size:12px; color:black;">Search</button>
+            <button type="submit" style="background:var(--main-neon); border:none; padding:12px 30px; border-radius:30px; cursor:pointer; font-weight:bold; font-family:'Orbitron'; font-size:12px; color:black; transition: background 0.3s;">Search</button>
         </form>
     </div>
 
@@ -220,8 +247,8 @@
         <div class="card">
             <img src="{% if item.logo %}{{ item.logo.url }}{% else %}https://cdn-icons-png.flaticon.com/512/873/873120.png{% endif %}" style="width:70px; height:70px; border-radius:15px; object-fit: cover; border: 1px solid #333;">
             <h3>{{ item.title }}</h3>
-            <p style="font-size: 12px; opacity: 0.6; margin-bottom: 15px;">Dev: <span style="color:var(--main-neon); font-weight:bold;">{{ item.uploaded_by.username }}</span></p>
-            <a href="{% url 'app_detail' item.pk %}" style="display:block; background:var(--main-neon); color:black; padding:10px; border-radius:25px; text-decoration:none; font-weight:bold; font-size:12px; font-family:'Orbitron';">VIEW REPORT</a>
+            <p style="font-size: 12px; opacity: 0.6; margin-bottom: 15px;">Dev: <span style="color:var(--main-neon); font-weight:bold; transition: color 0.3s;">{{ item.uploaded_by.username }}</span></p>
+            <a href="{% url 'app_detail' item.pk %}" style="display:block; background:var(--main-neon); color:black; padding:10px; border-radius:25px; text-decoration:none; font-weight:bold; font-size:12px; font-family:'Orbitron'; transition: background 0.3s;">VIEW REPORT</a>
         </div>
         {% empty %}
         <div style="grid-column: 1/-1; text-align: center; opacity: 0.3; padding: 80px; font-family:'Orbitron';">No items found in this category.</div>
@@ -232,7 +259,6 @@
         function openNav() { document.getElementById("mySidebar").style.width = "300px"; }
         function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
 
-        // Updated changeTheme to accept text color
         function changeTheme(color, deepColor, textColor, el) {
             document.documentElement.style.setProperty('--main-neon', color);
             document.documentElement.style.setProperty('--main-neon-deep', deepColor);
@@ -243,7 +269,7 @@
             localStorage.setItem('selectedTextColor', textColor);
             
             document.querySelectorAll('.dot-wrapper').forEach(dot => dot.classList.remove('active'));
-            el.classList.add('active');
+            if(el) el.classList.add('active');
         }
 
         function toggleDarkMode() {
@@ -274,33 +300,37 @@
         }
 
         window.onload = function() {
-            const savedTheme = localStorage.getItem('selectedTheme');
-            const savedThemeDeep = localStorage.getItem('selectedThemeDeep');
-            // Load saved text color, default to red if not set
-            const savedTextColor = localStorage.getItem('selectedTextColor') || '#ff0000'; 
+            // Populate Watermarks
+            const wmContainer = document.getElementById('watermarkContainer');
+            const numWatermarks = 150; 
+            const watermarkHTML = '<div class="watermark-text">Shuvajit Naskar</div>';
+            wmContainer.innerHTML = watermarkHTML.repeat(numWatermarks);
+
+            // Load Theme
+            const savedTheme = localStorage.getItem('selectedTheme') || '#00d4ff';
+            const savedThemeDeep = localStorage.getItem('selectedThemeDeep') || '#0088aa';
+            const savedTextColor = localStorage.getItem('selectedTextColor') || '#ff0000'; // Default red text
             
-            if (savedTheme && savedThemeDeep) {
-                document.documentElement.style.setProperty('--main-neon', savedTheme);
-                document.documentElement.style.setProperty('--main-neon-deep', savedThemeDeep);
-                document.documentElement.style.setProperty('--title-text-color', savedTextColor);
-                
-                document.querySelectorAll('.dot-wrapper').forEach(dot => {
-                    if (dot.getAttribute('onclick').includes(savedTheme)) {
-                        dot.classList.add('active');
-                    } else {
-                        dot.classList.remove('active');
-                    }
-                });
-            }
+            changeTheme(savedTheme, savedThemeDeep, savedTextColor, null);
+
+            // Set active dot based on loaded theme
+            document.querySelectorAll('.dot-wrapper').forEach(dot => {
+                if (dot.getAttribute('onclick').includes(savedTheme)) {
+                    dot.classList.add('active');
+                }
+            });
             
+            // Load Dark Mode
             const savedMode = localStorage.getItem('themeMode') || 'dark';
+            const darkModeToggle = document.getElementById('darkModeToggle');
             if (savedMode === 'light') {
-                document.getElementById('darkModeToggle').checked = false;
+                darkModeToggle.checked = false;
                 document.getElementById('mainBody').classList.add('light-mode');
             } else {
-                document.getElementById('darkModeToggle').checked = true;
+                darkModeToggle.checked = true;
             }
 
+            // Load Desktop Mode
             if (localStorage.getItem('vM') === 'd') {
                 document.getElementById('desktopModeToggle').checked = true;
                 document.getElementById('mainBody').classList.add('desktop-view');

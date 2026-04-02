@@ -22,29 +22,51 @@
             margin: 0; padding: 20px;
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden; /* Prevent scrolling from watermarks */
+            position: relative;
+        }
+
+        /* --- Dense Watermark Background --- */
+        .watermark-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: 1; /* Behind everything */
+            pointer-events: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-content: space-around;
+            opacity: 0.05; /* Subtle */
+        }
+        
+        .watermark-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: var(--main-neon);
+            transform: rotate(-30deg);
+            padding: 20px;
+            white-space: nowrap;
         }
 
         /* --- Elongated Hexagon Container (Cyber Shield) --- */
         .hex-wrapper {
             position: relative;
             width: 100%;
-            max-width: 480px; /* ফর্মের পারফেক্ট চওড়া */
-            height: 720px; /* লম্বাটে করা হয়েছে যাতে লেখা না কাটে */
+            max-width: 480px; 
+            height: 720px; 
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Neon Flow Animation on the border */
             background: linear-gradient(45deg, var(--main-neon), transparent, var(--main-neon-deep), transparent);
             background-size: 400% 400%;
             animation: neonFlow 3s ease infinite;
-            /* নতুন লম্বাটে হেক্সাগন শেপ */
             clip-path: polygon(50% 0%, 100% 8%, 100% 92%, 50% 100%, 0% 92%, 0% 8%);
-            padding: 4px; /* Border thickness */
+            padding: 4px; 
             transition: 0.5s;
+            z-index: 10; /* Above watermarks */
         }
 
-        /* Full Glow when upload completes */
         .hex-wrapper.glow-complete {
             background: var(--main-neon);
             box-shadow: 0 0 50px var(--main-neon), 0 0 100px var(--main-neon);
@@ -59,9 +81,9 @@
             clip-path: polygon(50% 0%, 100% 8%, 100% 92%, 50% 100%, 0% 92%, 0% 8%);
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* ওপর থেকে শুরু হবে */
+            justify-content: flex-start; 
             align-items: center;
-            padding: 70px 30px 40px 30px; /* ওপর-নিচে প্যাডিং বাড়ানো হয়েছে যাতে কোণায় না কাটে */
+            padding: 70px 30px 40px 30px; 
             box-sizing: border-box;
             position: relative;
             z-index: 10;
@@ -85,15 +107,14 @@
         }
 
         .form-content {
-            width: 95%; /* ফর্মের জায়গা বাড়ানো হয়েছে */
+            width: 95%; 
             display: flex;
             flex-direction: column;
-            overflow-y: auto; /* যদি লেখা বেশি হয়, তবে স্ক্রল করা যাবে */
+            overflow-y: auto; 
             max-height: 100%;
             padding-right: 5px;
         }
 
-        /* স্ক্রলবার হাইড করা হয়েছে প্রিমিয়াম লুকের জন্য */
         .form-content::-webkit-scrollbar { display: none; }
         .form-content { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -195,6 +216,9 @@
 </head>
 <body>
 
+    <div class="watermark-container" id="watermarkContainer">
+        </div>
+
     <div class="hex-wrapper" id="hexContainer">
         
         <div class="hex-inner">
@@ -233,7 +257,7 @@
                     <input type="file" name="file" required onchange="document.getElementById('fileBtnText').innerText = this.files[0].name">
                 </div>
                 
-                <button type="submit" class="upload-btn">INITIATE UPLOAD</button>
+                <button type="button" class="upload-btn" id="startUploadBtn">INITIATE UPLOAD</button>
 
                 <a href="{% url 'home' %}" class="back-link">ABORT & RETURN</a>
             </form>
@@ -254,15 +278,26 @@
             document.documentElement.style.setProperty('--main-neon', savedTheme);
             document.documentElement.style.setProperty('--main-neon-deep', savedThemeDeep);
 
+            // Populate Watermarks
+            const wmContainer = document.getElementById('watermarkContainer');
+            const numWatermarks = 150; // Add 150 instances
+            const watermarkHTML = '<div class="watermark-text">Shuvajit Naskar</div>';
+            wmContainer.innerHTML = watermarkHTML.repeat(numWatermarks);
+
             // Upload Animation Logic
             const form = document.getElementById('uploadForm');
+            const startBtn = document.getElementById('startUploadBtn');
             const progressOverlay = document.getElementById('uploadProgress');
             const progressVal = document.getElementById('progressVal');
             const statusText = document.getElementById('statusText');
             const hexContainer = document.getElementById('hexContainer');
 
-            form.addEventListener('submit', function(e) {
-                e.preventDefault(); // Stop normal submission instantly
+            startBtn.addEventListener('click', function() {
+                // Basic validation check before starting animation
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
 
                 // Show the progress screen over the form
                 progressOverlay.style.display = 'flex';
@@ -286,12 +321,12 @@
                         statusText.innerText = "UPLOAD COMPLETE!";
                         statusText.style.color = "white"; 
                         
-                        // হেক্সাগন ফুল গ্লো করবে (Full Glow Effect)
+                        // Full Glow Effect
                         hexContainer.classList.add('glow-complete');
                         
-                        // Actually submit the form to Django after 1.5 seconds of glowing
+                        // Use HTMLFormElement.prototype.submit to bypass any listeners preventing it
                         setTimeout(() => {
-                            form.submit();
+                            HTMLFormElement.prototype.submit.call(form);
                         }, 1500);
                     } else {
                         progressVal.innerText = percent + "%";
