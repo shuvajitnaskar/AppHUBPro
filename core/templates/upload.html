@@ -22,7 +22,7 @@
             margin: 0; padding: 20px;
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
-            overflow: hidden; /* Prevent scrolling from watermarks */
+            overflow: hidden; 
             position: relative;
         }
 
@@ -31,13 +31,13 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             overflow: hidden;
-            z-index: 1; /* Behind everything */
+            z-index: 1; 
             pointer-events: none;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
             align-content: space-around;
-            opacity: 0.05; /* Subtle */
+            opacity: 0.05; 
         }
         
         .watermark-text {
@@ -64,12 +64,12 @@
             clip-path: polygon(50% 0%, 100% 8%, 100% 92%, 50% 100%, 0% 92%, 0% 8%);
             padding: 4px; 
             transition: 0.5s;
-            z-index: 10; /* Above watermarks */
+            z-index: 10; 
         }
 
         .hex-wrapper.glow-complete {
-            background: var(--main-neon);
-            box-shadow: 0 0 50px var(--main-neon), 0 0 100px var(--main-neon);
+            background: #00e676; /* Success Green Glow */
+            box-shadow: 0 0 50px #00e676, 0 0 100px #00e676;
             animation: none;
         }
 
@@ -95,8 +95,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- Form Elements Inside Hexagon --- */
-        h1 {
+        h1.main-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 24px;
             color: white;
@@ -118,120 +117,109 @@
         .form-content::-webkit-scrollbar { display: none; }
         .form-content { -ms-overflow-style: none; scrollbar-width: none; }
 
-        label {
-            font-size: 11px;
-            color: #aaa;
-            margin-bottom: 5px;
-            font-family: 'Orbitron';
-            letter-spacing: 1px;
-        }
+        label { font-size: 11px; color: #aaa; margin-bottom: 5px; font-family: 'Orbitron'; letter-spacing: 1px; }
 
         input[type="text"], textarea, select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            background: rgba(10, 10, 12, 0.8);
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            font-size: 13px;
-            box-sizing: border-box;
-            outline: none;
-            transition: 0.3s;
+            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #333;
+            background: rgba(10, 10, 12, 0.8); color: white; font-family: 'Poppins', sans-serif;
+            font-size: 13px; box-sizing: border-box; outline: none; transition: 0.3s;
         }
 
         input[type="text"]:focus, textarea:focus, select:focus {
-            border-color: var(--main-neon);
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+            border-color: var(--main-neon); box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
         }
 
-        /* Custom File Input */
-        .file-input-wrapper {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        .file-input-wrapper input[type="file"] {
-            position: absolute;
-            left: 0; top: 0; opacity: 0;
-            width: 100%; height: 100%; cursor: pointer;
-        }
+        .file-input-wrapper { position: relative; margin-bottom: 15px; }
+        .file-input-wrapper input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
         .file-btn {
-            display: block; width: 100%; padding: 12px;
-            background: #121214; border: 1px dashed var(--main-neon);
-            color: #888; text-align: center; border-radius: 8px;
-            font-size: 12px; font-family: 'Orbitron'; box-sizing: border-box;
-            transition: 0.3s;
+            display: block; width: 100%; padding: 12px; background: #121214; border: 1px dashed var(--main-neon);
+            color: #888; text-align: center; border-radius: 8px; font-size: 12px; font-family: 'Orbitron'; box-sizing: border-box; transition: 0.3s;
         }
         .file-input-wrapper:hover .file-btn { background: rgba(0, 212, 255, 0.1); color: white; }
 
         .upload-btn {
-            width: 100%;
-            padding: 15px;
-            background: var(--main-neon);
-            color: black;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            font-family: 'Orbitron';
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
+            width: 100%; padding: 15px; background: var(--main-neon); color: black; border: none; border-radius: 8px;
+            font-size: 15px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; margin-top: 10px;
             box-shadow: 0 0 15px var(--main-neon-deep);
         }
         .upload-btn:hover { background: white; box-shadow: 0 0 25px var(--main-neon); }
 
-        .back-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-            text-decoration: none;
-            font-size: 11px;
-            font-family: 'Orbitron';
-            transition: 0.3s;
-        }
+        .back-link { text-align: center; margin-top: 20px; color: #666; text-decoration: none; font-size: 11px; font-family: 'Orbitron'; transition: 0.3s; }
         .back-link:hover { color: var(--main-neon); }
         .error-msg { color: #ff007b; text-align: center; font-size: 12px; margin-bottom: 15px; font-family: 'Orbitron'; }
 
-        /* --- Fake Loader inside Hexagon --- */
-        #uploadProgress {
+        /* --- Floating Progress Bar (Non-blocking) --- */
+        .floating-progress {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--card-dark);
+            border: 1px solid var(--main-neon);
+            padding: 20px;
+            border-radius: 15px;
+            z-index: 100000;
+            width: 320px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            display: none; 
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+        .float-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .float-status { font-family: 'Orbitron'; font-size: 12px; color: var(--main-neon); letter-spacing: 1px; animation: blink 1s infinite; }
+        .float-percent { font-family: 'Orbitron'; font-size: 16px; color: white; font-weight: bold; }
+        .bar-bg { width: 100%; height: 6px; background: #222; border-radius: 3px; overflow: hidden; }
+        .bar-fill { width: 0%; height: 100%; background: var(--main-neon); box-shadow: 0 0 10px var(--main-neon); transition: width 0.3s ease; }
+        
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        /* --- Success Screen --- */
+        #successScreen {
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             width: 100%;
             height: 100%;
-            position: absolute;
-            top: 0; left: 0;
-            background: var(--card-dark);
-            z-index: 20;
-            clip-path: polygon(50% 0%, 100% 8%, 100% 92%, 50% 100%, 0% 92%, 0% 8%);
+            text-align: center;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .percent-text { font-family: 'Orbitron'; font-size: 50px; color: white; text-shadow: 0 0 20px var(--main-neon); margin: 0; }
-        .status-text { font-family: 'Orbitron'; font-size: 12px; color: var(--main-neon); letter-spacing: 3px; margin-top: 10px; animation: blink 1s infinite; text-align: center;}
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .success-icon { font-size: 70px; margin-bottom: 20px; text-shadow: 0 0 20px #00e676; }
+        .success-title { color: #00e676; font-family: 'Orbitron'; font-size: 26px; text-shadow: 0 0 15px #00e676; margin-bottom: 10px; }
+        .success-desc { color: #ccc; font-size: 12px; margin-bottom: 40px; font-family: 'Poppins'; padding: 0 20px; }
+        .btn-green { background: #00e676; color: black; box-shadow: 0 0 15px #00e676; }
+        .btn-green:hover { background: white; box-shadow: 0 0 25px white; }
+        .btn-outline { background: transparent; border: 1px solid #00e676; color: #00e676; box-shadow: none; margin-top: 15px; }
+        .btn-outline:hover { background: rgba(0, 230, 118, 0.1); color: white; border-color: white; }
 
     </style>
 </head>
 <body>
 
-    <div class="watermark-container" id="watermarkContainer">
+    <div class="watermark-container" id="watermarkContainer"></div>
+
+    <div id="floatingProgress" class="floating-progress">
+        <div class="float-header">
+            <span class="float-status" id="floatStatus">UPLOADING...</span>
+            <span class="float-percent" id="floatPercent">0%</span>
         </div>
+        <div class="bar-bg">
+            <div class="bar-fill" id="floatFill"></div>
+        </div>
+        <p style="font-size: 9px; color: #666; margin: 10px 0 0 0; text-align: center;">Please do not close or leave this page.</p>
+    </div>
 
     <div class="hex-wrapper" id="hexContainer">
-        
         <div class="hex-inner">
             
-            <h1>SECURE HUB</h1>
+            <h1 class="main-title" id="mainTitle">SECURE HUB</h1>
             
             {% if error %}
-                <div class="error-msg">⚠️ {{ error }}</div>
+                <div class="error-msg" id="errorMsg">⚠️ {{ error }}</div>
             {% endif %}
 
             <form id="uploadForm" class="form-content" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                
                 <label>APP TITLE</label>
                 <input type="text" name="title" placeholder="e.g. Modded App v2.0" required>
                 
@@ -258,13 +246,16 @@
                 </div>
                 
                 <button type="button" class="upload-btn" id="startUploadBtn">INITIATE UPLOAD</button>
-
                 <a href="{% url 'home' %}" class="back-link">ABORT & RETURN</a>
             </form>
 
-            <div id="uploadProgress">
-                <h2 class="percent-text" id="progressVal">0%</h2>
-                <p class="status-text" id="statusText">UPLOADING DATA...</p>
+            <div id="successScreen">
+                <div class="success-icon">🏆</div>
+                <h1 class="success-title">CONGRATULATIONS!</h1>
+                <p class="success-desc">Your content has been securely encrypted and successfully published to the AppHUBPro database.</p>
+                
+                <button onclick="window.location.href='{% url 'home' %}'" class="upload-btn btn-green">EXPLORE THE HUB</button>
+                <button onclick="location.reload()" class="upload-btn btn-outline">UPLOAD ANOTHER FILE</button>
             </div>
 
         </div>
@@ -280,93 +271,135 @@
 
             // Populate Watermarks
             const wmContainer = document.getElementById('watermarkContainer');
-            const numWatermarks = 150; 
             const watermarkHTML = '<div class="watermark-text">Shuvajit Naskar</div>';
-            wmContainer.innerHTML = watermarkHTML.repeat(numWatermarks);
+            wmContainer.innerHTML = watermarkHTML.repeat(150);
 
             // ----------------------------------------------------
-            // REAL-TIME UPLOAD PROGRESS LOGIC (AJAX)
+            // DIRECT CLOUDINARY UPLOAD LOGIC
             // ----------------------------------------------------
             const form = document.getElementById('uploadForm');
             const startBtn = document.getElementById('startUploadBtn');
-            const progressOverlay = document.getElementById('uploadProgress');
-            const progressVal = document.getElementById('progressVal');
-            const statusText = document.getElementById('statusText');
+            const floatingProgress = document.getElementById('floatingProgress');
+            const floatStatus = document.getElementById('floatStatus');
+            const floatPercent = document.getElementById('floatPercent');
+            const floatFill = document.getElementById('floatFill');
+            
+            const mainTitle = document.getElementById('mainTitle');
+            const successScreen = document.getElementById('successScreen');
             const hexContainer = document.getElementById('hexContainer');
+            const errorMsg = document.getElementById('errorMsg');
 
-            startBtn.addEventListener('click', function() {
-                // 1. Basic validation check before starting upload
-                if (!form.checkValidity()) {
-                    form.reportValidity();
+            let isUploading = false;
+
+            // *** IMPORTANT: YOUR CLOUDINARY CREDENTIALS HERE ***
+            const cloudName = "dxf0xkwml"; 
+            const uploadPreset = "mp2fhggh"; 
+            const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
+
+            window.addEventListener('beforeunload', function (e) {
+                if (isUploading) { e.preventDefault(); e.returnValue = ''; }
+            });
+
+            startBtn.addEventListener('click', async function() {
+                if (!form.checkValidity()) { form.reportValidity(); return; }
+
+                const fileInput = document.querySelector('input[name="file"]');
+                const logoInput = document.querySelector('input[name="logo"]');
+                
+                if (fileInput.files.length === 0 || logoInput.files.length === 0) {
+                    alert("Please select both a thumbnail and a main file.");
                     return;
                 }
 
-                // 2. Show the progress screen over the form
-                progressOverlay.style.display = 'flex';
-                statusText.innerText = "STARTING UPLOAD...";
+                isUploading = true;
+                floatingProgress.style.display = 'flex';
+                floatStatus.innerText = "UPLOADING THUMBNAIL...";
                 
-                // 3. Create AJAX request
-                const xhr = new XMLHttpRequest();
-                const formData = new FormData(form);
+                try {
+                    // 1. Upload Logo First
+                    let logoUrl = await uploadToCloudinary(logoInput.files[0], 'image');
+                    
+                    floatStatus.innerText = "UPLOADING MAIN APP DATA...";
+                    floatPercent.innerText = "0%";
+                    floatFill.style.width = "0%";
 
-                // 4. Track Real Progress Event
-                xhr.upload.addEventListener("progress", function(e) {
-                    if (e.lengthComputable) {
-                        const percentComplete = Math.round((e.loaded / e.total) * 100);
-                        
-                        progressVal.innerText = percentComplete + "%";
+                    // 2. Upload Main File
+                    let fileUrl = await uploadToCloudinary(fileInput.files[0], 'raw');
 
-                        if (percentComplete < 50) {
-                            statusText.innerText = "UPLOADING DATA...";
-                        } else if (percentComplete >= 50 && percentComplete < 99) {
-                            statusText.innerText = "ENCRYPTING PACKAGES...";
-                        } else if (percentComplete === 100) {
-                            statusText.innerText = "FINALIZING...";
+                    floatStatus.innerText = "SAVING TO DATABASE...";
+
+                    // 3. Save URLs to Django Server
+                    saveToDjango(logoUrl, fileUrl);
+
+                } catch (error) {
+                    console.error("Upload Error:", error);
+                    alert("Error uploading file to Cloud Storage. Please check connection.");
+                    isUploading = false;
+                    floatingProgress.style.display = 'none';
+                }
+            });
+
+            function uploadToCloudinary(file, resourceType) {
+                return new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    const fd = new FormData();
+                    fd.append('file', file);
+                    fd.append('upload_preset', uploadPreset);
+
+                    xhr.upload.addEventListener("progress", function(e) {
+                        if (e.lengthComputable && resourceType === 'raw') { 
+                            const percentComplete = Math.round((e.loaded / e.total) * 100);
+                            floatPercent.innerText = percentComplete + "%";
+                            floatFill.style.width = percentComplete + "%";
                         }
-                    }
-                });
+                    });
 
-                // 5. Handle successful upload
-                xhr.addEventListener("load", function() {
-                    if (xhr.status >= 200 && xhr.status < 300) {
-                        progressVal.innerText = "100%";
-                        statusText.innerText = "UPLOAD COMPLETE!";
-                        statusText.style.color = "white"; 
-                        
-                        // Full Glow Effect
-                        hexContainer.classList.add('glow-complete');
-                        
-                        // Redirect to home page after success
-                        setTimeout(() => {
-                            window.location.href = "{% url 'home' %}"; 
-                        }, 2000);
-                    } else {
-                        // Handle server errors
-                        progressVal.innerText = "ERROR";
-                        statusText.innerText = "UPLOAD FAILED. TRY AGAIN.";
-                        statusText.style.color = "red";
-                        setTimeout(() => { progressOverlay.style.display = 'none'; }, 3000);
-                    }
-                });
+                    xhr.addEventListener("load", function() {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            const response = JSON.parse(xhr.responseText);
+                            resolve(response.secure_url); 
+                        } else {
+                            reject(xhr.responseText);
+                        }
+                    });
 
-                // Handle network errors
-                xhr.addEventListener("error", function() {
-                    progressVal.innerText = "ERROR";
-                    statusText.innerText = "NETWORK ERROR.";
-                    statusText.style.color = "red";
-                    setTimeout(() => { progressOverlay.style.display = 'none'; }, 3000);
+                    xhr.addEventListener("error", function() { reject("Network Error"); });
+                    
+                    xhr.open('POST', cloudinaryUrl, true);
+                    xhr.send(fd);
                 });
+            }
 
-                // 6. Send Data to Server
-                xhr.open("POST", form.action || window.location.href, true);
+            function saveToDjango(logoUrl, fileUrl) {
+                const xhr = new XMLHttpRequest();
+                const djangoFormData = new FormData(form);
                 
-                // Important: We need to send the CSRF token correctly if using AJAX
-                // Django usually requires this header for AJAX POST requests
+                // Remove actual files, append URLs
+                djangoFormData.delete('file');
+                djangoFormData.delete('logo');
+                djangoFormData.append('file_url', fileUrl);
+                djangoFormData.append('logo_url', logoUrl);
+
+                xhr.addEventListener("load", function() {
+                    isUploading = false;
+                    floatingProgress.style.display = 'none';
+
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        form.style.display = 'none';
+                        mainTitle.style.display = 'none';
+                        if(errorMsg) errorMsg.style.display = 'none';
+                        hexContainer.classList.add('glow-complete');
+                        successScreen.style.display = 'flex';
+                    } else {
+                        alert("Error saving data to AppHUBPro Server.");
+                    }
+                });
+
+                xhr.open("POST", form.action || window.location.href, true);
                 const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
                 xhr.setRequestHeader("X-CSRFToken", csrfToken);
-                
-                xhr.send(formData);
-            });
+                xhr.send(djangoFormData);
+            }
         });
     </script>
 </body>

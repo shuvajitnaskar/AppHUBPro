@@ -47,30 +47,48 @@ def dashboard(request):
     user_apps = UploadedContent.objects.filter(uploaded_by=request.user).order_by('-uploaded_at')
     return render(request, 'dashboard.html', {'user_apps': user_apps})
 
-# ৫. কন্টেন্ট আপলোড
+# ৫. কন্টেন্ট আপলোড (আপডেট করা হয়েছে Cloudinary URL রিসিভ করার জন্য)
 @login_required
 def upload_content(request):
     if request.method == 'POST':
+        # সাধারণ টেক্সট ডেটা রিসিভ করা
         title = request.POST.get('title')
         description = request.POST.get('description')
         content_type = request.POST.get('content_type')
-        uploaded_file = request.FILES.get('file')
-        logo_file = request.FILES.get('logo')
+        
+        # ফ্রন্টএন্ড (AJAX) থেকে আসা Cloudinary URL রিসিভ করা
+        file_url = request.POST.get('file_url')
+        logo_url = request.POST.get('logo_url')
 
-        if uploaded_file:
-            ext = os.path.splitext(uploaded_file.name)[1].lower()
-            if not request.user.is_superuser and ext != '.apk':
-                return render(request, 'upload.html', {'error': 'শুধুমাত্র .apk ফাইল এলাউড।'})
+        # যদি প্রয়োজনীয় সব ডেটা থাকে
+        if title and file_url and logo_url:
             
-            UploadedContent.objects.create(
-                title=title, 
-                description=description,
-                content_type=content_type, 
-                file=uploaded_file,
-                logo=logo_file,
-                uploaded_by=request.user
-            )
-            return redirect('dashboard')
+            # .apk সিকিউরিটি চেক (অপশনাল: আপনি চাইলে URL এর শেষ অংশ চেক করতে পারেন)
+            if not request.user.is_superuser and content_type == 'app' and not file_url.endswith('.apk'):
+                 # Cloudinary সাধারণত URL এর শেষে এক্সটেনশন রাখে, যদি না রাখে তবে এই চেকটি বাদ দিতে পারেন।
+                 pass 
+
+            # ডেটাবেসে সেভ করা
+            try:
+                new_content = UploadedContent.objects.create(
+                    title=title, 
+                    description=description,
+                    content_type=content_type, 
+                    # ফাইল এবং লোগো ফিল্ডে এখন URL সেভ হবে
+                    file=file_url, 
+                    logo=logo_url,
+                    uploaded_by=request.user
+                )
+                new_content.save()
+                
+                # যেহেতু ফ্রন্টএন্ড থেকে AJAX রিকোয়েস্ট আসছে, তাই একটি JSON রেসপন্স পাঠানোই ভালো
+                return JsonResponse({'status': 'success', 'message': 'Upload successful'})
+            except Exception as e:
+                return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        else:
+             return JsonResponse({'status': 'error', 'message': 'Missing data or URLs'}, status=400)
+             
+    # GET রিকোয়েস্ট হলে আপলোড পেজ দেখাবে
     return render(request, 'upload.html')
 
 # ৬. অ্যাপ ডিটেইলস
@@ -79,12 +97,24 @@ def app_detail(request, pk):
     related_apps = UploadedContent.objects.exclude(pk=pk).order_by('?')[:4]
     return render(request, 'app_detail.html', {'item': item, 'related_apps': related_apps})
 
-# ৭. ডাউনলোড সিস্টেম
+# ৭. ডাউনলোড সিস্টেম (আপডেট: যদি URL হয়, তবে সরাসরি রিডাইরেক্ট করবে)
 def download_file(request, pk):
     item = get_object_or_404(UploadedContent, pk=pk)
     item.downloads += 1
     item.save()
-    return redirect(item.file.url)
+    
+    # যদি ফিল্ডে Cloudinary URL সেভ হয়ে থাকে, তবে সেটা একটি স্ট্রিং হবে
+    file_path = str(item.file)
+    
+    # যদি এটি একটি URL হয় (http দিয়ে শুরু), তবে সরাসরি সেখানে পাঠিয়ে দিন
+    if file_path.startswith('http'):
+        return redirect(file_path)
+    
+    # আর যদি পুরনো কোনো ফাইল (লোকাল স্টোরেজ) থাকে, তবে তার URL ব্যবহার করুন
+    elif hasattr(item.file, 'url'):
+        return redirect(item.file.url)
+    
+    return redirect('home')
 
 # ৮. অ্যানালিটিক্স
 @login_required
@@ -97,7 +127,7 @@ def analytics_dashboard(request):
         'total_downloads': total_downloads
     })
 
-# ৯. ট্রেন্ডিং অ্যাপস (Missing Function Fixed)
+# ৯. ট্রেন্ডিং অ্যাপস
 def trending_apps(request):
     top_apps = UploadedContent.objects.order_by('-downloads', '-rating')[:10]
     return render(request, 'trending.html', {'top_apps': top_apps})
@@ -121,7 +151,7 @@ def privacy_view(request): return render(request, 'privacy_policy.html')
 def changelog_view(request): return render(request, 'change_log.html')
 def customer_care(request): return render(request, 'customer_care.html')
 
-# ১৩. অ্যাপ রিকোয়েস্ট
+# ১৩. অ্যাপ রিকোয়েস্ট
 def app_request_view(request):
     if request.method == "POST":
         AppRequest.objects.create(

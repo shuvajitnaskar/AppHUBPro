@@ -58,3 +58,7 @@ class AppRequest(models.Model):
 
     def __str__(self):
         return self.app_name
+
+class Content(models.Model):
+    file_url = models.URLField(max_length=500, blank=True, null=True)
+    logo_url = models.URLField(max_length=500, blank=True, null=True)
