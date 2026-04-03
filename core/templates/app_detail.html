@@ -4,165 +4,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ item.title }} | Security Report & Download</title>
+    <title>{{ item.title }} | AppHUBPro</title>
     <link rel="icon" type="image/png" href="{% static 'images/edited-image.png' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --neon-green: #00e676;
-            --neon-blue: #00d4ff;
-            --neon-pink: #ff007b;
-            --bg-dark: #0a0a0b;
-            --main-neon: #00d4ff; /* Home page থেকে থিম কালার পাবে */
+            --bg-dark: #0a0a0b; --bg-light: #ffffff;
+            --text-dark: #ffffff; --text-light: #1a1a1b;
+            --main-neon: #00d4ff; 
+            --main-neon-deep: #0088aa; 
+            --title-text-color: #ff0000; 
+            --card-dark: rgba(20, 20, 22, 0.9);
         }
 
         body { 
-            background-color: var(--bg-dark); 
-            color: white; 
-            font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 20px;
+            background-color: var(--bg-dark); color: var(--text-dark); 
+            font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; 
+            min-height: 100vh; position: relative; z-index: 1;
         }
 
-        .container { 
-            max-width: 850px; 
-            margin: 20px auto; 
-            background: rgba(21, 21, 23, 0.9); 
-            padding: 40px; 
-            border-radius: 30px; 
-            border: 1px solid #333;
-            backdrop-filter: blur(10px);
+        .watermark-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none; display: flex; flex-wrap: wrap; justify-content: space-around; align-content: space-around; opacity: 0.08; }
+        .watermark-text { font-family: 'Orbitron', sans-serif; font-size: 14px; color: var(--main-neon); transform: rotate(-30deg); padding: 20px; white-space: nowrap; }
+
+        /* Sidebar Styles */
+        .sidebar { height: 100%; width: 0; position: fixed; z-index: 10000; top: 0; left: 0; background-color: rgba(15, 15, 17, 0.98); backdrop-filter: blur(15px); border-right: 2px solid var(--main-neon); overflow-y: auto; transition: 0.4s; display: flex; flex-direction: column; padding-top: 60px; }
+        .closebtn { position: absolute; top: 10px; right: 20px; font-size: 36px; color: var(--title-text-color); cursor: pointer; transition: 0.3s; text-shadow: 0 0 10px var(--main-neon); }
+        .closebtn:hover { color: white; text-shadow: 0 0 15px white; }
+        .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 16px; color: #bbb; display: flex; align-items: center; gap: 20px; transition: 0.3s; font-family: 'Orbitron', sans-serif; }
+        .sidebar a:hover { color: var(--main-neon); padding-left: 35px; background: rgba(255,255,255,0.03); }
+        .sb-section-title { font-size: 11px; color: #555; padding-left: 25px; margin-top: 25px; letter-spacing: 2px; font-family: 'Orbitron'; text-transform: uppercase; border-bottom: 1px solid #222; padding-bottom: 5px; }
+
+        .openbtn { font-size: 30px; cursor: pointer; color: var(--main-neon); position: fixed; top: 25px; left: 25px; z-index: 999; text-shadow: 0 0 10px var(--main-neon); transition: color 0.3s; }
+
+        /* Main Content Container */
+        .detail-container {
+            max-width: 800px; margin: 60px auto; background: var(--card-dark); 
+            border: 1px solid #222; border-radius: 20px; padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8); position: relative;
         }
 
-        /* সেফটি ব্যাজ স্টাইল */
-        .safety-header {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
+        .app-header { display: flex; gap: 30px; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 30px; }
+        .app-logo { width: 120px; height: 120px; border-radius: 25px; object-fit: cover; border: 2px solid var(--main-neon); box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+        
+        .app-info h1 { font-family: 'Orbitron', sans-serif; font-size: 32px; margin: 0 0 10px 0; color: white; text-shadow: 0 0 10px var(--main-neon); }
+        .app-info p { margin: 5px 0; font-size: 14px; color: #aaa; }
+        .app-info span.highlight { color: var(--main-neon); font-weight: bold; }
+
+        .description-box { background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px; border-left: 3px solid var(--main-neon); font-size: 14px; line-height: 1.6; color: #ddd; margin-bottom: 30px; }
+
+        /* --- Security Scanner UI --- */
+        .security-panel {
+            background: #111; border: 1px dashed #444; border-radius: 10px; padding: 20px; margin-bottom: 30px;
+            text-align: center; transition: 0.3s;
         }
+        .security-status { font-family: 'Orbitron'; font-size: 18px; color: #ffaa00; margin-bottom: 15px; letter-spacing: 2px; }
+        .scan-bar-bg { width: 100%; height: 8px; background: #222; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+        .scan-bar-fill { width: 0%; height: 100%; background: #ffaa00; box-shadow: 0 0 10px #ffaa00; transition: width 0.4s ease, background 0.4s; }
+        .scan-details { font-size: 11px; color: #888; font-family: 'Orbitron'; letter-spacing: 1px; }
 
-        .v-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 8px 18px; border-radius: 50px;
-            font-family: 'Orbitron'; font-size: 12px; font-weight: bold;
-        }
-        .v-safe { background: rgba(0, 230, 118, 0.1); border: 1px solid var(--neon-green); color: var(--neon-green); }
-        .v-pending { background: rgba(255, 202, 40, 0.1); border: 1px solid #ffca28; color: #ffca28; }
-
-        /* অ্যাপ ইনফো */
-        .app-hero { display: flex; gap: 25px; align-items: center; margin-bottom: 40px; }
-        .app-logo { width: 100px; height: 100px; border-radius: 25px; border: 2px solid #444; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
-        .app-title h1 { margin: 0; font-family: 'Orbitron'; font-size: 32px; color: white; letter-spacing: 2px; }
-        .app-meta { font-size: 12px; color: #666; margin-top: 5px; }
-
-        /* স্ক্যান রিপোর্ট কার্ড */
-        .report-section {
-            background: #151517; border-radius: 20px; padding: 25px;
-            border-left: 4px solid var(--neon-green); margin-bottom: 35px;
-        }
-        .report-title { font-family: 'Orbitron'; font-size: 14px; color: var(--neon-green); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .scan-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-size: 14px; }
-        .status-ok { color: var(--neon-green); font-weight: bold; }
-
-        /* ডাউনলোড বাটন */
-        .download-area { text-align: center; margin: 40px 0; }
+        /* Download Button */
         .download-btn {
-            display: inline-block; width: 100%; max-width: 400px;
-            background: var(--main-neon); color: black;
-            padding: 18px; border-radius: 40px; text-decoration: none;
-            font-weight: bold; font-family: 'Orbitron'; font-size: 16px;
-            box-shadow: 0 0 20px var(--main-neon); transition: 0.3s;
+            display: block; width: 100%; text-align: center; padding: 18px; border-radius: 10px;
+            font-family: 'Orbitron'; font-size: 18px; font-weight: bold; text-decoration: none; transition: 0.3s;
         }
-        .download-btn:hover { transform: scale(1.03); background: white; box-shadow: 0 0 30px white; }
+        /* Locked state styling */
+        .download-btn.locked {
+            background: #333; color: #666; pointer-events: none; cursor: not-allowed; border: 1px solid #444;
+        }
+        /* Unlocked state styling */
+        .download-btn.unlocked {
+            background: var(--main-neon); color: black; box-shadow: 0 0 20px var(--main-neon-deep);
+        }
+        .download-btn.unlocked:hover { background: white; box-shadow: 0 0 30px var(--main-neon); }
 
-        /* ভার্সন হিস্ট্রি টেবিল */
-        .history-section { margin-top: 50px; }
-        .history-title { font-family: 'Orbitron'; font-size: 14px; color: var(--neon-pink); margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .v-table { width: 100%; border-collapse: collapse; }
-        .v-table td { padding: 15px 10px; border-bottom: 1px solid #1a1a1c; font-size: 13px; }
-        .v-num { font-weight: bold; color: var(--main-neon); }
-        .v-link { color: var(--neon-pink); text-decoration: none; font-weight: bold; }
+        /* Related Apps Grid */
+        .related-title { font-family: 'Orbitron'; margin-top: 50px; font-size: 18px; text-align: center; color: #aaa; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { background: #111; border: 1px solid #222; border-radius: 15px; padding: 20px; text-align: center; transition: 0.3s; text-decoration: none; display: block; }
+        .card:hover { border-color: var(--main-neon); transform: translateY(-5px); }
+        .card img { width: 60px; height: 60px; border-radius: 15px; object-fit: cover; }
+        .card h3 { font-size: 14px; margin: 10px 0 5px; font-family: 'Orbitron'; color: white; }
+        .card p { font-size: 11px; color: #888; margin: 0; }
 
-        .back-link { display: block; text-align: center; margin-top: 30px; color: #555; text-decoration: none; font-size: 12px; }
+        @media (max-width: 768px) {
+            .app-header { flex-direction: column; text-align: center; }
+        }
     </style>
 </head>
-<body>
+<body id="mainBody">
 
-    <div class="container">
-        <div class="safety-header">
-            <a href="{% url 'home' %}" style="color: var(--main-neon); text-decoration: none; font-size: 13px;">← Back to Hub</a>
-            {% if item.is_verified %}
-            <div class="v-badge v-safe">🛡️ VERIFIED SAFE</div>
-            {% else %}
-            <div class="v-badge v-pending">⚠️ SCAN PENDING</div>
-            {% endif %}
-        </div>
+    <div class="watermark-container" id="watermarkContainer"></div>
 
-        <div class="app-hero">
-            <img src="{% if item.logo %}{{ item.logo.url }}{% else %}https://cdn-icons-png.flaticon.com/512/873/873120.png{% endif %}" class="app-logo">
-            <div class="app-title">
+    <div id="mySidebar" class="sidebar">
+        <span class="closebtn" onclick="closeNav()">&times;</span>
+        <span class="sb-section-title">EXPLORE</span>
+        <a href="{% url 'home' %}">🏠 Store Home</a>
+        <a href="{% url 'trending' %}">🔥 Trending</a>
+        <a href="{% url 'leaderboard' %}">🥇 Leaderboard</a>
+        <a href="{% url 'app_request' %}">💡 Request App</a>
+
+        <span class="sb-section-title">ACCOUNT</span>
+        {% if user.is_authenticated %}
+            <a href="{% url 'developer_profile' user.username %}">👤 Profile</a>
+            <a href="{% url 'dashboard' %}">📂 Dashboard</a>
+            <a href="{% url 'analytics' %}">📊 Analytics</a>
+            <a href="{% url 'upload' %}">☁️ Upload App</a>
+        {% else %}
+            <a href="{% url 'login' %}">🔑 Login / Register</a>
+        {% endif %}
+    </div>
+
+    <span class="openbtn" onclick="openNav()">&#9776;</span>
+
+    <div class="detail-container">
+        
+        <div class="app-header">
+            <img src="{% if item.logo %}{% if 'http' in item.logo|stringformat:'s' %}{{ item.logo }}{% else %}{{ item.logo.url }}{% endif %}{% else %}https://cdn-icons-png.flaticon.com/512/873/873120.png{% endif %}" class="app-logo" alt="App Logo">
+            
+            <div class="app-info">
                 <h1>{{ item.title }}</h1>
-                <div class="app-meta">
-                    Category: {{ item.get_content_type_display }} | 📥 {{ item.downloads }} Downloads | ⭐ {{ item.rating }}
-                </div>
-                <div style="margin-top: 10px; font-size: 11px; color: #444;">
-                    Uploaded by: <b style="color: #888;">{{ item.uploaded_by.username }}</b>
-                </div>
+                <p>Developer: <span class="highlight">{{ item.uploaded_by.username }}</span></p>
+                <p>Category: <span style="text-transform: uppercase;">{{ item.content_type }}</span></p>
+                <p>Total Downloads: <span class="highlight">{{ item.downloads }}</span></p>
             </div>
         </div>
 
-        <div class="report-section">
-            <div class="report-title">🛡️ SECURITY SCAN REPORT</div>
-            <div class="scan-row">
-                <span>Virus & Malware Check:</span>
-                <span class="status-ok">PASS (Clean)</span>
+        <div class="description-box">
+            <strong>ABOUT THIS CONTENT:</strong><br><br>
+            {{ item.description|linebreaksbr }}
+        </div>
+
+        <div class="security-panel" id="securityPanel">
+            <div class="security-status" id="securityStatus">🛡️ SCANNING PACKAGES...</div>
+            <div class="scan-bar-bg">
+                <div class="scan-bar-fill" id="scanBarFill"></div>
             </div>
-            <div class="scan-row">
-                <span>Encryption Protocol:</span>
-                <span class="status-ok">SSL Secure</span>
-            </div>
-            <div class="scan-row">
-                <span>Data Privacy Scan:</span>
-                <span class="status-ok">No Hidden Trackers</span>
-            </div>
-            <p style="font-size: 10px; color: #555; margin-top: 15px; font-style: italic;">
-                Verified apps are manually inspected by AppHUBPro Security Team to ensure 100% safety.
-            </p>
+            <div class="scan-details" id="scanDetails">Initializing Google Play Protect definitions...</div>
         </div>
 
-        <div style="padding: 0 10px;">
-            <h4 style="font-family: 'Orbitron'; font-size: 12px; color: #888;">DESCRIPTION</h4>
-            <p style="line-height: 1.7; color: #aaa; font-size: 14px;">{{ item.description|linebreaks }}</p>
+        <a href="{% url 'download_file' item.pk %}" id="downloadBtn" class="download-btn locked">
+            🔒 PLEASE WAIT FOR SCAN TO COMPLETE
+        </a>
+
+        <h2 class="related-title">YOU MIGHT ALSO LIKE</h2>
+        <div class="grid-container">
+            {% for rel_item in related_apps %}
+            <a href="{% url 'app_detail' rel_item.pk %}" class="card">
+                <img src="{% if rel_item.logo %}{% if 'http' in rel_item.logo|stringformat:'s' %}{{ rel_item.logo }}{% else %}{{ rel_item.logo.url }}{% endif %}{% else %}https://cdn-icons-png.flaticon.com/512/873/873120.png{% endif %}">
+                <h3>{{ rel_item.title }}</h3>
+                <p>Dev: {{ rel_item.uploaded_by.username }}</p>
+            </a>
+            {% empty %}
+            <p style="text-align: center; width: 100%; color: #555;">No related content found.</p>
+            {% endfor %}
         </div>
 
-        <div class="download-area">
-            <a href="{{ item.file.url }}" class="download-btn">DOWNLOAD APK (SECURE)</a>
-        </div>
-
-        <div class="history-section">
-            <div class="history-title">📜 VERSION HISTORY</div>
-            <table class="v-table">
-                {% if item.versions.all %}
-                    {% for version in item.versions.all %}
-                    <tr>
-                        <td class="v-num">{{ version.version_number }}</td>
-                        <td style="color: #666;">{{ version.created_at|date:"d M, Y" }}</td>
-                        <td style="color: #888;">{{ version.changelog|truncatechars:30 }}</td>
-                        <td style="text-align: right;"><a href="{{ version.file.url }}" class="v-link">Get App</a></td>
-                    </tr>
-                    {% endfor %}
-                {% else %}
-                    <tr>
-                        <td colspan="4" style="text-align: center; color: #444; padding: 20px;">No previous versions recorded for this app.</td>
-                    </tr>
-                {% endif %}
-            </table>
-        </div>
-
-        <a href="{% url 'home' %}" class="back-link">Return to Store Home Hub</a>
     </div>
 
     <script>
-        // থিম কালার সিঙ্ক করা
-        const savedTheme = localStorage.getItem('selectedTheme') || '#00d4ff';
-        document.documentElement.style.setProperty('--main-neon', savedTheme);
+        // Sidebar functions
+        function openNav() { document.getElementById("mySidebar").style.width = "300px"; }
+        function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Apply Theme
+            const savedTheme = localStorage.getItem('selectedTheme') || '#00d4ff';
+            const savedThemeDeep = localStorage.getItem('selectedThemeDeep') || '#0088aa';
+            document.documentElement.style.setProperty('--main-neon', savedTheme);
+            document.documentElement.style.setProperty('--main-neon-deep', savedThemeDeep);
+
+            // Populate Watermarks
+            const wmContainer = document.getElementById('watermarkContainer');
+            const watermarkHTML = '<div class="watermark-text">Shuvajit Naskar</div>';
+            wmContainer.innerHTML = watermarkHTML.repeat(150);
+
+            // --- REALISTIC SECURITY SCANNER LOGIC ---
+            const scanBarFill = document.getElementById('scanBarFill');
+            const securityStatus = document.getElementById('securityStatus');
+            const scanDetails = document.getElementById('scanDetails');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const securityPanel = document.getElementById('securityPanel');
+
+            let scanProgress = 0;
+            
+            // Randomly increase progress bar to simulate real scanning
+            const scanInterval = setInterval(() => {
+                scanProgress += Math.floor(Math.random() * 15) + 5;
+                if (scanProgress > 100) scanProgress = 100;
+                
+                scanBarFill.style.width = scanProgress + '%';
+
+                // Change status text based on progress
+                if (scanProgress < 30) {
+                    scanDetails.innerText = "Analyzing APK signatures...";
+                } else if (scanProgress < 60) {
+                    scanDetails.innerText = "Checking against Cloud malware databases...";
+                } else if (scanProgress < 90) {
+                    scanDetails.innerText = "Verifying AES-256 encryption certificates...";
+                } else if (scanProgress === 100) {
+                    clearInterval(scanInterval);
+                    
+                    // Success State
+                    securityStatus.innerHTML = "✅ VERIFIED SAFE (NO THREATS FOUND)";
+                    securityStatus.style.color = "#00e676";
+                    scanBarFill.style.background = "#00e676";
+                    scanBarFill.style.boxShadow = "0 0 15px #00e676";
+                    securityPanel.style.borderColor = "#00e676";
+                    scanDetails.innerText = "Scan complete. Network connection secure.";
+                    
+                    // Unlock Download Button
+                    downloadBtn.classList.remove('locked');
+                    downloadBtn.classList.add('unlocked');
+                    downloadBtn.innerText = "⬇️ SECURE DOWNLOAD NOW";
+                }
+            }, 300); // Speed of the scan
+        });
     </script>
 </body>
 </html>
